@@ -15,10 +15,18 @@ public class Main {
         Node d = new Node(4);
         d.saveContent("This is content from node D.");
 
-        //Setup Routes
-        Route ab = new Route(a.nodeID, b.nodeID);
-        Route bc = new Route(b.nodeID, c.nodeID);
-        Route cd = new Route(c.nodeID, d.nodeID);
+        //Setup Edges
+        a.setEdge(b);
+        b.setEdge(a);
+        b.setEdge(c);
+        c.setEdge(b);
+        c.setEdge(d);
+        d.setEdge(c);
+
+        //Test to show edges
+        a.getEdges();
+        b.getEdges();
+
 
         //Test show the content
         a.getContent();

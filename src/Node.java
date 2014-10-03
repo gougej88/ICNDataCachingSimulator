@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 /**
@@ -7,6 +8,7 @@ import java.util.Hashtable;
 public class Node {
     int nodeID;
     int batteryLifeRemaining;
+    ArrayList<Integer> edges = new ArrayList<Integer>();
     Content content = new Content();
     Hashtable cache = new Hashtable(10);
     Hashtable contentCustodians;
@@ -17,11 +19,24 @@ public class Node {
         this.batteryLifeRemaining = 100;
     }
 
+
     public int getNodeID()
     {
         return nodeID;
     }
 
+    public void setEdge(Node n) {
+        edges.add(n.nodeID);
+    }
+
+    public void getEdges() {
+        int size = edges.size();
+        for (int i = 0; i < size; i++)
+        {
+            int t = edges.get(i);
+            System.out.format("Edges for %d : %d \n", nodeID,t);
+        }
+    }
     public void receiveData(Content in, int route)
     {
         //Store content in cache then send along path if not on this node
