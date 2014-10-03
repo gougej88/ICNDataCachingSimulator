@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 /**
  * Created by n00430588 on 10/3/2014.
@@ -5,7 +6,7 @@
 public class Graph {
     int length;
     int width;
-    Node nodes;
+    ArrayList<Node> nodes = new ArrayList<Node>();
 
     public Graph(int length, int width) {
         this.length = length;
@@ -17,9 +18,16 @@ public class Graph {
         int size = length*width;
         for(int i = 0; i < size; i++)
         {
-            Node a = new Node(i);
+            nodes.add(i,new Node(i));
         }
 
+    }
+
+    public int route(Node src, Node dest)
+    {
+        src.getEdges();
+        int test = 5;
+        return test;
     }
 
 

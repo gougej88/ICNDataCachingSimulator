@@ -6,13 +6,17 @@ public class Main {
         // write your code here
 
         //Create graph grid of nodes
-        Node a = new Node(1);
+        Graph g = new Graph(2,2);
+        g.createGraph();
+        Node a = g.nodes.get(0);
+        Node b = g.nodes.get(1);
+        Node c = g.nodes.get(2);
+        Node d = g.nodes.get(3);
+
+        //Manual add content to nodes
         a.saveContent("This is content from node A.");
-        Node b = new Node(2);
         b.saveContent("This is content from node B.");
-        Node c = new Node(3);
         c.saveContent("This is content from node C.");
-        Node d = new Node(4);
         d.saveContent("This is content from node D.");
 
         //Setup Edges

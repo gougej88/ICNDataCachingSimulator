@@ -29,13 +29,15 @@ public class Node {
         edges.add(n.nodeID);
     }
 
-    public void getEdges() {
+    public ArrayList<Integer> getEdges() {
         int size = edges.size();
+        ArrayList<Integer> ret = new ArrayList<Integer>();
         for (int i = 0; i < size; i++)
         {
-            int t = edges.get(i);
-            System.out.format("Edges for %d : %d \n", nodeID,t);
+            ret.add(i, edges.get(i));
+
         }
+        return ret;
     }
     public void receiveData(Content in, int route)
     {
