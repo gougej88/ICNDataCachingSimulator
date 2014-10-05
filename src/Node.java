@@ -1,6 +1,7 @@
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 
 /**
  * Created by n00430588 on 9/24/2014.
@@ -10,8 +11,9 @@ public class Node {
     int batteryLifeRemaining;
     ArrayList<Integer> edges = new ArrayList<Integer>();
     Content content = new Content();
-    Hashtable cache = new Hashtable(10);
-    Hashtable contentCustodians;
+    LinkedHashMap<Integer,String> cache = new LinkedHashMap<Integer,String>(10);
+    Hashtable<Integer,Integer> contentCustodians = new Hashtable<Integer, Integer>();
+    Hashtable<Integer,Integer> nextHop = new Hashtable<Integer, Integer>();
 
     public Node(int NodeID)
     {

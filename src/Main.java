@@ -38,7 +38,6 @@ public class Main {
         c.getContent();
 
 
-
         //Start at outside node
 
         //Search grid for content custodian
