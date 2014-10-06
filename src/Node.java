@@ -9,11 +9,16 @@ import java.util.LinkedHashMap;
 public class Node {
     int nodeID;
     int batteryLifeRemaining;
-    ArrayList<Integer> edges = new ArrayList<Integer>();
+    double minDistance;
+    Node previous;
+    ArrayList<Node> edges = new ArrayList<Node>();
     Content content = new Content();
-    LinkedHashMap<Integer,String> cache = new LinkedHashMap<Integer,String>(10);
-    Hashtable<Integer,Integer> contentCustodians = new Hashtable<Integer, Integer>();
-    Hashtable<Integer,Integer> nextHop = new Hashtable<Integer, Integer>();
+    //index, ContentID
+    LinkedHashMap<Integer,Integer> cache = new LinkedHashMap<Integer,Integer>(10);
+    //nodeID stored on, contentID for each
+    Hashtable<Integer,Content> contentCustodians = new Hashtable<Integer, Content>();
+    //nodeID to go to for next hop, and contentID
+    Hashtable<Integer,Content> nextHop = new Hashtable<Integer, Content>();
 
     public Node(int NodeID)
     {
@@ -28,16 +33,17 @@ public class Node {
     }
 
     public void setEdge(Node n) {
-        edges.add(n.nodeID);
+        edges.add(n);
     }
 
-    public ArrayList<Integer> getEdges() {
+
+    public ArrayList<Node> getAllEdges() {
         int size = edges.size();
-        ArrayList<Integer> ret = new ArrayList<Integer>();
+        ArrayList<Node> ret = new ArrayList<Node>();
         for (int i = 0; i < size; i++)
         {
             ret.add(i, edges.get(i));
-
+            System.out.format("%d", ret.get(i).getNodeID());
         }
         return ret;
     }
@@ -47,9 +53,11 @@ public class Node {
         //Check in cache, if so sendData
         if(searchCache(in.contentID))
         {
-            sendData(in, route);
+            //content found in cache send back to src
+            //sendData(in, route);
             powerDrain(1);
         }else{
+            //Not found in cache, add to cache and forward to next hop
             addToCache(in);
             sendData(in, route);
             powerDrain(1);
@@ -91,10 +99,13 @@ public class Node {
     {
         //Make this node a content custodian. Should this be done as each node saves only 1 content item?
         content.addContent(nodeID, stuff);
+
+
     }
 
-    public void getContent(){
-        String stuff =  content.showContent(nodeID);
-        System.out.println(stuff);
+    public Content getContent(){
+        //String stuff =  content.showContent(nodeID);
+        //System.out.println(stuff);
+        return content;
     }
 }

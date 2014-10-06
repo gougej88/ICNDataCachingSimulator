@@ -12,6 +12,11 @@ public class Content {
 
     }
 
+    public Content getContent()
+    {
+        return this;
+    }
+
     public void addContent(int contentID, String content)
     {
         this.contentID = contentID;

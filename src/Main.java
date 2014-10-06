@@ -1,4 +1,7 @@
-
+import java.util.List;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public class Main {
 
@@ -8,6 +11,7 @@ public class Main {
         //Create graph grid of nodes
         Graph g = new Graph(2,2);
         g.createGraph();
+
         Node a = g.nodes.get(0);
         Node b = g.nodes.get(1);
         Node c = g.nodes.get(2);
@@ -27,16 +31,39 @@ public class Main {
         c.setEdge(d);
         d.setEdge(c);
 
-        //Test to show edges
-        a.getEdges();
-        b.getEdges();
 
 
-        //Test show the content
-        a.getContent();
-        b.getContent();
-        c.getContent();
 
+        g.distributeContentCustodians();
+
+        //Test node for contentCustodians
+        Set set = c.contentCustodians.entrySet();
+        Iterator it = set.iterator();
+        while (it.hasNext()) {
+            Map.Entry entry = (Map.Entry) it.next();
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+
+
+        //Test Dijkstra
+        Dijkstra.ComputePaths(a);
+        System.out.println("Distance to " + d.nodeID + ": " + d.minDistance);
+        List<Node> path = Dijkstra.getShortestPath(d);
+        for(Node test : path){
+        System.out.println("Path: " + test.nodeID);}
+        /*
+        for(int i=0; i<4;i++)
+        {
+           Dijkstra.ComputePaths(g.nodes.get(i));
+        }
+        for (int i=0; i<4;i++)
+        {
+            Node v = g.nodes.get(i);
+            System.out.println("Distance to " + v.nodeID + ": " + v.minDistance);
+            List<Node> path = Dijkstra.getShortestPath(v);
+            System.out.println("Path: " + path);
+        }
+        */
 
         //Start at outside node
 
