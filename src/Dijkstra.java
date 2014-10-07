@@ -16,13 +16,14 @@ public class Dijkstra {
         while(!queue1.isEmpty()){
             Node n = queue1.poll();
 
-            for(Node e : n.edges)
+            for(Edge e : n.edges)
             {
-                Node x = e;
-                double distanceThru = n.minDistance + 1;
+                Node x = e.target;
+                double weight = e.weight;
+                double distanceThru = n.minDistance + weight;
                 if(distanceThru < x.minDistance) {
                     queue1.remove(x);
-                    x.minDistance = 1;
+                    x.minDistance = distanceThru;
                     x.previous = n;
                     queue1.add(x);
                 }

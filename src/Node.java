@@ -9,9 +9,9 @@ import java.util.LinkedHashMap;
 public class Node {
     int nodeID;
     int batteryLifeRemaining;
-    double minDistance;
+    double minDistance = Double.POSITIVE_INFINITY;
     Node previous;
-    ArrayList<Node> edges = new ArrayList<Node>();
+    Edge[] edges;
     Content content = new Content();
     //index, ContentID
     LinkedHashMap<Integer,Integer> cache = new LinkedHashMap<Integer,Integer>(10);
@@ -32,17 +32,18 @@ public class Node {
         return nodeID;
     }
 
-    public void setEdge(Node n) {
-        edges.add(n);
+    public void setEdge(Node n, Integer weight) {
+        edges = new Edge[]{ new Edge(n, weight)};
+
     }
 
 
     public ArrayList<Node> getAllEdges() {
-        int size = edges.size();
+        int size = edges.length;
         ArrayList<Node> ret = new ArrayList<Node>();
         for (int i = 0; i < size; i++)
         {
-            ret.add(i, edges.get(i));
+            ret.add(i, edges[i].target);
             System.out.format("%d", ret.get(i).getNodeID());
         }
         return ret;

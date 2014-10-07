@@ -24,14 +24,12 @@ public class Main {
         d.saveContent("This is content from node D.");
 
         //Setup Edges
-        a.setEdge(b);
-        b.setEdge(a);
-        b.setEdge(c);
-        c.setEdge(b);
-        c.setEdge(d);
-        d.setEdge(c);
-
-
+        a.setEdge(b,1);
+        b.setEdge(a,1);
+        b.setEdge(c,1);
+        c.setEdge(b,1);
+        c.setEdge(d,1);
+        d.setEdge(c,1);
 
 
         g.distributeContentCustodians();
@@ -47,10 +45,12 @@ public class Main {
 
         //Test Dijkstra
         Dijkstra.ComputePaths(a);
-        System.out.println("Distance to " + d.nodeID + ": " + d.minDistance);
-        List<Node> path = Dijkstra.getShortestPath(d);
-        for(Node test : path){
-        System.out.println("Path: " + test.nodeID);}
+        for (Node v : g.nodes)
+        {
+            System.out.println("Distance to " + v.nodeID + ": " + v.minDistance);
+            List<Node> path = Dijkstra.getShortestPath(v);
+            System.out.println("Path: " + path);
+        }
         /*
         for(int i=0; i<4;i++)
         {
