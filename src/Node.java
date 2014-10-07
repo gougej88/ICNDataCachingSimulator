@@ -16,9 +16,10 @@ public class Node {
     //index, ContentID
     LinkedHashMap<Integer,Integer> cache = new LinkedHashMap<Integer,Integer>(10);
     //nodeID stored on, contentID for each
-    Hashtable<Integer,Content> contentCustodians = new Hashtable<Integer, Content>();
+    Hashtable<Node,Content> contentCustodians = new Hashtable<Node, Content>();
     //nodeID to go to for next hop, and contentID
-    Hashtable<Integer,Content> nextHop = new Hashtable<Integer, Content>();
+    //WILL I NEED?
+    //Hashtable<Integer,Content> nextHop = new Hashtable<Integer, Content>();
 
     public Node(int NodeID)
     {

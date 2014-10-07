@@ -29,10 +29,11 @@ public class Graph {
 
     public void distributeContentCustodians() {
 
-        Hashtable<Integer,Content> local = new Hashtable<Integer, Content>();
+        Hashtable<Node,Content> local = new Hashtable<Node, Content>();
         for (int i = 0; i < size; i++)
         {
-            local.put(i, nodes.get(i).getContent());
+
+            local.put(nodes.get(i), nodes.get(i).getContent());
         }
         for (int i = 0; i < size; i++) {
             nodes.get(i).contentCustodians = local;
