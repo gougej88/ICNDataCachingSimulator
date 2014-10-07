@@ -51,19 +51,7 @@ public class Main {
             List<Node> path = Dijkstra.getShortestPath(v);
             System.out.println("Path: " + path);
         }
-        /*
-        for(int i=0; i<4;i++)
-        {
-           Dijkstra.ComputePaths(g.nodes.get(i));
-        }
-        for (int i=0; i<4;i++)
-        {
-            Node v = g.nodes.get(i);
-            System.out.println("Distance to " + v.nodeID + ": " + v.minDistance);
-            List<Node> path = Dijkstra.getShortestPath(v);
-            System.out.println("Path: " + path);
-        }
-        */
+
 
         //Start at outside node
 
