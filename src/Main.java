@@ -31,6 +31,7 @@ public class Main {
         c.setEdge(d,1);
         d.setEdge(c,1);
 
+        //test
 
         g.distributeContentCustodians();
 
