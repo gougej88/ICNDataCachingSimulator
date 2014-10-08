@@ -16,7 +16,7 @@ public class Node {
     //index, ContentID
     LinkedHashMap<Integer,Integer> cache = new LinkedHashMap<Integer,Integer>(10);
     //nodeID stored on, contentID for each
-    Hashtable<Node,Content> contentCustodians = new Hashtable<Node, Content>();
+    Hashtable<Content,Node> contentCustodians = new Hashtable<Content, Node>();
     //nodeID to go to for next hop, and contentID
     //WILL I NEED?
     //Hashtable<Integer,Content> nextHop = new Hashtable<Integer, Content>();
@@ -49,29 +49,36 @@ public class Node {
         }
         return ret;
     }
-    public void receiveData(Content in, int route)
+    public void receiveData(Packet p)
     {
         //Store content in cache then send along path if not on this node
         //Check in cache, if so sendData
-        if(searchCache(in.contentID))
+        if(searchCache(p.search.contentID) && p.found==false)
         {
             //content found in cache send back to src
-            //sendData(in, route);
+            p.found=true;
+            p.hops++;
+            p.referrer = this;
+            p.dest = p.src;
+            sendData(p);
             powerDrain(1);
         }else{
             //Not found in cache, add to cache and forward to next hop
-            addToCache(in);
-            sendData(in, route);
+            addToCache(p.search);
+            sendData(p);
             powerDrain(1);
         }
 
 
     }
 
-    public void sendData(Content out, int route)
+    public void sendData(Packet p)
     {
         //Send content to next route
+        if(p.found) {
+        //Return to src
 
+        }
     }
 
     public boolean searchCache(int contentID)

@@ -55,6 +55,7 @@ public class Main {
 
 
         //Start at outside node
+        Dijkstra.findContent(g.getRandomNode(),g.getRandomContent());
 
         //Search grid for content custodian
 

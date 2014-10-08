@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * Created by n00430588 on 10/6/2014.
@@ -37,6 +34,21 @@ public class Dijkstra {
             path.add(vertex);
         Collections.reverse(path);
         return path;
+    }
+
+    public static Packet findContent(Node n, Content k){
+        Packet p = new Packet(n, k);
+        p.dest = n.contentCustodians.get(k);
+        p.route = getShortestPath(p.dest);
+        int i =0;
+        while(p.found == false)
+        {
+
+            p.route.get(i).sendData(p);
+            i++;
+        }
+
+        return p;
     }
 
 }

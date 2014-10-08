@@ -29,16 +29,26 @@ public class Graph {
 
     public void distributeContentCustodians() {
 
-        Hashtable<Node,Content> local = new Hashtable<Node, Content>();
+        Hashtable<Content,Node> local = new Hashtable<Content, Node>();
         for (int i = 0; i < size; i++)
         {
 
-            local.put(nodes.get(i), nodes.get(i).getContent());
+            local.put(nodes.get(i).getContent(), nodes.get(i));
         }
         for (int i = 0; i < size; i++) {
             nodes.get(i).contentCustodians = local;
         }
 
+    }
+
+    public Node getRandomNode(){
+        int ran = new Random().nextInt(size);
+        return nodes.get(ran);
+    }
+
+    public Content getRandomContent(){
+        int ran = new Random().nextInt(size);
+        return nodes.get(ran).getContent();
     }
 
 
