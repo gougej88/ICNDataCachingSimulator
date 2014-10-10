@@ -2,6 +2,7 @@
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Created by n00430588 on 9/24/2014.
@@ -14,7 +15,9 @@ public class Node {
     Edge[] edges;
     Content content = new Content();
     //index, ContentID
-    LinkedHashMap<Integer,Content> cache = new LinkedHashMap<Integer,Content>(10);
+    LinkedHashMap<Integer,Content> cache = new LinkedHashMap<Integer,Content>(10) {public boolean removeEldestEntry(Map.Entry eldest) {
+        return size() > 10;
+    }};
     //nodeID stored on, contentID for each
     Hashtable<Content,Node> contentCustodians = new Hashtable<Content, Node>();
     //nodeID to go to for next hop, and contentID
