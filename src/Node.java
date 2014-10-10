@@ -49,8 +49,18 @@ public class Node {
         }
         return ret;
     }
-    public void receiveData(Packet p)
+    public Packet receiveData(Packet p)
     {
+        //If this node is the dest
+        if(p.dest.nodeID == this.nodeID)
+        {
+            //p.hops++;
+            p.referrer = this;
+            p.data = content;
+            p.found=true;
+            powerDrain(1);
+            return p;
+        }
         //Store content in cache then send along path if not on this node
         //Check in cache, if so sendData
         if(searchCache(p.search.contentID) && p.found==false)
@@ -60,25 +70,35 @@ public class Node {
             p.hops++;
             p.referrer = this;
             p.dest = p.src;
-            sendData(p);
+            //p.data = content;
+
             powerDrain(1);
+            return p;
         }else{
             //Not found in cache, add to cache and forward to next hop
             addToCache(p.search);
-            sendData(p);
+            p.hops++;
+
             powerDrain(1);
+            return p;
         }
 
 
     }
 
-    public void sendData(Packet p)
+    public Packet sendData(Packet p)
     {
         //Send content to next route
         if(p.found) {
         //Return to src
+            p.route = Dijkstra.getShortestPath(p.src);
 
+            p = p.route.get(1).receiveData(p);
+        }else {
+            //p.route = Dijkstra.getShortestPath(p.dest);
+            p = p.route.get(1).receiveData(p);
         }
+        return p;
     }
 
     public boolean searchCache(int contentID)

@@ -9,6 +9,7 @@ public class Packet {
     Node dest;
     Node referrer;
     Content search;
+    Content data;
     Integer hops;
     Boolean found;
     List<Node> route;
