@@ -36,6 +36,7 @@ public class Main {
         g.distributeContentCustodians();
 
         //Test node for contentCustodians
+        /*
         Set set = c.contentCustodians.entrySet();
         Iterator it = set.iterator();
         while (it.hasNext()) {
@@ -52,17 +53,18 @@ public class Main {
             List<Node> path = Dijkstra.getShortestPath(v);
             System.out.println("Path: " + path);
         }
+        */
+
+        //Search for random content starting on random node
+        Packet ret =  Dijkstra.findContent(g.nodes.get(0),g.nodes.get(3).getContent());
+        System.out.println("Data found:" + ret.data.toString() + "on Node:" + ret.referrer.nodeID);
+        System.out.println("Number of hops: " + ret.hops.toString());
+
+        //Run again to test cache
+        Packet ret2 =  Dijkstra.findContent(g.nodes.get(0),g.nodes.get(3).getContent());
+        System.out.println("Data found:" + ret2.data.toString() + "on Node:" + ret2.referrer.nodeID);
+        System.out.println("Number of hops: " + ret2.hops.toString());
 
 
-        //Start at outside node
-        Packet ret =  Dijkstra.findContent(g.getRandomNode(),g.getRandomContent());
-        System.out.println(ret.data.toString());
-        System.out.println(ret.hops.toString());
-
-        //Search grid for content custodian
-
-        //Need to know where content found
-
-        //Print where content is found
     }
 }

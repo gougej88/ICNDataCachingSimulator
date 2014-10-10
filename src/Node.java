@@ -14,7 +14,7 @@ public class Node {
     Edge[] edges;
     Content content = new Content();
     //index, ContentID
-    LinkedHashMap<Integer,Integer> cache = new LinkedHashMap<Integer,Integer>(10);
+    LinkedHashMap<Integer,Content> cache = new LinkedHashMap<Integer,Content>(10);
     //nodeID stored on, contentID for each
     Hashtable<Content,Node> contentCustodians = new Hashtable<Content, Node>();
     //nodeID to go to for next hop, and contentID
@@ -54,7 +54,7 @@ public class Node {
         //If this node is the dest
         if(p.dest.nodeID == this.nodeID)
         {
-            //p.hops++;
+            p.hops++;
             p.referrer = this;
             p.data = content;
             p.found=true;
@@ -70,7 +70,7 @@ public class Node {
             p.hops++;
             p.referrer = this;
             p.dest = p.src;
-            //p.data = content;
+            p.data = cache.get(p.search.contentID);
 
             powerDrain(1);
             return p;
@@ -89,15 +89,7 @@ public class Node {
     public Packet sendData(Packet p)
     {
         //Send content to next route
-        if(p.found) {
-        //Return to src
-            p.route = Dijkstra.getShortestPath(p.src);
-
-            p = p.route.get(1).receiveData(p);
-        }else {
-            //p.route = Dijkstra.getShortestPath(p.dest);
-            p = p.route.get(1).receiveData(p);
-        }
+        p = p.next.receiveData(p);
         return p;
     }
 
@@ -114,7 +106,7 @@ public class Node {
     public void addToCache(Content x)
     {
         //Add content to cache when new content is received
-
+        this.cache.put(x.contentID,x);
     }
 
     public int powerDrain(int drain)

@@ -8,6 +8,7 @@ public class Packet {
     Node src;
     Node dest;
     Node referrer;
+    Node next;
     Content search;
     Content data;
     Integer hops;
