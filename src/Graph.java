@@ -32,8 +32,10 @@ public class Graph {
         Hashtable<Content,Node> local = new Hashtable<Content, Node>();
         for (int i = 0; i < size; i++)
         {
-
-            local.put(nodes.get(i).getContent(), nodes.get(i));
+            int kPerNode = nodes.get(i).content.size();
+            for(int k = 0; k < kPerNode; k++) {
+                local.put(nodes.get(i).getContent(k), nodes.get(i));
+            }
         }
         for (int i = 0; i < size; i++) {
             nodes.get(i).contentCustodians = local;
@@ -48,7 +50,7 @@ public class Graph {
 
     public Content getRandomContent(){
         int ran = new Random().nextInt(size);
-        return nodes.get(ran).getContent();
+        return nodes.get(ran).getContent(0);
     }
 
 

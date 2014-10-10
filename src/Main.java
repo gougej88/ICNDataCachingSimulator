@@ -22,6 +22,7 @@ public class Main {
         b.saveContent("This is content from node B.");
         c.saveContent("This is content from node C.");
         d.saveContent("This is content from node D.");
+        d.saveContent("This is new content");
 
         //Setup Edges
         a.setEdge(b,1);
@@ -56,14 +57,24 @@ public class Main {
         */
 
         //Search for random content starting on random node
-        Packet ret =  Dijkstra.findContent(g.nodes.get(0),g.nodes.get(3).getContent());
+        System.out.println("Starting test routing...");
+        System.out.println();
+
+        Packet ret =  Dijkstra.findContent(g.nodes.get(0),g.nodes.get(3).getContent(0));
         System.out.println("Data found:" + ret.data.toString() + "on Node:" + ret.referrer.nodeID);
         System.out.println("Number of hops: " + ret.hops.toString());
+        System.out.println();
 
         //Run again to test cache
-        Packet ret2 =  Dijkstra.findContent(g.nodes.get(0),g.nodes.get(3).getContent());
+        Packet ret2 =  Dijkstra.findContent(g.nodes.get(0),g.nodes.get(3).getContent(0));
         System.out.println("Data found:" + ret2.data.toString() + "on Node:" + ret2.referrer.nodeID);
         System.out.println("Number of hops: " + ret2.hops.toString());
+        System.out.println();
+
+        Packet ret3 =  Dijkstra.findContent(g.nodes.get(0),g.nodes.get(3).getContent(1));
+        System.out.println("Data found:" + ret3.data.toString() + "on Node:" + ret3.referrer.nodeID);
+        System.out.println("Number of hops: " + ret3.hops.toString());
+        System.out.println();
 
 
     }

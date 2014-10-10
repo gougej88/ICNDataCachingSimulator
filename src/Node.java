@@ -1,8 +1,5 @@
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by n00430588 on 9/24/2014.
@@ -13,9 +10,9 @@ public class Node {
     double minDistance = Double.POSITIVE_INFINITY;
     Node previous;
     Edge[] edges;
-    Content content = new Content();
+    ArrayList<Content> content = new ArrayList<Content>();
     //index, ContentID
-    LinkedHashMap<Integer,Content> cache = new LinkedHashMap<Integer,Content>(10) {public boolean removeEldestEntry(Map.Entry eldest) {
+    LinkedHashMap<UUID,Content> cache = new LinkedHashMap<UUID,Content>(10) {public boolean removeEldestEntry(Map.Entry eldest) {
         return size() > 10;
     }};
     //nodeID stored on, contentID for each
@@ -59,7 +56,9 @@ public class Node {
         {
             p.hops++;
             p.referrer = this;
-            p.data = content;
+            UUID s = p.search.contentID;
+            int f = content.indexOf(p.search);
+            p.data = content.get(f);
             p.found=true;
             powerDrain(1);
             return p;
@@ -96,8 +95,8 @@ public class Node {
         return p;
     }
 
-    public boolean searchCache(int contentID)
-    {
+    public boolean searchCache(UUID contentID)
+        {
         if(cache.containsKey(contentID))
         {
             return true;
@@ -122,14 +121,18 @@ public class Node {
     public void saveContent(String stuff)
     {
         //Make this node a content custodian. Should this be done as each node saves only 1 content item?
-        content.addContent(nodeID, stuff);
+        UUID contentID = UUID.randomUUID();
+        Content t = new Content();
+        t.addContent(contentID, stuff);
+        content.add(t);
+
 
 
     }
 
-    public Content getContent(){
+    public Content getContent(int index){
         //String stuff =  content.showContent(nodeID);
         //System.out.println(stuff);
-        return content;
+        return content.get(index);
     }
 }

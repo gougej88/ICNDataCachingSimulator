@@ -1,26 +1,28 @@
+import java.util.UUID;
 
 /**
  * Created by n00430588 on 9/24/2014.
  */
 public class Content {
     //right now each node can only hold 1 piece of content
-    int contentID;
+    UUID contentID;
     String content;
 
     public Content()
     {
 
+
     }
 
-    public Content getContent()
+    public Content getContent(UUID contentID)
     {
         return this;
     }
 
-    public void addContent(int contentID, String content)
+    public void addContent(UUID contentID, String stuff)
     {
         this.contentID = contentID;
-        this.content = content;
+        this.content = stuff;
     }
 
 
