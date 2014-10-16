@@ -13,28 +13,9 @@ public class Main {
         g.createGraph();
 
 
-        //Manual add content to nodes
-        g.nodes.get(0).saveContent("This is content from node A.");
-        g.nodes.get(1).saveContent("This is content from node B.");
-        g.nodes.get(2).saveContent("This is content from node C.");
-        g.nodes.get(3).saveContent("This is content from node D.");
-        g.nodes.get(3).saveContent("This is new content");
+        g.nodes.get(0).getAllEdges();
+        g.nodes.get(3).getAllEdges();
 
-
-        //Setup Edges
-        /*
-        a.setEdge(b,1);
-        a.setEdge(c,1);
-        b.setEdge(a,1);
-        b.setEdge(d,1);
-        c.setEdge(a,1);
-        c.setEdge(d,1);
-        d.setEdge(c,1);
-        d.setEdge(b,1);
-        */
-
-
-        //test
 
         g.distributeContentCustodians();
 
@@ -78,6 +59,10 @@ public class Main {
         System.out.println("Number of hops: " + ret3.hops.toString());
         System.out.println();
 
+        Packet ret4 =  Search.findContent(g.nodes.get(0),g.nodes.get(15).getContent(0));
+        System.out.println("Data found:" + ret4.data.toString() + "on Node:" + ret4.referrer.nodeID);
+        System.out.println("Number of hops: " + ret4.hops.toString());
+        System.out.println();
 
     }
 }

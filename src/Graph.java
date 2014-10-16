@@ -26,7 +26,7 @@ public class Graph {
 
         }
         setEdges();
-
+        createContent();
     }
 
     public void setEdges(){
@@ -35,20 +35,28 @@ public class Graph {
         {
 
                 if(i%width < width-1) {
-                    System.out.println("Set right edge:" + nodes.get(i).getNodeID());
+                    //System.out.println("Set right edge:" + nodes.get(i).getNodeID());
                     nodes.get(i).setEdge(nodes.get(i+1), 1);
                 } if(i < (size-width)) {
-                    System.out.println("Set bottom edge:" + nodes.get(i).getNodeID());
+                    //System.out.println("Set bottom edge:" + nodes.get(i).getNodeID());
                     nodes.get(i).setEdge(nodes.get(i+width), 1);
                 } if(i >= length)
                 {
-                    System.out.println("Set top edge:" + nodes.get(i).getNodeID());
+                    //System.out.println("Set top edge:" + nodes.get(i).getNodeID());
                     nodes.get(i).setEdge(nodes.get(i-length),1);
                 } if(i%length > 0)
                 {
-                    System.out.println("Set left edge:" + nodes.get(i).getNodeID());
+                    //System.out.println("Set left edge:" + nodes.get(i).getNodeID());
                     nodes.get(i).setEdge(nodes.get(i-1),1);
                 }
+        }
+    }
+
+    public void createContent(){
+        for(int i=0; i<size;i++)
+        {
+            nodes.get(i).saveContent("This is content from node "+ i);
+            nodes.get(i).saveContent("This is a second piece of content on node "+i);
         }
     }
 

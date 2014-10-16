@@ -4,10 +4,21 @@ import java.util.*;
  * Created by n00430588 on 10/6/2014.
  */
 public class Dijkstra {
+
+    public static class NodeCompator implements Comparator<Node>  {
+        public int compare(Node n1, Node n2) {
+            if (n1.minDistance > n2.minDistance) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    };
+
     public static void ComputePaths(Node src)
     {
         src.minDistance = 0;
-        PriorityQueue<Node> queue1 = new PriorityQueue<Node>();
+        PriorityQueue<Node> queue1 = new PriorityQueue<Node>(10, new NodeCompator());
         queue1.add(src);
 
         while(!queue1.isEmpty()){

@@ -9,7 +9,7 @@ public class Node {
     int batteryLifeRemaining;
     double minDistance = Double.POSITIVE_INFINITY;
     Node previous;
-    Edge[] edges;
+    ArrayList<Edge> edges = new ArrayList<Edge>();
     ArrayList<Content> content = new ArrayList<Content>();
     //index, ContentID
     LinkedHashMap<UUID,Content> cache = new LinkedHashMap<UUID,Content>(10) {public boolean removeEldestEntry(Map.Entry eldest) {
@@ -34,17 +34,17 @@ public class Node {
     }
 
     public void setEdge(Node n, Integer weight) {
-        edges = new Edge[]{ new Edge(n, weight)};
+        edges.add(new Edge(n, weight));
 
     }
 
 
     public ArrayList<Node> getAllEdges() {
-        int size = edges.length;
+        int size = edges.size();
         ArrayList<Node> ret = new ArrayList<Node>();
         for (int i = 0; i < size; i++)
         {
-            ret.add(i, edges[i].target);
+            ret.add(i, edges.get(i).target);
             System.out.println("Node ID: "+ ret.get(i).getNodeID());
         }
         return ret;
