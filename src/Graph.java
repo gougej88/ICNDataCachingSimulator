@@ -27,6 +27,28 @@ public class Graph {
 
     }
 
+    public void setEdges(){
+
+        for(int i=0; i<size;i++)
+        {
+                if((i%width) < (width-1)) {
+                    nodes.get(i).setEdge(nodes.get(i + 1), 1);
+                }
+                if(i < (size-width)) {
+                    nodes.get(i).setEdge(nodes.get(width + i), 1);
+                }
+                if(i > length)
+                {
+                    nodes.get(i).setEdge(nodes.get(i-length),1);
+                }
+                if(i%length > 0)
+                {
+                    nodes.get(i).setEdge(nodes.get(i-1),1);
+                }
+
+        }
+    }
+
     public void distributeContentCustodians() {
 
         Hashtable<Content,Node> local = new Hashtable<Content, Node>();

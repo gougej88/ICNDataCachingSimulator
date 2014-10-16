@@ -45,7 +45,7 @@ public class Node {
         for (int i = 0; i < size; i++)
         {
             ret.add(i, edges[i].target);
-            System.out.format("%d", ret.get(i).getNodeID());
+            System.out.println("Node ID: "+ ret.get(i).getNodeID());
         }
         return ret;
     }
