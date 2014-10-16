@@ -39,26 +39,15 @@ public class Main {
         System.out.println("Starting test routing...");
         System.out.println();
 
-        Packet ret =  Search.findContent(g.nodes.get(0),g.nodes.get(3).getContent(0));
-        System.out.println("Data found:" + ret.data.toString() + "on Node:" + ret.referrer.nodeID);
-        System.out.println("Number of hops: " + ret.hops.toString());
-        System.out.println();
+        Search.findContent(g.nodes.get(0),g.nodes.get(3).getContent(0));
 
         //Run again to test cache
-        Packet ret2 =  Search.findContent(g.nodes.get(0),g.nodes.get(3).getContent(0));
-        System.out.println("Data found:" + ret2.data.toString() + "on Node:" + ret2.referrer.nodeID);
-        System.out.println("Number of hops: " + ret2.hops.toString());
-        System.out.println();
+        Search.findContent(g.nodes.get(0),g.nodes.get(3).getContent(0));
 
-        Packet ret3 =  Search.findContent(g.nodes.get(0),g.nodes.get(3).getContent(1));
-        System.out.println("Data found:" + ret3.data.toString() + "on Node:" + ret3.referrer.nodeID);
-        System.out.println("Number of hops: " + ret3.hops.toString());
-        System.out.println();
+        Search.findContent(g.nodes.get(0),g.nodes.get(3).getContent(1));
 
-        Packet ret4 =  Search.findContent(g.nodes.get(0),g.nodes.get(15).getContent(0));
-        System.out.println("Data found:" + ret4.data.toString() + "on Node:" + ret4.referrer.nodeID);
-        System.out.println("Number of hops: " + ret4.hops.toString());
-        System.out.println();
+        Search.findContent(g.nodes.get(1),g.nodes.get(12).getContent(0));
+
 
     }
 }

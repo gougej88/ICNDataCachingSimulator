@@ -1,17 +1,23 @@
 /**
  * Created by Jeff on 10/15/2014.
  */
+
 public class Search {
 
-    public static Packet findContent(Node n, Content k){
+    public static void RunTest(Graph g){
+        //Create searches for content on Poisson Distribution
+
+        //Use Zipfian to see which piece of content to search for
+    }
+
+    public static void findContent(Node n, Content k){
         System.out.println("Starting node:" + n.nodeID);
         System.out.println("Search for:" + k.contentID);
         Packet p = new Packet(n, k);
         p.dest = n.contentCustodians.get(k);
         Dijkstra.ComputePaths(p.src);
         p.route = Dijkstra.getShortestPath(p.dest);
-        System.out.println("route size"+p.route.size());
-        System.out.println(p.route);
+        System.out.println("Route" + p.route);
         int i = 0;
         while(p.found == false)
         {
@@ -21,8 +27,9 @@ public class Search {
             p = p.route.get(i).sendData(p);
             i++;
         }
-
-        return p;
+        System.out.println("Data found:" + p.data.toString() + " on Node:" + p.referrer.nodeID);
+        System.out.println("Number of hops: " + p.hops.toString());
+        System.out.println();
     }
 
 }
