@@ -23,7 +23,9 @@ public class Graph {
             Node a = new Node(i);
             nodes.add(i,a);
 
+
         }
+        setEdges();
 
     }
 
@@ -31,21 +33,22 @@ public class Graph {
 
         for(int i=0; i<size;i++)
         {
-                if((i%width) < (width-1)) {
-                    nodes.get(i).setEdge(nodes.get(i + 1), 1);
-                }
-                if(i < (size-width)) {
-                    nodes.get(i).setEdge(nodes.get(width + i), 1);
-                }
-                if(i > length)
+
+                if(i%width < width-1) {
+                    System.out.println("Set right edge:" + nodes.get(i).getNodeID());
+                    nodes.get(i).setEdge(nodes.get(i+1), 1);
+                } if(i < (size-width)) {
+                    System.out.println("Set bottom edge:" + nodes.get(i).getNodeID());
+                    nodes.get(i).setEdge(nodes.get(i+width), 1);
+                } if(i >= length)
                 {
+                    System.out.println("Set top edge:" + nodes.get(i).getNodeID());
                     nodes.get(i).setEdge(nodes.get(i-length),1);
-                }
-                if(i%length > 0)
+                } if(i%length > 0)
                 {
+                    System.out.println("Set left edge:" + nodes.get(i).getNodeID());
                     nodes.get(i).setEdge(nodes.get(i-1),1);
                 }
-
         }
     }
 

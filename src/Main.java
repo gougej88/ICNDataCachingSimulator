@@ -9,27 +9,18 @@ public class Main {
         // write your code here
 
         //Create graph grid of nodes
-        Graph g = new Graph(2,2);
+        Graph g = new Graph(4,4);
         g.createGraph();
 
-        Node a = g.nodes.get(0);
-        Node b = g.nodes.get(1);
-        Node c = g.nodes.get(2);
-        Node d = g.nodes.get(3);
 
         //Manual add content to nodes
-        a.saveContent("This is content from node A.");
-        b.saveContent("This is content from node B.");
-        c.saveContent("This is content from node C.");
-        d.saveContent("This is content from node D.");
-        d.saveContent("This is new content");
+        g.nodes.get(0).saveContent("This is content from node A.");
+        g.nodes.get(1).saveContent("This is content from node B.");
+        g.nodes.get(2).saveContent("This is content from node C.");
+        g.nodes.get(3).saveContent("This is content from node D.");
+        g.nodes.get(3).saveContent("This is new content");
 
-        g.setEdges();
-        g.nodes.get(0).setEdge(g.nodes.get(1),1);
-        g.nodes.get(0).getAllEdges();
-        g.nodes.get(1).getAllEdges();
-        g.nodes.get(2).getAllEdges();
-        g.nodes.get(3).getAllEdges();
+
         //Setup Edges
         /*
         a.setEdge(b,1);
