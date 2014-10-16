@@ -12,11 +12,7 @@ public class Main {
         Graph g = new Graph(4,4);
         g.createGraph();
 
-
-        g.nodes.get(0).getAllEdges();
-        g.nodes.get(3).getAllEdges();
-
-
+        //Broadcast all content custodians to all nodes in graph
         g.distributeContentCustodians();
 
         //Test node for contentCustodians
