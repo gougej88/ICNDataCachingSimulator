@@ -20,6 +20,7 @@ public class Search {
         System.out.println("Search for:" + k.contentID);
         Packet p = new Packet(n, k);
         p.dest = n.contentCustodians.get(k);
+        System.out.println("Dest node for content: "+ p.dest.nodeID);
         Dijkstra.ComputePaths(p.src);
         p.route = Dijkstra.getShortestPath(p.dest);
         System.out.println("Route" + p.route);
