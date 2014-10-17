@@ -25,8 +25,13 @@ public class Graph {
 
 
         }
+
+        //Setup the rest of the graph
         setEdges();
         createContent();
+        assignZipf();
+        distributeContentCustodians();
+        System.out.println("Test Zipf content " + getZipfContent().contentID);
     }
 
     public void setEdges(){
@@ -60,6 +65,55 @@ public class Graph {
         }
     }
 
+    public void assignZipf(){
+        int totalContent = 0;
+        for(int i=0; i<size;i++)
+        {
+           int numContentOnNode =  nodes.get(i).getContentCount();
+           totalContent += numContentOnNode;
+        }
+        //System.out.println("Total content items in graph: " + totalContent);
+
+        Zipf zip = new Zipf(totalContent,1);
+        ArrayList<Double> ranks = new ArrayList<Double>();
+        for(int j=0; j<totalContent; j++)
+        {
+            ranks.add(zip.getProbability(j));
+        }
+        //Shuffle the ranks
+        Collections.shuffle(ranks);
+        for(int i=0; i<size;i++) {
+            nodes.get(i).content.get(0).probability = ranks.get(i);
+            nodes.get(i).content.get(1).probability = ranks.get(i*2+1);
+        }
+
+        //Test Zipf probability randomization
+        System.out.println("Prob of node 2 content 1 "+ nodes.get(2).content.get(1).probability);
+        System.out.println("Prob of node 6 content 0 "+ nodes.get(6).content.get(0).probability);
+    }
+
+    public Content getZipfContent()
+    {
+        double totalSum = 0.0;
+        double x = Math.random();
+        Content r = new Content();
+        ArrayList<Content> allContent = new ArrayList<Content>();
+        for(int i=0; i<size;i++) {
+            allContent.add(i * 2, nodes.get(i).content.get(0));
+            allContent.add(i * 2 + 1, nodes.get(i).content.get(1));
+        }
+        for(Content k : allContent )
+        {
+            totalSum += k.probability;
+            if(x <= totalSum)
+            {
+                r = k;
+                break;
+            }
+        }
+       return r;
+    }
+
     public void distributeContentCustodians() {
 
         Hashtable<Content,Node> local = new Hashtable<Content, Node>();
@@ -76,15 +130,8 @@ public class Graph {
 
     }
 
-    public Node getRandomNode(){
-        int ran = new Random().nextInt(size);
-        return nodes.get(ran);
-    }
 
-    public Content getRandomContent(){
-        int ran = new Random().nextInt(size);
-        return nodes.get(ran).getContent(0);
-    }
+
 
 
 

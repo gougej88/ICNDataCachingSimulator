@@ -12,10 +12,6 @@ public class Main {
         Graph g = new Graph(4,4);
         g.createGraph();
 
-        //Broadcast all content custodians to all nodes in graph
-        g.distributeContentCustodians();
-
-
         //Search for random content starting on random node
         System.out.println("Starting test routing...");
         System.out.println();

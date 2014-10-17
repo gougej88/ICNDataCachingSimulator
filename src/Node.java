@@ -135,4 +135,8 @@ public class Node {
         //System.out.println(stuff);
         return content.get(index);
     }
+
+    public int getContentCount(){
+        return content.size();
+    }
 }

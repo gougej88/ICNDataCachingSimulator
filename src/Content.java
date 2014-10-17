@@ -7,6 +7,7 @@ public class Content {
     //right now each node can only hold 1 piece of content
     UUID contentID;
     String content;
+    double probability;
 
     public Content()
     {

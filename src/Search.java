@@ -8,8 +8,7 @@ public class Search {
         findContent(g.nodes.get(0),g.nodes.get(3).getContent(0));
         //Run again to test cache
         findContent(g.nodes.get(0),g.nodes.get(3).getContent(0));
-        findContent(g.nodes.get(0),g.nodes.get(3).getContent(1));
-        findContent(g.nodes.get(1),g.nodes.get(12).getContent(0));
+        findContent(g.nodes.get(0),g.getZipfContent());
 
         //Create searches for content on Poisson Distribution
 
