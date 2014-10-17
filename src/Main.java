@@ -16,7 +16,7 @@ public class Main {
         System.out.println("Starting test routing...");
         System.out.println();
 
-        Search.runTest(g,100);
+        Search.runTest(g,5);
 
     }
 }

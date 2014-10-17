@@ -8,8 +8,9 @@ public class Search {
         findContent(g.nodes.get(0),g.nodes.get(3).getContent(0));
         //Run again to test cache
         findContent(g.nodes.get(0),g.nodes.get(3).getContent(0));
-        findContent(g.nodes.get(0),g.getZipfContent());
-
+        for(int x=0; x<numTests; x++) {
+            findContent(g.nodes.get(0), g.getZipfContent());
+        }
         //Create searches for content on Poisson Distribution
 
         //Use Zipfian to see which piece of content to search for
@@ -20,7 +21,7 @@ public class Search {
         System.out.println("Search for:" + k.contentID);
         Packet p = new Packet(n, k);
         p.dest = n.contentCustodians.get(k);
-        System.out.println("Dest node for content: "+ p.dest.nodeID);
+        System.out.println("Dest node for content: " + p.dest.nodeID);
         Dijkstra.ComputePaths(p.src);
         p.route = Dijkstra.getShortestPath(p.dest);
         System.out.println("Route" + p.route);
@@ -30,8 +31,12 @@ public class Search {
             if(i < p.route.size()) {
                 p.next = p.route.get(i + 1);
             }
-            p = p.route.get(i).sendData(p);
-            i++;
+            if(p.dest != p.src) {
+                p = p.route.get(i).sendData(p);
+            }else{
+                System.out.println("Content is on the requesting node");
+            }
+                i++;
         }
         System.out.println("Data found:" + p.data.toString() + " on Node:" + p.referrer.nodeID);
         System.out.println("Number of hops: " + p.hops.toString());
