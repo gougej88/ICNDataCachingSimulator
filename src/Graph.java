@@ -79,6 +79,8 @@ public class Graph {
                 nodes.get(contentCust).saveContent("This is a sixth piece of content on node "+contentCust);
                 nodes.get(contentCust).saveContent("This is a seventh piece of content on node "+contentCust);
                 nodes.get(contentCust).saveContent("This is a eighth piece of content on node "+contentCust);
+                nodes.get(contentCust).saveContent("This is a ninth piece of content on node "+contentCust);
+                nodes.get(contentCust).saveContent("This is a tenth piece of content on node "+contentCust);
 
             }
         }
