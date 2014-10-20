@@ -70,7 +70,7 @@ public class Graph {
         {
             int contentCust = rand.nextInt(size);
             if(!n.contains(contentCust)) {
-                n.add(i, contentCust);
+                n.add(contentCust);
                 nodes.get(contentCust).saveContent("This is content from node "+ contentCust);
                 nodes.get(contentCust).saveContent("This is a second piece of content on node "+contentCust);
                 nodes.get(contentCust).saveContent("This is a third piece of content on node "+contentCust);
@@ -142,7 +142,8 @@ public class Graph {
             //i++;
         }
 
-        System.out.println("Random x = " + x);
+        //Test for popularity search
+        //System.out.println("Random x = " + x);
         for(Content k : allContent )
         {
             totalSum += k.probability;

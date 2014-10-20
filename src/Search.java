@@ -1,3 +1,5 @@
+import java.util.*;
+
 /**
  * Created by Jeff on 10/15/2014.
  */
@@ -8,8 +10,14 @@ public class Search {
         //findContent(g.nodes.get(0),g.nodes.get(3).contentCustodians.keys().nextElement());
         //Run again to test cache
         //findContent(g.nodes.get(0),g.nodes.get(3).getContent(0));
+        double temp = g.size * .2;
+        int numCustodians = (int)temp;
+        int requesters = g.size - numCustodians;
+        System.out.println("Num of content custodians: "+numCustodians);
+        System.out.println("Num of requesters: "+requesters);
+        Random rand = new Random();
         for(int x=0; x<numTests; x++) {
-            findContent(g.nodes.get(0), g.getZipfContent());
+            findContent(g.nodes.get(19), g.getZipfContent());
         }
         //Create searches for content on Poisson Distribution
 
@@ -28,19 +36,20 @@ public class Search {
         int i = 0;
         while(p.found == false)
         {
-            if(i < p.route.size()) {
+            if(p.dest != p.src && i < p.route.size()) {
                 p.next = p.route.get(i + 1);
-            }
-            if(p.dest != p.src) {
                 p = p.route.get(i).sendData(p);
             }else{
                 System.out.println("Content is on the requesting node");
+                break;
             }
                 i++;
         }
-        System.out.println("Data found:" + p.data.toString() + " on Node:" + p.referrer.nodeID);
-        System.out.println("Number of hops: " + p.hops.toString());
-        System.out.println();
+        if(p.found) {
+            System.out.println("Data found:" + p.data.toString() + " on Node:" + p.referrer.nodeID);
+            System.out.println("Number of hops: " + p.hops.toString());
+            System.out.println();
+        }
     }
 
 }
