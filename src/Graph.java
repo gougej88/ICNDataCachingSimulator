@@ -1,5 +1,6 @@
 import java.util.*;
 
+
 /**
  * Created by n00430588 on 10/3/2014.
  */
@@ -7,7 +8,9 @@ public class Graph {
     int length;
     int width;
     ArrayList<Node> nodes = new ArrayList<Node>();
+    Hashtable<Content,Node> localContentCustodians = new Hashtable<Content, Node>();
     int size;
+
 
 
     public Graph(int length, int width) {
@@ -28,10 +31,11 @@ public class Graph {
 
         //Setup the rest of the graph
         setEdges();
-        createContent();
-        assignZipf();
+        createContentCustodians();
         distributeContentCustodians();
-        System.out.println("Test Zipf content " + getZipfContent().contentID);
+        assignPopularityDistribution();
+
+
     }
 
     public void setEdges(){
@@ -57,39 +61,62 @@ public class Graph {
         }
     }
 
-    public void createContent(){
-        for(int i=0; i<size;i++)
+    public void createContentCustodians(){
+        ArrayList<Integer> n = new ArrayList<Integer>();
+        double temp = size * .2;
+        int numCustodians = (int)temp;
+        Random rand = new Random();
+        for(int i = 0; i<numCustodians; i++)
         {
-            nodes.get(i).saveContent("This is content from node "+ i);
-            nodes.get(i).saveContent("This is a second piece of content on node "+i);
+            int contentCust = rand.nextInt(size);
+            if(!n.contains(contentCust)) {
+                n.add(i, contentCust);
+                nodes.get(contentCust).saveContent("This is content from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is a second piece of content on node "+contentCust);
+                nodes.get(contentCust).saveContent("This is a third piece of content on node "+contentCust);
+                nodes.get(contentCust).saveContent("This is a fourth piece of content on node "+contentCust);
+                nodes.get(contentCust).saveContent("This is a fifth piece of content on node "+contentCust);
+                nodes.get(contentCust).saveContent("This is a sixth piece of content on node "+contentCust);
+                nodes.get(contentCust).saveContent("This is a seventh piece of content on node "+contentCust);
+                nodes.get(contentCust).saveContent("This is a eighth piece of content on node "+contentCust);
+
+            }
         }
     }
 
-    public void assignZipf(){
-        int totalContent = 0;
-        for(int i=0; i<size;i++)
-        {
-           int numContentOnNode =  nodes.get(i).getContentCount();
-           totalContent += numContentOnNode;
-        }
+    public void assignPopularityDistribution(){
+        //int totalContent = 0;
+        //for(int i=0; i<size;i++)
+        //{
+          // int numContentOnNode =  nodes.get(i).getContentCount();
+          // totalContent += numContentOnNode;
+       //}
         //System.out.println("Total content items in graph: " + totalContent);
-
+        int totalContent = localContentCustodians.size();
+        System.out.println("Number of content items: " + totalContent);
         Zipf zip = new Zipf(totalContent,1);
         ArrayList<Double> ranks = new ArrayList<Double>();
+        double test = 0;
         for(int j=0; j<totalContent; j++)
         {
-            ranks.add(zip.getProbability(j));
+            ranks.add(zip.getProbability(j+1));
+            //System.out.print(" Zip prob:"+zip.getProbability(j+1));
+            //test += zip.getProbability(j+1);
         }
+        //System.out.println("Total prob sum: "+ test);
         //Shuffle the ranks
         Collections.shuffle(ranks);
-        for(int i=0; i<size;i++) {
-            nodes.get(i).content.get(0).probability = ranks.get(i);
-            nodes.get(i).content.get(1).probability = ranks.get(i*2+1);
+
+        Enumeration e = localContentCustodians.keys();
+        int i = 0;
+        while(e.hasMoreElements()){
+
+            Content k = (Content) e.nextElement();
+            k.probability = ranks.get(i);
+            i++;
+            //System.out.println(k);
         }
 
-        //Test Zipf probability randomization
-        System.out.println("Prob of node 2 content 1 "+ nodes.get(2).content.get(1).probability);
-        System.out.println("Prob of node 6 content 0 "+ nodes.get(6).content.get(0).probability);
     }
 
     public Content getZipfContent()
@@ -97,14 +124,27 @@ public class Graph {
         double totalSum = 0.0;
         double x = Math.random();
         Content r = new Content();
+        //ArrayList<Content> allContent = new ArrayList<Content>();
+        //for(int i=0; i<size;i++) {
+            //allContent.add(i * 2, nodes.get(i).content.get(0));
+           // allContent.add(i * 2 + 1, nodes.get(i).content.get(1));
+       // }
         ArrayList<Content> allContent = new ArrayList<Content>();
-        for(int i=0; i<size;i++) {
-            allContent.add(i * 2, nodes.get(i).content.get(0));
-            allContent.add(i * 2 + 1, nodes.get(i).content.get(1));
+        Enumeration e = localContentCustodians.keys();
+        //int i =0;
+        while(e.hasMoreElements()){
+
+            Content t = (Content) e.nextElement();
+            allContent.add(t);
+            //System.out.println("Adding to allcontent: "+ allContent.get(i).contentID);
+            //i++;
         }
+
+        System.out.println("Random x = " + x);
         for(Content k : allContent )
         {
             totalSum += k.probability;
+            //System.out.print(" k prob : "+ k.probability + "content id " + k.contentID);
             if(x <= totalSum)
             {
                 r = k;
@@ -116,16 +156,16 @@ public class Graph {
 
     public void distributeContentCustodians() {
 
-        Hashtable<Content,Node> local = new Hashtable<Content, Node>();
+
         for (int i = 0; i < size; i++)
         {
             int kPerNode = nodes.get(i).content.size();
             for(int k = 0; k < kPerNode; k++) {
-                local.put(nodes.get(i).getContent(k), nodes.get(i));
+                localContentCustodians.put(nodes.get(i).getContent(k), nodes.get(i));
             }
         }
         for (int i = 0; i < size; i++) {
-            nodes.get(i).contentCustodians = local;
+            nodes.get(i).contentCustodians = localContentCustodians;
         }
 
     }

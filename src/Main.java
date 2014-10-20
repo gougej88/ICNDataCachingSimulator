@@ -9,14 +9,14 @@ public class Main {
         // write your code here
 
         //Create graph grid of nodes
-        Graph g = new Graph(4,4);
+        Graph g = new Graph(5,5);
         g.createGraph();
 
         //Search for random content starting on random node
         System.out.println("Starting test routing...");
         System.out.println();
 
-        Search.runTest(g,5);
+        Search.runTest(g,10);
 
     }
 }
