@@ -44,18 +44,18 @@ public class Graph {
         {
 
                 if(i%width < width-1) {
-                    //System.out.println("Set right edge:" + nodes.get(i).getNodeID());
+                    //System.out.println("Set right edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i+1).nodeID);
                     nodes.get(i).setEdge(nodes.get(i+1), 1);
                 } if(i < (size-width)) {
-                    //System.out.println("Set bottom edge:" + nodes.get(i).getNodeID());
+                    //System.out.println("Set bottom edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i+width).nodeID);
                     nodes.get(i).setEdge(nodes.get(i+width), 1);
                 } if(i >= length)
                 {
-                    //System.out.println("Set top edge:" + nodes.get(i).getNodeID());
+                    //System.out.println("Set top edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i-length).nodeID);
                     nodes.get(i).setEdge(nodes.get(i-length),1);
                 } if(i%length > 0)
                 {
-                    //System.out.println("Set left edge:" + nodes.get(i).getNodeID());
+                    //System.out.println("Set left edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i-1).nodeID);
                     nodes.get(i).setEdge(nodes.get(i-1),1);
                 }
         }
@@ -84,18 +84,13 @@ public class Graph {
 
             }
         }
+
     }
 
     public void assignPopularityDistribution(){
-        //int totalContent = 0;
-        //for(int i=0; i<size;i++)
-        //{
-          // int numContentOnNode =  nodes.get(i).getContentCount();
-          // totalContent += numContentOnNode;
-       //}
-        //System.out.println("Total content items in graph: " + totalContent);
+
         int totalContent = localContentCustodians.size();
-        System.out.println("Number of content items: " + totalContent);
+        //System.out.println("Number of content items: " + totalContent);
         Zipf zip = new Zipf(totalContent,1);
         ArrayList<Double> ranks = new ArrayList<Double>();
         double test = 0;
@@ -106,6 +101,7 @@ public class Graph {
             //test += zip.getProbability(j+1);
         }
         //System.out.println("Total prob sum: "+ test);
+
         //Shuffle the ranks
         Collections.shuffle(ranks);
 
