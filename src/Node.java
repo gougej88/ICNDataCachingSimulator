@@ -73,8 +73,8 @@ public class Node {
             p.referrer = this;
             p.dest = p.src;
             p.data = cache.get(p.search.contentID);
-
             powerDrain(1);
+            System.out.println("Content Found in Cache!!!");
             return p;
         }else{
             //Not found in cache, add to cache and forward to next hop

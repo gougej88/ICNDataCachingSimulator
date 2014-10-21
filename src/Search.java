@@ -8,6 +8,10 @@ public class Search {
 
     public static void runTest(Graph g, int numTests){
 
+
+        //Create searches for content on Poisson Distribution
+
+        //Get all nodes that are not content custodians
         ArrayList<Node> requesters = new ArrayList<Node>();
         for(int j=0; j<g.size; j++)
         {
@@ -18,22 +22,19 @@ public class Search {
 
             }
         }
+        //Get a random requester (aka not a custodian)
         double temp = g.size * .2;
         int numCustodians = (int)temp;
         Random rand = new Random(g.size-numCustodians);
-        System.out.println("Get random requester: "+ requesters.get(rand.nextInt(requesters.size())));
+        //System.out.println("Get random requester: "+ requesters.get(rand.nextInt(requesters.size())));
 
         for(int x=0; x<numTests; x++) {
-
-            //findContent(g, g.nodes.get(5), g.getZipfContent());
-            //findContent(g, g.nodes.get(13), g.getZipfContent());
 
             findContent(g, g.nodes.get(requesters.get(rand.nextInt(requesters.size())).nodeID), g.getZipfContent());
         }
 
-        //Create searches for content on Poisson Distribution
 
-        //Use Zipfian to see which piece of content to search for
+
     }
 
     public static void findContent(Graph g, Node n, Content k){
@@ -53,6 +54,7 @@ public class Search {
                 p.next = p.route.get(i + 1);
                 p = p.route.get(i).sendData(p);
             }else{
+                //This should only occur if a content custodian makes a request
                 System.out.println("Content is on the requesting node");
                 break;
             }
