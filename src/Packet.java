@@ -12,6 +12,7 @@ public class Packet {
     Content search;
     Content data;
     Integer hops;
+    Boolean cachehit;
     Boolean found;
     List<Node> route;
 
@@ -19,6 +20,7 @@ public class Packet {
         this.src = s;
         this.search = k;
         this.hops = 0;
+        this.cachehit = false;
         this.found = false;
 
     }

@@ -75,6 +75,7 @@ public class Node {
             p.data = cache.get(p.search.contentID);
             powerDrain(1);
             System.out.println("Content Found in Cache!!!");
+            p.cachehit = true;
             return p;
         }else{
             //Not found in cache, add to cache and forward to next hop
