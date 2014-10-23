@@ -30,9 +30,17 @@ public class Graph {
         }
 
         //Setup the rest of the graph
+        //Create all edges and weights
         setEdges();
+
+        //Make 20% of the nodes content custodians and assign content to each one
         createContentCustodians();
+
+        //Pass a hashtable of all content and their respective custodian to all nodes
+        //All nodes must know where content lives in order to route correctly
         distributeContentCustodians();
+
+        //Use Distribution to assign popularity to each piece of content in the graph
         assignPopularityDistribution();
 
 
@@ -42,18 +50,25 @@ public class Graph {
 
         for(int i=0; i<size;i++)
         {
-
+                //Check if node has a neighbor to the right
                 if(i%width < width-1) {
                     //System.out.println("Set right edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i+1).nodeID);
                     nodes.get(i).setEdge(nodes.get(i+1), 1);
-                } if(i < (size-width)) {
+
+                }
+                //Check if node has a neighbor to the bottom
+                if(i < (size-width)) {
                     //System.out.println("Set bottom edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i+width).nodeID);
                     nodes.get(i).setEdge(nodes.get(i+width), 1);
-                } if(i >= length)
+                }
+                //Check if node has a neighbor to the top
+                if(i >= length)
                 {
                     //System.out.println("Set top edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i-length).nodeID);
                     nodes.get(i).setEdge(nodes.get(i-length),1);
-                } if(i%length > 0)
+                }
+                //Check if node has a neighbor to the left
+                if(i%length > 0)
                 {
                     //System.out.println("Set left edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i-1).nodeID);
                     nodes.get(i).setEdge(nodes.get(i-1),1);
@@ -63,9 +78,11 @@ public class Graph {
 
     public void createContentCustodians(){
         ArrayList<Integer> n = new ArrayList<Integer>();
+        //Get 20% of the graph size and make them content custodians
         double temp = size * .2;
         int numCustodians = (int)temp;
         Random rand = new Random();
+        //Loop and create random nodes in the graph as content custodians
         for(int i = 0; i<numCustodians; i++)
         {
             int contentCust = rand.nextInt(size);
@@ -91,9 +108,11 @@ public class Graph {
 
         int totalContent = localContentCustodians.size();
         //System.out.println("Number of content items: " + totalContent);
+        //Create a zipfian distribution
         Zipf zip = new Zipf(totalContent,1);
         ArrayList<Double> ranks = new ArrayList<Double>();
         double test = 0;
+        //Assign the distribution probabilities to an array and shuffle them before assign popularity to each piece of content
         for(int j=0; j<totalContent; j++)
         {
             ranks.add(zip.getProbability(j+1));
@@ -105,6 +124,7 @@ public class Graph {
         //Shuffle the ranks
         Collections.shuffle(ranks);
 
+        //Assign all the ranks to each piece of content
         Enumeration e = localContentCustodians.keys();
         int i = 0;
         while(e.hasMoreElements()){
@@ -119,6 +139,7 @@ public class Graph {
 
     public Content getZipfContent()
     {
+        //This method will grab a random piece of content based on its popularity
         double totalSum = 0.0;
         double x = Math.random();
         Content r = new Content();
@@ -154,15 +175,19 @@ public class Graph {
     }
 
     public void distributeContentCustodians() {
+    //This method is used to pass a hashtable of all content and respective nodes to all nodes
+    //It must be called after creating all content custodians
 
-
+        //Start at each node and check the number of content items on that node
         for (int i = 0; i < size; i++)
         {
             int kPerNode = nodes.get(i).content.size();
+            //Loop through each piece of content on that node and all it to the local variable hashtable
             for(int k = 0; k < kPerNode; k++) {
                 localContentCustodians.put(nodes.get(i).getContent(k), nodes.get(i));
             }
         }
+        //Loop through all the nodes and assign the local hashtable to the hashtable on each node
         for (int i = 0; i < size; i++) {
             nodes.get(i).contentCustodians = localContentCustodians;
         }
