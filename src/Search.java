@@ -10,14 +10,16 @@ public class Search {
 
 
         //Create searches for content on Poisson Distribution
+        /*
         int p = 0;
         for(int x=0; x<numTests; x++) {
-           p= Poisson.getPoisson(1);
+            p= Poisson.getPoisson(1);
             System.out.println("Poisson: "+ p);
-        }
+
+        }*/
 
 
-            //Get all nodes that are not content custodians
+        //Get all nodes that are not content custodians, thus requesters
         ArrayList<Node> requesters = new ArrayList<Node>();
         for(int j=0; j<g.size; j++)
         {
@@ -28,19 +30,27 @@ public class Search {
 
             }
         }
+
         //Get a random requester (aka not a custodian)
         double temp = g.size * .2;
         int numCustodians = (int)temp;
         Random rand = new Random(g.size-numCustodians);
         //System.out.println("Get random requester: "+ requesters.get(rand.nextInt(requesters.size())));
 
+        //Each numTests is a time step
         int cachehits = 0;
         double percent = 0;
+        int p = 0;
         for(int x=0; x<numTests; x++) {
+            //Get the number of requests to create per time step
+            p= Poisson.getPoisson(1);
 
-           Boolean r = findContent(g, g.nodes.get(requesters.get(rand.nextInt(requesters.size())).nodeID), g.getZipfContent());
-            if(r)
-                cachehits++;
+            //Perform a search based on the poisson distribution
+            for(int num=0;num<p;num++) {
+                Boolean r = findContent(g, g.nodes.get(requesters.get(rand.nextInt(requesters.size())).nodeID), g.getZipfContent());
+                if (r)
+                    cachehits++;
+            }
         }
         percent = (double)cachehits/(double)numTests *100;
         System.out.println("Number of cache hits in test: "+ cachehits);
