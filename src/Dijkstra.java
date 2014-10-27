@@ -21,7 +21,6 @@ public class Dijkstra {
     public static void ComputePaths(Graph g, Node src)
     {
         src.minDistance = 0.;
-        src.previous = null;
         Queue<Node> queue1 = new LinkedList<Node>();
 
         queue1.add(src);
@@ -30,7 +29,6 @@ public class Dijkstra {
             if(n.nodeID != src.nodeID)
             {
                 n.minDistance = Double.POSITIVE_INFINITY;
-                n.previous = null;
                 queue1.add(n);
             }
 
@@ -48,18 +46,23 @@ public class Dijkstra {
                 double distanceThru = u.minDistance + weight;
                 if(distanceThru < x.minDistance) {
                     x.minDistance = distanceThru;
-                    //System.out.print("Previous node: "+ u.nodeID);
-                    x.previous = u;
-                    //System.out.println("Current node: "+ x.nodeID);
+
+                    if(x.previous == null || !x.previous.containsKey(src))
+                    {
+                        x.previous.put(src,u);
+                    }else {
+                        x.previous.replace(src, u);
+                    }
+
                 }
             }
         }
 
     }
 
-    public static List<Node> getShortestPath(Node target){
+    public static List<Node> getShortestPath(Node src, Node target){
         List<Node> path = new ArrayList<Node>();
-        for (Node vertex = target; vertex != null; vertex = vertex.previous) {
+        for (Node vertex = target; vertex != null; vertex = vertex.previous.get(src)) {
             //System.out.println("Adding node to path: "+ vertex.nodeID);
             path.add(vertex);
         }

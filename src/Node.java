@@ -8,7 +8,8 @@ public class Node {
     int nodeID;
     int batteryLifeRemaining;
     double minDistance = Double.POSITIVE_INFINITY;
-    Node previous;
+    Hashtable<Node,Node> previous = new Hashtable<Node, Node>();
+    //Node previous;
     ArrayList<Edge> edges = new ArrayList<Edge>();
     ArrayList<Content> content = new ArrayList<Content>();
     //index, ContentID
@@ -79,6 +80,7 @@ public class Node {
             return p;
         }else{
             //Not found in cache, add to cache and forward to next hop
+            //DISABLE/ENABLE CACHE HERE
             addToCache(p.search);
             p.hops++;
 

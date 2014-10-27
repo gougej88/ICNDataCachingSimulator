@@ -12,11 +12,12 @@ public class Main {
         Graph g = new Graph(5,5);
         g.createGraph();
 
+
         //Search for random content starting on random node
         System.out.println("Starting test routing...");
         System.out.println();
 
-        Search.runTest(g,5000);
+        Search.runTest(g,500);
 
     }
 }

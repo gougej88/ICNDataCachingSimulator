@@ -10,22 +10,19 @@ public class Search {
 
 
         //Create searches for content on Poisson Distribution
-        /*
-        int p = 0;
-        for(int x=0; x<numTests; x++) {
-            p= Poisson.getPoisson(1);
-            System.out.println("Poisson: "+ p);
-
-        }*/
 
 
         //Get all nodes that are not content custodians, thus requesters
         ArrayList<Node> requesters = new ArrayList<Node>();
         for(int j=0; j<g.size; j++)
         {
+            //COMPUTE ALL PATHS FROM EACH SRC ONCE
+            Dijkstra.ComputePaths(g, g.nodes.get(j));
 
+            //Check if the node is a custodian. if not: add to requesters
             if(!g.localContentCustodians.contains(g.nodes.get(j)))
             {
+
                 requesters.add(g.nodes.get(j));
 
             }
@@ -37,36 +34,47 @@ public class Search {
         Random rand = new Random(g.size-numCustodians);
         //System.out.println("Get random requester: "+ requesters.get(rand.nextInt(requesters.size())));
 
+
+        PacketTracer test = new PacketTracer();
         //Each numTests is a time step
         int cachehits = 0;
+        int totalHops = 0;
         double percent = 0;
         int p = 0;
+        int jump = 0;
+        int maxtime = 0;
+
         for(int x=0; x<numTests; x++) {
             //Get the number of requests to create per time step
+            jump = p;
             p= Poisson.getPoisson(1);
-
-            //Perform a search based on the poisson distribution
-            for(int num=0;num<p;num++) {
-                Boolean r = findContent(g, g.nodes.get(requesters.get(rand.nextInt(requesters.size())).nodeID), g.getZipfContent());
-                if (r)
+            test.addToTest(jump+p,g.getZipfContent(),g.nodes.get(requesters.get(rand.nextInt(requesters.size())).nodeID));
+                Packet r = findContent(g, g.nodes.get(requesters.get(rand.nextInt(requesters.size())).nodeID), g.getZipfContent());
+                if (r.cachehit)
                     cachehits++;
-            }
+
+                totalHops+=r.hops;
+                maxtime += p;
+
         }
+        System.out.println(test.k.size());
+        System.out.println("Maxtime: " + maxtime);
         percent = (double)cachehits/(double)numTests *100;
+        System.out.println("Number of tests performed: "+ numTests);
+        System.out.println("Number of hops in test: "+ totalHops);
         System.out.println("Number of cache hits in test: "+ cachehits);
         System.out.println("Percentage of cache hits: "+ percent+"%");
 
     }
 
-    public static Boolean findContent(Graph g, Node n, Content k){
+    public static Packet findContent(Graph g, Node n, Content k){
 
         System.out.println("Starting node:" + n.nodeID);
         System.out.println("Search for:" + k.contentID);
         Packet p = new Packet(n, k);
         p.dest = n.contentCustodians.get(k);
         System.out.println("Dest node for content: " + p.dest.nodeID);
-        Dijkstra.ComputePaths(g, p.src);
-        p.route = Dijkstra.getShortestPath(p.dest);
+        p.route = Dijkstra.getShortestPath(p.src,p.dest);
         System.out.println("Route" + p.route);
         int i = 0;
         while(p.found == false)
@@ -88,7 +96,7 @@ public class Search {
             System.out.println("Number of hops: " + p.hops.toString());
             System.out.println();
         }
-        return p.cachehit;
+        return p;
     }
 
 }
