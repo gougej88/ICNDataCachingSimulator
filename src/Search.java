@@ -8,7 +8,7 @@ import java.text.*;
 
 public class Search {
 
-    public static void runTest(Graph g, int numTests){
+    public static PacketTracer runTest(Graph g, int numTests, Boolean cacheEnabled){
 
         //Get all nodes that are not content custodians, thus requesters
         ArrayList<Node> requesters = new ArrayList<Node>();
@@ -25,12 +25,13 @@ public class Search {
         }
 
         //Create a new log file of a test
-        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
         Date d = new Date();
         String file_name = "C:\\temp\\manet\\"+dateFormat.format(d)+".txt";
         File file = new File("C:\\temp\\manet\\");
         file.mkdirs();
         Writer writer = null;
+        PacketTracer test = new PacketTracer(cacheEnabled);
         try {
              writer = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream(file_name), "utf-8"));
@@ -40,7 +41,7 @@ public class Search {
         int numCustodians = (int)temp;
         Random rand = new Random(g.size-numCustodians);
 
-        PacketTracer test = new PacketTracer();
+
         //Each numTests is a time step
         int cachehits = 0;
         int totalHops = 0;
@@ -57,14 +58,17 @@ public class Search {
             Node n = g.nodes.get(requesters.get(rand.nextInt(requesters.size())).nodeID);
             test.addToTest(jump+p,k,n);
             Packet pack = new Packet(n,k);
+            pack.cacheEnabled = cacheEnabled;
             pack.dest = n.contentCustodians.get(k);
             pack.route = Dijkstra.getShortestPath(pack.src,pack.dest);
-                Packet r = findContent(pack);
+            //Perform the search
+            Packet r = findContent(pack);
                 if (r.cachehit)
                     cachehits++;
 
                 totalHops+=r.hops;
                 maxtime += p;
+            //Write each query out to text file
             writer.write("Test:"+x+" | Time:"+maxtime+" | Source:"+r.src.nodeID+" | Content:"+r.search.contentID+" | Destination:"+r.dest.nodeID+" | Data found on:"+r.referrer.nodeID+" | Number of hops:"+r.hops+" | Cache hit?:"+r.cachehit+"\r\n");
         }
         System.out.println("Maxtime: " + maxtime);
@@ -73,19 +77,21 @@ public class Search {
         System.out.println("Number of hops in test: "+ totalHops);
         System.out.println("Number of cache hits in test: "+ cachehits);
         System.out.println("Percentage of cache hits: "+ percent+"%");
+        //Set totals in packetTracer
+        test.setTotals(numTests,totalHops,cachehits);
+
+        //Write output to log file
         writer.write("Number of requests:"+numTests+" | Total number of hops:"+totalHops+" | Number of cache hits:"+cachehits+" | Percentage cache hits:"+percent+"%");
         } catch (IOException ex) {
             System.out.println(ex);
         } finally {
             try {writer.close();} catch (Exception ex) {System.out.println(ex);}
         }
-
+    return test;
     }//end runTest
 
     public static Packet findContent(Packet p){
 
-        //System.out.println("Starting node:" + n.nodeID);
-        //System.out.println("Search for:" + k.contentID);
         //System.out.println("Route" + p.route);
         int i = 0;
         while(!p.found)
@@ -94,7 +100,7 @@ public class Search {
                 p.next = p.route.get(i + 1);
                 p = p.route.get(i).sendData(p);
             }else{
-                //This should only occur if a content custodian makes a request
+                //This should only occur if a content custodian makes a request, which should never happen
                 //System.out.println("Content is on the requesting node");
                 break;
             }

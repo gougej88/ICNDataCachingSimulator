@@ -1,7 +1,6 @@
-import java.util.List;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import javax.swing.*;
+import java.util.*;
+
 
 public class Main {
 
@@ -17,7 +16,16 @@ public class Main {
         System.out.println("Starting test routing...");
         System.out.println();
 
-        Search.runTest(g,500);
+
+        //Create an arraylist of all tests, and results
+        ArrayList<PacketTracer> tests = new ArrayList<PacketTracer>();
+        //Run a test(graph, number of requests to perform, cache enabled)
+        tests.add(Search.runTest(g, 500, true));
+        tests.add(Search.runTest(g, 500, false));
+
+        JFrame f = new JFrame();
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 
 
     }

@@ -12,6 +12,7 @@ public class Packet {
     Content search;
     Content data;
     Integer hops;
+    Boolean cacheEnabled;
     Boolean cachehit;
     Boolean found;
     List<Node> route;

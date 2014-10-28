@@ -66,7 +66,7 @@ public class Node {
         }
         //Store content in cache then send along path if not on this node
         //Check in cache, if so sendData
-        if(searchCache(p.search.contentID) && p.found==false)
+        if(p.cacheEnabled && (searchCache(p.search.contentID) && p.found==false))
         {
             //content found in cache send back to src
             p.found=true;
@@ -80,9 +80,9 @@ public class Node {
         }else{
             //Not found in cache, add to cache and forward to next hop
             //DISABLE/ENABLE CACHE HERE
-            addToCache(p.search);
+            if(p.cacheEnabled)
+                addToCache(p.search);
             p.hops++;
-
             powerDrain(1);
             return p;
         }
