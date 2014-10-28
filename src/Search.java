@@ -1,4 +1,7 @@
+import java.io.PrintWriter;
 import java.util.*;
+import java.io.*;
+import java.text.*;
 
 /**
  * Created by Jeff on 10/15/2014.
@@ -27,6 +30,16 @@ public class Search {
 
             }
         }
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        Date d = new Date();
+        String file_name = "C:\\temp\\manet\\"+dateFormat.format(d)+".txt";
+        File file = new File("C:\\temp\\manet\\");
+        file.mkdirs();
+        Writer writer = null;
+        try {
+             writer = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(file_name), "utf-8"));
+
 
         //Get a random requester (aka not a custodian)
         double temp = g.size * .2;
@@ -44,6 +57,7 @@ public class Search {
         int jump = 0;
         int maxtime = 0;
 
+
         for(int x=0; x<numTests; x++) {
             //Get the number of requests to create per time step
             jump = p;
@@ -55,6 +69,7 @@ public class Search {
 
                 totalHops+=r.hops;
                 maxtime += p;
+            writer.write("Test:"+x+" | Source:"+r.src.nodeID+" | Content:"+r.search.contentID+" | Destination:"+r.dest.nodeID+" | Number of hops:"+r.hops+" | Cache hit?:"+r.cachehit+"\n");
 
         }
         System.out.println(test.k.size());
@@ -64,6 +79,14 @@ public class Search {
         System.out.println("Number of hops in test: "+ totalHops);
         System.out.println("Number of cache hits in test: "+ cachehits);
         System.out.println("Percentage of cache hits: "+ percent+"%");
+            writer.write("Number of requests:"+numTests+" | Total number of hops:"+totalHops+" | Number of cache hits:"+cachehits+" | Percentage cache hits:"+percent+"%");
+
+        } catch (IOException ex) {
+            System.out.println(ex);
+            // report
+        } finally {
+            try {writer.close();} catch (Exception ex) {}
+        }
 
     }
 
@@ -95,6 +118,8 @@ public class Search {
             System.out.println("Data found:" + p.data.toString() + " on Node:" + p.referrer.nodeID);
             System.out.println("Number of hops: " + p.hops.toString());
             System.out.println();
+
+
         }
         return p;
     }
