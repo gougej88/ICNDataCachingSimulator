@@ -72,10 +72,9 @@ public class Node {
             p.found=true;
             p.hops++;
             p.referrer = this;
-            p.dest = p.src;
             p.data = cache.get(p.search.contentID);
             powerDrain(1);
-            System.out.println("Content Found in Cache!!!");
+            //System.out.println("Content Found in Cache!!!");
             p.cachehit = true;
             return p;
         }else{
