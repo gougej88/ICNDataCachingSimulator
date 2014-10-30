@@ -1,5 +1,7 @@
 import javax.swing.*;
+import java.awt.*;
 import java.util.*;
+import org.jfree.*;
 
 
 public class Main {
@@ -22,9 +24,22 @@ public class Main {
         //Run a test(graph, number of requests to perform, cache enabled)
         tests.add(Search.runTest(g, 500, true));
         tests.add(Search.runTest(g, 500, false));
+        tests.add(Search.runTest(g, 1000, true));
+        tests.add(Search.runTest(g, 1000, false));
+        tests.add(Search.runTest(g, 2000, true));
+        tests.add(Search.runTest(g, 2000, false));
+        tests.add(Search.runTest(g, 3000, true));
+        tests.add(Search.runTest(g, 3000, false));
+        tests.add(Search.runTest(g, 4000, true));
+        tests.add(Search.runTest(g, 4000, false));
+        tests.add(Search.runTest(g, 5000, true));
+        tests.add(Search.runTest(g, 5000, false));
 
-        JFrame f = new JFrame();
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        LineChart demo = new LineChart("Test","This is a test:"+tests.size(), tests);
+        demo.pack();
+        demo.setVisible(true);
+
 
 
 
