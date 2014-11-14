@@ -33,41 +33,32 @@ public class LineChart extends JFrame {
     }
 
     private XYDataset LoadData(ArrayList<PacketTracer> tests){
-        final XYSeries seriesNoCache = new XYSeries("NoCache");
-        final XYSeries seriesCache = new XYSeries("Cache");
+        //final XYSeries seriesNoCache = new XYSeries("NoCache");
+        final XYSeries seriesCache = new XYSeries("Average Hops");
 
         for(int i =0; i <tests.size(); i++)
         {
-            if(tests.get(i).cacheEnabled)
-            {
-                seriesCache.add(tests.get(i).totalRequests, tests.get(i).totalHops);
-            }else{
-                seriesNoCache.add(tests.get(i).totalRequests, tests.get(i).totalHops);
+            //if(tests.get(i).cacheEnabled)
+            //{
+                seriesCache.add(tests.get(i).cacheSize, tests.get(i).averageHops);
+            //}
+            /*else{
+                seriesNoCache.add(tests.get(i).cacheSize, tests.get(i).averageHops);
             }
-
+*/
         }
         final XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(seriesCache);
-        dataset.addSeries(seriesNoCache);
+        //dataset.addSeries(seriesNoCache);
         return dataset;
 
     }
 
-    /**
-     * Creates a sample dataset
-     */
-
-
-
-    /**
-     * Creates a chart
-     */
-
     private JFreeChart createChart(XYDataset dataset) {
 
-        JFreeChart chart = ChartFactory.createXYLineChart("Line Chart Example",
-                "Total Test Size",
-                "Number of hops",
+        JFreeChart chart = ChartFactory.createXYLineChart("Average Hops per Request with cache size changes",
+                "Cache Size",
+                "Average Hops per Request",
                 dataset,
                 PlotOrientation.VERTICAL,
                 true,

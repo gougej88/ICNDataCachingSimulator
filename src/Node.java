@@ -13,19 +13,20 @@ public class Node {
     ArrayList<Edge> edges = new ArrayList<Edge>();
     ArrayList<Content> content = new ArrayList<Content>();
     //index, ContentID
-    LinkedHashMap<UUID,Content> cache = new LinkedHashMap<UUID,Content>(10) {public boolean removeEldestEntry(Map.Entry eldest) {
-        return size() > 10;
-    }};
+    LinkedHashMap<UUID,Content> cache;
     //nodeID stored on, contentID for each
     Hashtable<Content,Node> contentCustodians = new Hashtable<Content, Node>();
     //nodeID to go to for next hop, and contentID
     //WILL I NEED?
     //Hashtable<Integer,Content> nextHop = new Hashtable<Integer, Content>();
 
-    public Node(int NodeID)
+    public Node(int NodeID, final int cacheSize)
     {
         this.nodeID = NodeID;
         this.batteryLifeRemaining = 100;
+        cache = new LinkedHashMap<UUID,Content>(cacheSize) {public boolean removeEldestEntry(Map.Entry eldest) {
+        return size() > cacheSize;
+    }};
     }
 
 

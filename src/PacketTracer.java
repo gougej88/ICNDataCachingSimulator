@@ -9,9 +9,11 @@ public class PacketTracer {
     ArrayList<Content> k = new ArrayList<Content>();
     ArrayList<Node> srcNodes = new ArrayList<Node>();
     Boolean cacheEnabled;
+    Integer cacheSize;
     Integer totalRequests;
     Integer totalHops;
     Integer totalCacheHits;
+    Double averageHops;
 
     public PacketTracer(Boolean cache){
         this.cacheEnabled = cache;
@@ -23,10 +25,12 @@ public class PacketTracer {
         srcNodes.add(node1);
     }
 
-    public void setTotals(Integer tests, Integer hops, Integer cache){
+    public void setTotals(Integer cacheSize, Integer tests, Integer hops, Integer cache, Double avgHops){
+        this.cacheSize = cacheSize;
         this.totalRequests = tests;
         this.totalHops = hops;
         this.totalCacheHits = cache;
+        this.averageHops = avgHops;
     }
 
 

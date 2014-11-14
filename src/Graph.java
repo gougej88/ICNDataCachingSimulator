@@ -7,15 +7,17 @@ import java.util.*;
 public class Graph {
     int length;
     int width;
+    int cacheSize;
     ArrayList<Node> nodes = new ArrayList<Node>();
     Hashtable<Content,Node> localContentCustodians = new Hashtable<Content, Node>();
     int size;
 
 
 
-    public Graph(int length, int width) {
+    public Graph(int length, int width, int cacheSize) {
         this.length = length;
         this.width = width;
+        this.cacheSize = cacheSize;
         size = length*width;
     }
 
@@ -23,7 +25,7 @@ public class Graph {
 
         for(int i = 0; i < size; i++)
         {
-            Node a = new Node(i);
+            Node a = new Node(i, cacheSize);
             nodes.add(i,a);
 
 
