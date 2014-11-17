@@ -13,7 +13,7 @@ public class Node {
     ArrayList<Edge> edges = new ArrayList<Edge>();
     ArrayList<Content> content = new ArrayList<Content>();
     //index, ContentID
-    LinkedHashMap<UUID,Content> cache;
+    LinkedHashMap<UUID,Content> LRUcache;
     //nodeID stored on, contentID for each
     Hashtable<Content,Node> contentCustodians = new Hashtable<Content, Node>();
     //nodeID to go to for next hop, and contentID
@@ -24,7 +24,7 @@ public class Node {
     {
         this.nodeID = NodeID;
         this.batteryLifeRemaining = 100;
-        cache = new LinkedHashMap<UUID,Content>(cacheSize) {public boolean removeEldestEntry(Map.Entry eldest) {
+        LRUcache = new LinkedHashMap<UUID,Content>(cacheSize) {public boolean removeEldestEntry(Map.Entry eldest) {
         return size() > cacheSize;
     }};
     }
@@ -73,7 +73,7 @@ public class Node {
             p.found=true;
             p.hops++;
             p.referrer = this;
-            p.data = cache.get(p.search.contentID);
+            p.data = LRUcache.get(p.search.contentID);
             powerDrain(1);
             //System.out.println("Content Found in Cache!!!");
             p.cachehit = true;
@@ -100,7 +100,7 @@ public class Node {
 
     public boolean searchCache(UUID contentID)
         {
-        if(cache.containsKey(contentID))
+        if(LRUcache.containsKey(contentID))
         {
             return true;
         }else{
@@ -111,7 +111,7 @@ public class Node {
     public void addToCache(Content x)
     {
         //Add content to cache when new content is received
-        this.cache.put(x.contentID,x);
+        this.LRUcache.put(x.contentID,x);
     }
 
     public int powerDrain(int drain)
