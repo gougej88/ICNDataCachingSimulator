@@ -21,7 +21,7 @@ public class LineChart extends JFrame {
     public LineChart(String applicationTitle, String chartTitle, ArrayList<PacketTracer> tests) {
         super(applicationTitle);
         XYDataset dataset = LoadData(tests);
-        JFreeChart chart = createChart(dataset);
+        JFreeChart chart = createChart(dataset, applicationTitle);
         // we put the chart into a panel
         ChartPanel chartPanel = new ChartPanel(chart);
         // default size
@@ -35,17 +35,17 @@ public class LineChart extends JFrame {
     private XYDataset LoadData(ArrayList<PacketTracer> tests){
         //final XYSeries seriesNoCache = new XYSeries("NoCache");
         final XYSeries seriesCache = new XYSeries("LRU Average Hops (Zipfian alpha = 1)");
+        double[] result = new double[6];
 
+        //Combine all results
         for(int i =0; i <tests.size(); i++)
         {
-            //if(tests.get(i).cacheEnabled)
-            //{
-                seriesCache.add(tests.get(i).cacheSize, tests.get(i).averageHops);
-            //}
-            /*else{
-                seriesNoCache.add(tests.get(i).cacheSize, tests.get(i).averageHops);
-            }
-*/
+                result[tests.get(i).cacheSize/10] += tests.get(i).averageHops;
+        }
+        //Divide the result sums by the number of tests and add to series
+        for(int j = 0; j< result.length; j++)
+        {
+            seriesCache.add(j*10, result[j]/100);
         }
         final XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(seriesCache);
@@ -54,9 +54,9 @@ public class LineChart extends JFrame {
 
     }
 
-    private JFreeChart createChart(XYDataset dataset) {
+    private JFreeChart createChart(XYDataset dataset, String applicationTitle) {
 
-        JFreeChart chart = ChartFactory.createXYLineChart("Average Hops per Request with cache size changes",
+        JFreeChart chart = ChartFactory.createXYLineChart(applicationTitle,
                 "Cache Size",
                 "Average Hops per Request",
                 dataset,
