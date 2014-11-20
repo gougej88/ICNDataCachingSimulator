@@ -47,6 +47,7 @@ public class LineChart extends JFrame {
         {
             seriesCache.add(j*10, result[j]/testsize);
         }
+
         final XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(seriesCache);
         //dataset.addSeries(seriesNoCache);
