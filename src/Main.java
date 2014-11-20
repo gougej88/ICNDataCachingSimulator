@@ -35,7 +35,7 @@ public class Main {
         }
 
 
-        LineChart demo = new LineChart("Average hops per request. Number of nodes:25 "+ "Number of files:"+tests.get(0).k.size()+" Number of tests: "+testsize,"Average hops per request",testsize, tests);
+        LineChart demo = new LineChart("Average hops per request. Alpha:.65 Nodes:25 Files:"+tests.get(0).k.size()+" Number of tests:"+testsize,"Average hops per request",testsize, tests);
         demo.pack();
         demo.setVisible(true);
 

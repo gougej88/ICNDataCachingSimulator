@@ -55,7 +55,10 @@ public class Search {
         for(int x=0; x<numTests; x++) {
             //Get the number of requests to create per time step
             jump = maxtime;
+
+            //Mean is set here
             p= Poisson.getPoisson(1);
+
             Content k = g.getZipfContent();
             Node n = g.nodes.get(requesters.get(rand.nextInt(requesters.size())).nodeID);
             test.addToTest(jump+p,k,n);

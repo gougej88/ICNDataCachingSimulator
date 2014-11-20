@@ -34,7 +34,7 @@ public class LineChart extends JFrame {
 
     private XYDataset LoadData(Integer testsize, ArrayList<PacketTracer> tests){
         //final XYSeries seriesNoCache = new XYSeries("NoCache");
-        final XYSeries seriesCache = new XYSeries("LRU Average Hops (Zipfian alpha = 1)");
+        final XYSeries seriesCache = new XYSeries("LRU Average Hops");
         double[] result = new double[6];
 
         //Combine all results

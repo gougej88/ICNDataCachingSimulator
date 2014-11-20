@@ -110,8 +110,13 @@ public class Graph {
 
         int totalContent = localContentCustodians.size();
         //System.out.println("Number of content items: " + totalContent);
+
+
         //Create a zipfian distribution
-        Zipf zip = new Zipf(totalContent,1);
+        //Change Alpha here for Zipfian
+        Zipf zip = new Zipf(totalContent,.65);
+
+
         ArrayList<Double> ranks = new ArrayList<Double>();
         double test = 0;
         //Assign the distribution probabilities to an array and shuffle them before assign popularity to each piece of content
