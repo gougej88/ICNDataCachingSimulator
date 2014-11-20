@@ -18,9 +18,9 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class LineChart extends JFrame {
 
 
-    public LineChart(String applicationTitle, String chartTitle, ArrayList<PacketTracer> tests) {
+    public LineChart(String applicationTitle, String chartTitle, Integer testsize, ArrayList<PacketTracer> tests) {
         super(applicationTitle);
-        XYDataset dataset = LoadData(tests);
+        XYDataset dataset = LoadData(testsize, tests);
         JFreeChart chart = createChart(dataset, applicationTitle);
         // we put the chart into a panel
         ChartPanel chartPanel = new ChartPanel(chart);
@@ -32,7 +32,7 @@ public class LineChart extends JFrame {
 
     }
 
-    private XYDataset LoadData(ArrayList<PacketTracer> tests){
+    private XYDataset LoadData(Integer testsize, ArrayList<PacketTracer> tests){
         //final XYSeries seriesNoCache = new XYSeries("NoCache");
         final XYSeries seriesCache = new XYSeries("LRU Average Hops (Zipfian alpha = 1)");
         double[] result = new double[6];
@@ -45,7 +45,7 @@ public class LineChart extends JFrame {
         //Divide the result sums by the number of tests and add to series
         for(int j = 0; j< result.length; j++)
         {
-            seriesCache.add(j*10, result[j]/100);
+            seriesCache.add(j*10, result[j]/testsize);
         }
         final XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(seriesCache);
