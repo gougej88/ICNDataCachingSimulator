@@ -6,6 +6,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYErrorRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
@@ -48,8 +49,10 @@ public class LineChart extends JFrame {
             seriesCache.add(j*10, result[j]/testsize);
         }
 
+
         final XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(seriesCache);
+
         //dataset.addSeries(seriesNoCache);
         return dataset;
 
@@ -73,10 +76,17 @@ public class LineChart extends JFrame {
         plot.setDomainGridlinePaint(Color.white);
         plot.setRangeGridlinePaint(Color.white);
 
-        final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesLinesVisible(0, true);
-        renderer.setSeriesShapesVisible(1, false);
-        plot.setRenderer(renderer);
+        //final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        XYErrorRenderer t = new XYErrorRenderer();
+        t.setBaseLinesVisible(true);
+        t.setBaseShapesVisible(false);
+        t.setDrawYError(true);
+        t.setDrawXError(true);
+        t.setSeriesPaint(0, Color.black);
+        //renderer.setSeriesLinesVisible(0, true);
+        //renderer.setSeriesShapesVisible(1, false);
+        plot.setRenderer(t);
+        //plot.setRenderer(renderer);
 
         return chart;
 

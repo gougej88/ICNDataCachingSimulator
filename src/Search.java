@@ -28,13 +28,12 @@ public class Search {
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
         Date d = new Date();
         String file_name = "C:\\temp\\manet\\"+dateFormat.format(d)+".txt";
-        File file = new File("C:\\temp\\manet\\");
-        file.mkdirs();
-        Writer writer = null;
+        //File file = new File("C:\\temp\\manet\\");
+        //file.mkdirs();
+        //Writer writer = null;
         PacketTracer test = new PacketTracer(cacheEnabled);
-        try {
-             writer = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(file_name), "utf-8"));
+        //try {
+             //writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file_name), "utf-8"));
 
         //Get a random requester (aka not a custodian)
         double temp = g.size * .2;
@@ -74,7 +73,7 @@ public class Search {
                 totalHops+=r.hops;
                 maxtime += p;
             //Write each query out to text file
-            writer.write("Test:"+x+" | Time:"+maxtime+" | Source:"+r.src.nodeID+" | Content:"+r.search.contentID+" | Destination:"+r.dest.nodeID+" | Data found on:"+r.referrer.nodeID+" | Number of hops:"+r.hops+" | Cache hit?:"+r.cachehit+"\r\n");
+            //writer.write("Test:"+x+" | Time:"+maxtime+" | Source:"+r.src.nodeID+" | Content:"+r.search.contentID+" | Destination:"+r.dest.nodeID+" | Data found on:"+r.referrer.nodeID+" | Number of hops:"+r.hops+" | Cache hit?:"+r.cachehit+"\r\n");
         }
         System.out.println("Maxtime: " + maxtime);
         percent = (double)cachehits/(double)numTests *100;
@@ -89,12 +88,12 @@ public class Search {
         test.setTotals(cacheSize,numTests,totalHops,cachehits,averagehops);
 
         //Write output to log file
-        writer.write("Number of requests:"+numTests+" | Total number of hops:"+totalHops+" | Number of cache hits:"+cachehits+" | Percentage cache hits:"+percent+"%"+ " | Average hops per request"+ averagehops );
-        } catch (IOException ex) {
-            System.out.println(ex);
-        } finally {
-            try {writer.close();} catch (Exception ex) {System.out.println(ex);}
-        }
+        //writer.write("Number of requests:"+numTests+" | Total number of hops:"+totalHops+" | Number of cache hits:"+cachehits+" | Percentage cache hits:"+percent+"%"+ " | Average hops per request"+ averagehops );
+       // } catch (IOException ex) {
+       //     System.out.println(ex);
+       // } finally {
+            //try {writer.close();} catch (Exception ex) {System.out.println(ex);}
+       // }
     return test;
     }//end runTest
 

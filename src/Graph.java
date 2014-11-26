@@ -11,14 +11,16 @@ public class Graph {
     ArrayList<Node> nodes = new ArrayList<Node>();
     Hashtable<Content,Node> localContentCustodians = new Hashtable<Content, Node>();
     int size;
+    double alpha;
 
 
 
-    public Graph(int length, int width, int cacheSize) {
+    public Graph(int length, int width, int cacheSize, double alpha) {
         this.length = length;
         this.width = width;
         this.cacheSize = cacheSize;
         size = length*width;
+        this.alpha = alpha;
     }
 
     public void createGraph(){
@@ -43,7 +45,7 @@ public class Graph {
         distributeContentCustodians();
 
         //Use Distribution to assign popularity to each piece of content in the graph
-        assignPopularityDistribution();
+        assignPopularityDistribution(alpha);
 
 
     }
@@ -106,7 +108,7 @@ public class Graph {
 
     }
 
-    public void assignPopularityDistribution(){
+    public void assignPopularityDistribution(double Alpha){
 
         int totalContent = localContentCustodians.size();
         //System.out.println("Number of content items: " + totalContent);
@@ -114,7 +116,7 @@ public class Graph {
 
         //Create a zipfian distribution
         //Change Alpha here for Zipfian
-        Zipf zip = new Zipf(totalContent,.65);
+        Zipf zip = new Zipf(totalContent,Alpha);
 
 
         ArrayList<Double> ranks = new ArrayList<Double>();
