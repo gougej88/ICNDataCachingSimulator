@@ -50,6 +50,7 @@ public class Search {
         double jump = 0;
         double maxtime = 0;
         int cacheSize = g.cacheSize;
+        int cacheType = g.cacheType;
 
         for(int x=0; x<numTests; x++) {
             //Get the number of requests to create per time step
@@ -85,7 +86,7 @@ public class Search {
         averagehops = (double)totalHops/(double)numTests;
         System.out.println("Average hops per request: "+ averagehops);
         //Set totals in packetTracer
-        test.setTotals(cacheSize,numTests,totalHops,cachehits,averagehops);
+        test.setTotals(cacheType,cacheSize,numTests,totalHops,cachehits,averagehops);
 
         //Write output to log file
         //writer.write("Number of requests:"+numTests+" | Total number of hops:"+totalHops+" | Number of cache hits:"+cachehits+" | Percentage cache hits:"+percent+"%"+ " | Average hops per request"+ averagehops );

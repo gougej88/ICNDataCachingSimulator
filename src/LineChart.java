@@ -19,7 +19,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class LineChart extends JFrame {
 
 
-    public LineChart(String applicationTitle, String chartTitle, Integer testsize, ArrayList<PacketTracer> tests) {
+    public LineChart(String applicationTitle, String chartTitle, Integer testsize, ArrayList<ArrayList<PacketTracer>> tests) {
         super(applicationTitle);
         XYDataset dataset = LoadData(testsize, tests);
         JFreeChart chart = createChart(dataset, applicationTitle);
@@ -33,25 +33,40 @@ public class LineChart extends JFrame {
 
     }
 
-    private XYDataset LoadData(Integer testsize, ArrayList<PacketTracer> tests){
+    private XYDataset LoadData(Integer testsize, ArrayList<ArrayList<PacketTracer>> tests){
         //final XYSeries seriesNoCache = new XYSeries("NoCache");
-        final XYSeries seriesCache = new XYSeries("LRU Average Hops");
-        double[] result = new double[6];
+        final XYSeries seriesLRUCache = new XYSeries("LRU Cache Average Hops");
+        final XYSeries seriesFIFOCache = new XYSeries("FIFO Cache Average Hops");
+        final XYSeries seriesRandomCache = new XYSeries("Random Cache Average Hops");
+
+        ArrayList<PacketTracer> singleTest = new ArrayList<PacketTracer>();
 
         //Combine all results
-        for(int i =0; i <tests.size(); i++)
-        {
-                result[tests.get(i).cacheSize/10] += tests.get(i).averageHops;
-        }
-        //Divide the result sums by the number of tests and add to series
-        for(int j = 0; j< result.length; j++)
-        {
-            seriesCache.add(j*10, result[j]/testsize);
+        for(int t=0; t< tests.size(); t++) {
+            singleTest = tests.get(t);
+            double[] result = new double[6];
+            for (int i = 0; i < singleTest.size(); i++) {
+                result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
+            }
+            //Divide the result sums by the number of tests and add to series
+            for (int j = 0; j < result.length; j++) {
+                //LRU
+                if(t==0)
+                seriesLRUCache.add(j * 10, result[j] / testsize);
+                //FIFO
+                if(t==1)
+                seriesFIFOCache.add(j * 10, result[j] / testsize);
+                //Random
+                if(t==2)
+                    seriesRandomCache.add(j * 10, result[j] / testsize);
+            }
         }
 
 
         final XYSeriesCollection dataset = new XYSeriesCollection();
-        dataset.addSeries(seriesCache);
+        dataset.addSeries(seriesLRUCache);
+        dataset.addSeries(seriesFIFOCache);
+        dataset.addSeries(seriesRandomCache);
 
         //dataset.addSeries(seriesNoCache);
         return dataset;
@@ -83,6 +98,8 @@ public class LineChart extends JFrame {
         t.setDrawYError(true);
         t.setDrawXError(true);
         t.setSeriesPaint(0, Color.black);
+        t.setSeriesPaint(1, Color.BLUE);
+        t.setSeriesPaint(2, Color.red);
         //renderer.setSeriesLinesVisible(0, true);
         //renderer.setSeriesShapesVisible(1, false);
         plot.setRenderer(t);

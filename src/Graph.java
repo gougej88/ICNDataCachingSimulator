@@ -12,22 +12,24 @@ public class Graph {
     Hashtable<Content,Node> localContentCustodians = new Hashtable<Content, Node>();
     int size;
     double alpha;
+    int cacheType;
 
 
 
-    public Graph(int length, int width, int cacheSize, double alpha) {
+    public Graph(int length, int width, int cacheSize, double alpha, int cacheType) {
         this.length = length;
         this.width = width;
         this.cacheSize = cacheSize;
         size = length*width;
         this.alpha = alpha;
+        this.cacheType = cacheType;
     }
 
     public void createGraph(){
 
         for(int i = 0; i < size; i++)
         {
-            Node a = new Node(i, cacheSize);
+            Node a = new Node(i, cacheSize, cacheType);
             nodes.add(i,a);
 
 

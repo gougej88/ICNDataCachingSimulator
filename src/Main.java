@@ -9,34 +9,43 @@ public class Main {
     public static void main(String[] args) throws java.io.IOException, java.lang.Exception {
 
         //Create an arraylist of all tests, and results
-        ArrayList<PacketTracer> tests = new ArrayList<PacketTracer>();
-
+        ArrayList<ArrayList<PacketTracer>> allTests = new ArrayList<ArrayList<PacketTracer>>();
         //Create graph grid of nodes(length, width, cacheSize)
         Graph g;
 
         //Run a test(graph, number of requests to perform, cache enabled)
         //To change the number of tests change the integer for testsize
         int testsize = 30;
-        double alpha = 1;
+        double alpha = .65;
 
-        for(int y=0; y <6; y++) {
-            g = new Graph(5,5,y*10,alpha);
-            g.createGraph();
-            if(y==0) {
-                for (int n = 0; n < testsize; n++)
-                    //Run without cache
-                    tests.add(Search.runTest(g, 1000, false));
+        //1 = LRU, 2 = FIFO, 3=Random
+        int cacheType = 1;
 
-            }else {
-                for (int x = 0; x < testsize; x++) {
-                    //Run with cache. Increases by 10. Run 100000 tests
-                    tests.add(Search.runTest(g, 1000, true));
-                }//end for
-            }//end else
-        }
+        //Loop for number of cache types
+        for(int c = 1; c < 4; c++) {
+            cacheType = c;
+            ArrayList<PacketTracer> tests = new ArrayList<PacketTracer>();
+            //Loop for number of unique cache sizes
+            for (int y = 0; y < 6; y++) {
+                g = new Graph(5, 5, y * 10, alpha, cacheType);
+                g.createGraph();
+                if (y == 0) {
+                    for (int n = 0; n < testsize; n++)
+                        //Run without cache
+                        tests.add(Search.runTest(g, 50000, false));
+
+                } else {
+                    for (int x = 0; x < testsize; x++) {
+                        //Run with cache. Increases by 10. Run 100000 tests
+                        tests.add(Search.runTest(g, 50000, true));
+                    }//end for number of tests
+                }//end else
+            }//end for cachesize tests
+            allTests.add(tests);
+        }//end for cachetype tests
 
 
-        LineChart demo = new LineChart("Average hops per request. Alpha:"+alpha +"Nodes:25 Files:"+tests.get(0).k.size()+" Number of tests:"+testsize,"Average hops per request",testsize, tests);
+        LineChart demo = new LineChart("Average hops per request. Alpha:"+alpha +" Nodes:25 Requests per test:"+allTests.get(0).get(0).k.size()+" Number of tests:"+testsize,"Average hops per request",testsize, allTests);
         demo.pack();
         demo.setVisible(true);
 
