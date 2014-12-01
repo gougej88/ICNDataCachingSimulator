@@ -16,7 +16,7 @@ public class Main {
         //Run a test(graph, number of requests to perform, cache enabled)
         //To change the number of tests change the integer for testsize
         int testsize = 30;
-        double alpha = .65;
+        double alpha = 1;
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType = 1;
@@ -32,12 +32,12 @@ public class Main {
                 if (y == 0) {
                     for (int n = 0; n < testsize; n++)
                         //Run without cache
-                        tests.add(Search.runTest(g, 50000, false));
+                        tests.add(Search.runTest(g, 5000, false));
 
                 } else {
                     for (int x = 0; x < testsize; x++) {
                         //Run with cache. Increases by 10. Run 100000 tests
-                        tests.add(Search.runTest(g, 50000, true));
+                        tests.add(Search.runTest(g, 5000, true));
                     }//end for number of tests
                 }//end else
             }//end for cachesize tests

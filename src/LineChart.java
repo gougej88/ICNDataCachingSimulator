@@ -44,22 +44,71 @@ public class LineChart extends JFrame {
         //Combine all results
         for(int t=0; t< tests.size(); t++) {
             singleTest = tests.get(t);
+            double[] max = new double[6];
+            double[] min = new double[6];
             double[] result = new double[6];
+            Arrays.fill(max,0);
+            Arrays.fill(min,10);
+            int testsPerSize =singleTest.size()/6;
+            double numTestsKept = (double)testsize * .30;
+
             for (int i = 0; i < singleTest.size(); i++) {
-                result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
+                int x = i / testsPerSize;
+                int z = i % testsPerSize;
+                if (t == 0) {
+                    if (z >= testsPerSize * .70) {
+                        if (singleTest.get(i).averageHops < min[x])
+                            min[x] = singleTest.get(i).averageHops;
+                        if (singleTest.get(i).averageHops > max[x])
+                            max[x] = singleTest.get(i).averageHops;
+                        result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
+                    }
+                }
+
+                if (t == 1) {
+                    if (z >= testsPerSize * .70) {
+                        if (singleTest.get(i).averageHops < min[x])
+                            min[x] = singleTest.get(i).averageHops;
+                        if (singleTest.get(i).averageHops > max[x])
+                            max[x] = singleTest.get(i).averageHops;
+                        result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
+                    }
+                }
+                if (t == 2) {
+                    if (z >= testsPerSize * .70) {
+                        if (singleTest.get(i).averageHops < min[x])
+                            min[x] = singleTest.get(i).averageHops;
+                        if (singleTest.get(i).averageHops > max[x])
+                            max[x] = singleTest.get(i).averageHops;
+                        result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
+                    }
+                }
+                //result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
             }
-            //Divide the result sums by the number of tests and add to series
-            for (int j = 0; j < result.length; j++) {
-                //LRU
-                if(t==0)
-                seriesLRUCache.add(j * 10, result[j] / testsize);
-                //FIFO
-                if(t==1)
-                seriesFIFOCache.add(j * 10, result[j] / testsize);
-                //Random
-                if(t==2)
-                    seriesRandomCache.add(j * 10, result[j] / testsize);
-            }
+                //Divide the result sums by the number of tests and add to series
+                for (int j = 0; j < result.length; j++) {
+                    //LRU
+                    if(t==0) {
+                        seriesLRUCache.add(j * 10, result[j] / numTestsKept);
+                        seriesLRUCache.add(j*10,max[j]);
+                        seriesLRUCache.add(j*10,min[j]);
+                    }
+                    //FIFO
+                    if(t==1) {
+                        seriesFIFOCache.add(j * 10, result[j] / numTestsKept);
+                        seriesFIFOCache.add(j*10,max[j]);
+                        seriesFIFOCache.add(j*10,min[j]);
+                    }
+                    //Random
+                    if(t==2) {
+                        seriesRandomCache.add(j * 10, result[j] / numTestsKept);
+                        seriesRandomCache.add(j*10,max[j]);
+                        seriesRandomCache.add(j*10,min[j]);
+                    }
+                }
+
+
+
         }
 
 
@@ -96,7 +145,7 @@ public class LineChart extends JFrame {
         t.setBaseLinesVisible(true);
         t.setBaseShapesVisible(false);
         t.setDrawYError(true);
-        t.setDrawXError(true);
+        t.setDrawXError(false);
         t.setSeriesPaint(0, Color.black);
         t.setSeriesPaint(1, Color.BLUE);
         t.setSeriesPaint(2, Color.red);
