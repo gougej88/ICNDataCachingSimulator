@@ -8,10 +8,12 @@ import java.text.*;
 
 public class Search {
 
-    public static PacketTracer runTest(Graph g, int numTests, Boolean cacheEnabled){
+    public static PacketTracer runTest(Graph g, int numTests, Boolean cacheEnabled, int numAttackers){
 
         //Get all nodes that are not content custodians, thus requesters
         ArrayList<Node> requesters = new ArrayList<Node>();
+        ArrayList<Node> custodians = new ArrayList<Node>();
+        ArrayList<Node> attackers = new ArrayList<Node>();
         for(int j=0; j<g.size; j++)
         {
             //COMPUTE ALL PATHS FROM EACH SRC ONCE
@@ -21,6 +23,8 @@ public class Search {
             if(!g.localContentCustodians.contains(g.nodes.get(j)))
             {
                 requesters.add(g.nodes.get(j));
+            }else {
+                custodians.add(g.nodes.get(j));
             }
         }
 
@@ -36,9 +40,24 @@ public class Search {
              //writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file_name), "utf-8"));
 
         //Get a random requester (aka not a custodian)
-        double temp = g.size * .2;
-        int numCustodians = (int)temp;
-        Random rand = new Random(g.size-numCustodians);
+        Random rand = new Random(requesters.size());
+
+        //Assign random requester as attacker
+        for(int a=0; a<numAttackers; a++) {
+            int attackerindex = rand.nextInt(requesters.size());
+            attackers.add(requesters.get(attackerindex));
+            requesters.remove(attackerindex);
+            Attack.OrderAllContent(attackers.get(a));
+            Node target = Attack.FindBestTarget(attackers.get(a),custodians);
+        }
+
+
+        //Estimate CacheSize(target)
+        //if target node.number of content items < cacheSize Estimate then state attack would not fill cache.
+        //get popular content from target
+        //Estimate Characteristic Time
+        //Start attack on target node by requesting all unpopular content in a row then waiting T*+2-4 time iterations
+
 
 
         //Each numTests is a time step
@@ -56,8 +75,8 @@ public class Search {
             //Get the number of requests to create per time step
             jump = maxtime;
 
-            //Mean is set here
-            p= Poisson.getPoisson(1);
+            //Mean is set here for rate at which to request content
+            p= Poisson.getPoisson(.65);
 
             Content k = g.getZipfContent();
             Node n = g.nodes.get(requesters.get(rand.nextInt(requesters.size())).nodeID);

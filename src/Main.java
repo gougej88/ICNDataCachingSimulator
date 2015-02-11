@@ -13,10 +13,11 @@ public class Main {
         //Create graph grid of nodes(length, width, cacheSize)
         Graph g;
 
-        //Run a test(graph, number of requests to perform, cache enabled)
+        //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
-        int testsize = 30;
+        int testsize = 5;
         double alpha = 1;
+        int numAttackers = 1;
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType = 1;
@@ -27,17 +28,21 @@ public class Main {
             ArrayList<PacketTracer> tests = new ArrayList<PacketTracer>();
             //Loop for number of unique cache sizes
             for (int y = 0; y < 6; y++) {
+
+                //Create square graph
                 g = new Graph(5, 5, y * 10, alpha, cacheType);
                 g.createGraph();
+
+                //Start test
                 if (y == 0) {
                     for (int n = 0; n < testsize; n++)
                         //Run without cache
-                        tests.add(Search.runTest(g, 50000, false));
+                        tests.add(Search.runTest(g, 10, false, numAttackers));
 
                 } else {
                     for (int x = 0; x < testsize; x++) {
                         //Run with cache. Increases by 10. Run 100000 tests
-                        tests.add(Search.runTest(g, 50000, true));
+                        tests.add(Search.runTest(g, 10, true, numAttackers));
                     }//end for number of tests
                 }//end else
             }//end for cachesize tests
