@@ -47,7 +47,7 @@ public class Search {
             int attackerindex = rand.nextInt(requesters.size());
             attackers.add(requesters.get(attackerindex));
             requesters.remove(attackerindex);
-            Attack.OrderAllContent(attackers.get(a));
+            ArrayList<Content> orderedContentTarget = Attack.OrderTargetContent(attackers.get(a));
             Node target = Attack.FindBestTarget(attackers.get(a),custodians);
         }
 
