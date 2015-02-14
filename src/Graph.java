@@ -13,27 +13,41 @@ public class Graph {
     int size;
     double alpha;
     int cacheType;
+    int numAttackers;
+    ArrayList<Node> custodians = new ArrayList<Node>();
+    ArrayList<AttackerNode> attackers = new ArrayList<AttackerNode>();
 
 
 
-    public Graph(int length, int width, int cacheSize, double alpha, int cacheType) {
+    public Graph(int length, int width, int cacheSize, double alpha, int cacheType, int numAttackers) {
         this.length = length;
         this.width = width;
         this.cacheSize = cacheSize;
         size = length*width;
         this.alpha = alpha;
         this.cacheType = cacheType;
+        this.numAttackers = numAttackers;
     }
 
     public void createGraph(){
 
+        //Assign random requester as attacker
+        Random rand = new Random(size);
+        int attackerindex = rand.nextInt(size);
+
+
         for(int i = 0; i < size; i++)
         {
-            Node a = new Node(i, cacheSize, cacheType);
-            nodes.add(i,a);
+            if(i == attackerindex) {
+                AttackerNode att = new AttackerNode(i, cacheSize, cacheType);
+                attackers.add(att);
+                nodes.add(i, att);
+            }else {
+                Node a = new Node(i, cacheSize, cacheType);
+                nodes.add(i, a);
+            }//end else
 
-
-        }
+        }//end for
 
         //Setup the rest of the graph
         //Create all edges and weights
@@ -94,6 +108,7 @@ public class Graph {
             int contentCust = rand.nextInt(size);
             if(!n.contains(contentCust)) {
                 n.add(contentCust);
+                custodians.add(nodes.get(contentCust));
                 nodes.get(contentCust).saveContent("This is content from node "+ contentCust);
                 nodes.get(contentCust).saveContent("This is a second piece of content on node "+contentCust);
                 nodes.get(contentCust).saveContent("This is a third piece of content on node "+contentCust);
@@ -106,7 +121,7 @@ public class Graph {
                 nodes.get(contentCust).saveContent("This is a tenth piece of content on node "+contentCust);
 
             }
-        }
+        }//end for
 
     }
 

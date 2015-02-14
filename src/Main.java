@@ -29,20 +29,20 @@ public class Main {
             //Loop for number of unique cache sizes
             for (int y = 0; y < 6; y++) {
 
-                //Create square graph
-                g = new Graph(5, 5, y * 10, alpha, cacheType);
+                //Create square graph(x,y,cacheSize,alpha, cacheType, numAttackers)
+                g = new Graph(5, 5, y * 10, alpha, cacheType, numAttackers);
                 g.createGraph();
 
                 //Start test
                 if (y == 0) {
                     for (int n = 0; n < testsize; n++)
                         //Run without cache
-                        tests.add(Search.runTest(g, 10, false, numAttackers));
+                        tests.add(Search.runTest(g, 100, false, numAttackers));
 
                 } else {
                     for (int x = 0; x < testsize; x++) {
                         //Run with cache. Increases by 10. Run 100000 tests
-                        tests.add(Search.runTest(g, 10, true, numAttackers));
+                        tests.add(Search.runTest(g, 100, true, numAttackers));
                     }//end for number of tests
                 }//end else
             }//end for cachesize tests

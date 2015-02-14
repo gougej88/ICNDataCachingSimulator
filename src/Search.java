@@ -13,7 +13,7 @@ public class Search {
         //Get all nodes that are not content custodians, thus requesters
         ArrayList<Node> requesters = new ArrayList<Node>();
         ArrayList<Node> custodians = new ArrayList<Node>();
-        ArrayList<Node> attackers = new ArrayList<Node>();
+        ArrayList<AttackerNode> attackers = new ArrayList<AttackerNode>();
         for(int j=0; j<g.size; j++)
         {
             //COMPUTE ALL PATHS FROM EACH SRC ONCE
@@ -26,6 +26,12 @@ public class Search {
             }else {
                 custodians.add(g.nodes.get(j));
             }
+        }
+
+        attackers = g.attackers;
+        for(AttackerNode att : attackers)
+        {
+            att.SetCustodians(custodians);
         }
 
         //Create a new log file of a test
@@ -42,19 +48,8 @@ public class Search {
         //Get a random requester (aka not a custodian)
         Random rand = new Random(requesters.size());
 
-        //Assign random requester as attacker
-        for(int a=0; a<numAttackers; a++) {
-            int attackerindex = rand.nextInt(requesters.size());
-            attackers.add(requesters.get(attackerindex));
-            requesters.remove(attackerindex);
-            ArrayList<Content> orderedContentTarget = Attack.OrderTargetContent(attackers.get(a));
-            Node target = Attack.FindBestTarget(attackers.get(a),custodians);
-        }
 
 
-        //Estimate CacheSize(target)
-        //if target node.number of content items < cacheSize Estimate then state attack would not fill cache.
-        //get popular content from target
         //Estimate Characteristic Time
         //Start attack on target node by requesting all unpopular content in a row then waiting T*+2-4 time iterations
 
