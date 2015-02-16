@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Jeff on 2/14/2015.
@@ -9,6 +10,7 @@ public class AttackerNode extends Node {
     int numRequestsServed;
     int cacheSizeGuess;
     int characteristicTimeGuess;
+    int attackDuration;
     Node target;
     ArrayList<Node> custodians;
     ArrayList<Content> popularContent;
@@ -80,7 +82,37 @@ public class AttackerNode extends Node {
                 cacheSizeGuess = maxCacheSize;
                 //estimate Characteristic Time
                 characteristicTimeGuess = GuessCharacteristicTime(target,cacheSizeGuess,characteristicTimeGuess);
+
                 //Run attack
+
+                /*
+                int x = 0;
+                while(x < attackDuration)
+                {
+                    int count = 0;
+                    for(Content k : unpopularContent)
+                    {
+                        //Request Content
+
+                        //Every 10 requests
+                        if(count % 10 == 0)
+                        {
+                            //Requeset popular content
+                            Packet pop = new Packet(this,popularContent.get(0));
+                            Search.findContent(pop);
+                        }
+                    }//end for each
+
+                    try {
+                        Thread.sleep(characteristicTimeGuess);
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+
+
+                    x++;
+                }//end while
+                */
 
             }
             return p;
@@ -143,6 +175,42 @@ public class AttackerNode extends Node {
     }
 
     public int GuessCharacteristicTime(Node target, int CacheSizeGuess, int CharacteristicTimeGuess) {
+
+        boolean allPacketsFromCustodian = true;
+
+        for(Content k : unpopularContent)
+        {
+            //Request each item in unpopular content
+            //Need to make sure items are distinct and unique
+
+        }
+
+        //Wait a long time
+        try {
+            Thread.sleep(characteristicTimeGuess*2);
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+
+        for(Content k : unpopularContent)
+        {
+            //Request each item in unpopular content
+            //Need to make sure items are distinct and unique
+
+        }
+
+        //if all requests returned from custodian, then reduce T* guess
+        if(allPacketsFromCustodian)
+        {
+            CharacteristicTimeGuess = CharacteristicTimeGuess/2;
+            GuessCharacteristicTime(target, CacheSizeGuess, CharacteristicTimeGuess);
+        }//end if all packets from custodian
+        else{
+            CharacteristicTimeGuess = CharacteristicTimeGuess + 2;
+            return CharacteristicTimeGuess;
+        }//end else
+
+        //Should not get here...
         return 1;
     }
 
