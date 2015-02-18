@@ -81,7 +81,7 @@ public class Search {
             pack.dest = n.contentCustodians.get(k);
             pack.route = Dijkstra.getShortestPath(pack.src,pack.dest);
             //Perform the search
-            Packet r = findContent(pack);
+            Packet r = findContent(pack,attackers);
                 if (r.cachehit)
                     cachehits++;
 
@@ -112,7 +112,7 @@ public class Search {
     return test;
     }//end runTest
 
-    public static Packet findContent(Packet p){
+    public static Packet findContent(Packet p, ArrayList<AttackerNode> attackers){
 
         //System.out.println("Route" + p.route);
         int i = 0;
@@ -120,7 +120,15 @@ public class Search {
         {
             if(p.dest != p.src && i < p.route.size()) {
                 p.next = p.route.get(i + 1);
-                p = p.route.get(i).sendData(p);
+                //Check if starting node is attack node
+                if(attackers.contains(p.route.get(i)))
+                {
+                   p = attackers.get(0).sendData(p);
+
+                }else {
+                    //else send data as usual
+                    p = p.route.get(i).sendData(p);
+                }
             }else{
                 //This should only occur if a content custodian makes a request, which should never happen
                 //System.out.println("Content is on the requesting node");

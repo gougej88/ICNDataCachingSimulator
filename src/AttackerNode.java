@@ -15,6 +15,9 @@ public class AttackerNode extends Node {
     ArrayList<Node> custodians;
     ArrayList<Content> popularContent;
     ArrayList<Content> unpopularContent;
+    boolean donePolling;
+    boolean readyToAttack;
+
 
 
 
@@ -27,6 +30,8 @@ public class AttackerNode extends Node {
         cacheSizeGuess = cacheSize;
         //Guess Characteristic Time to large value
         characteristicTimeGuess = cacheSize*4;
+        donePolling = false;
+        readyToAttack = false;
 
     }
 
@@ -76,49 +81,27 @@ public class AttackerNode extends Node {
             //Before return, check if poll done
             if(numRequestsServed == maxCacheSize*2)
             {
-
+                donePolling = true;
                 target = FindBestTarget(this, custodians);
                 //estimate cacheSize
                 cacheSizeGuess = maxCacheSize;
                 //estimate Characteristic Time
-                characteristicTimeGuess = GuessCharacteristicTime(target,cacheSizeGuess,characteristicTimeGuess);
-
-                //Run attack
-
-                /*
-                int x = 0;
-                while(x < attackDuration)
-                {
-                    int count = 0;
-                    for(Content k : unpopularContent)
-                    {
-                        //Request Content
-
-                        //Every 10 requests
-                        if(count % 10 == 0)
-                        {
-                            //Requeset popular content
-                            Packet pop = new Packet(this,popularContent.get(0));
-                            Search.findContent(pop);
-                        }
-                    }//end for each
-
-                    try {
-                        Thread.sleep(characteristicTimeGuess);
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
-
-
-                    x++;
-                }//end while
-                */
+                //characteristicTimeGuess = GuessCharacteristicTime(target,cacheSizeGuess,characteristicTimeGuess);
 
             }
             return p;
         }
 
 
+
+
+    }
+
+    public Packet sendData(Packet p)
+    {
+        //Send content to next route
+        p = p.next.receiveData(p);
+        return p;
     }
 
     public void SetCustodians(ArrayList<Node> cust){
@@ -144,7 +127,7 @@ public class AttackerNode extends Node {
             Packet p = new Packet(attacker,distinctFile);
             p.dest = attacker.contentCustodians.get(distinctFile);
             p.route = Dijkstra.getShortestPath(p.src,p.dest);
-            Packet r = Search.findContent(p);
+            //Packet r = Search.findContent(p);
 
         }
 
@@ -156,9 +139,9 @@ public class AttackerNode extends Node {
             Packet p = new Packet(attacker,distinctFile);
             p.dest = attacker.contentCustodians.get(distinctFile);
             p.route = Dijkstra.getShortestPath(p.src,p.dest);
-            Packet r = Search.findContent(p);
-            if(r.cachehit)
-                SumCacheHits++;
+            //Packet r = Search.findContent(p);
+            //if(r.cachehit)
+                //SumCacheHits++;
         }
 
         Collections.reverse(K);
@@ -212,6 +195,39 @@ public class AttackerNode extends Node {
 
         //Should not get here...
         return 1;
+    }//end guessCharacteristicTime
+
+    public void sendAttack(){
+        //Run attack
+
+                /*
+                int x = 0;
+                while(x < attackDuration)
+                {
+                    int count = 0;
+                    for(Content k : unpopularContent)
+                    {
+                        //Request Content
+
+                        //Every 10 requests
+                        if(count % 10 == 0)
+                        {
+                            //Requeset popular content
+                            Packet pop = new Packet(this,popularContent.get(0));
+                            Search.findContent(pop);
+                        }
+                    }//end for each
+
+                    try {
+                        Thread.sleep(characteristicTimeGuess);
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+
+
+                    x++;
+                }//end while
+                */
     }
 
 
