@@ -81,7 +81,7 @@ public class Node {
         }
         //Store content in cache then send along path if not on this node
         //Check in cache, if so sendData
-        if(p.cacheEnabled && (searchCache(p.search.contentID) && p.found==false))
+        if(p.cacheEnabled && (searchCache(p.search.contentID) && !p.found))
         {
             //content found in cache send back to src
             p.found=true;

@@ -54,7 +54,7 @@ public class AttackerNode extends Node {
         }
         //Store content in cache then send along path if not on this node
         //Check in cache, if so sendData
-        if(p.cacheEnabled && (searchCache(p.search.contentID) && p.found==false))
+        if(p.cacheEnabled && (searchCache(p.search.contentID) && !p.found))
         {
             //content found in cache send back to src
             p.found=true;
@@ -114,8 +114,8 @@ public class AttackerNode extends Node {
 
         //Start by getting random custodian
         Random rand = new Random(custodians.size());
-        Node target = custodians.get(rand.nextInt(custodians.size()));
-        return target;
+        Node t = custodians.get(rand.nextInt(custodians.size()));
+        return t;
     }
 
     public int GuessCacheSize(Node attacker, Node target, List<Content> K, int cacheSizeGuess){
@@ -175,7 +175,6 @@ public class AttackerNode extends Node {
         {
             //Request each item in unpopular content
             //Need to make sure items are distinct and unique
-
         }
 
         //if all requests returned from custodian, then reduce T* guess
