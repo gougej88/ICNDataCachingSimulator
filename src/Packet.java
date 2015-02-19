@@ -1,3 +1,5 @@
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.util.List;
 
 /**
@@ -23,6 +25,8 @@ public class Packet {
         this.hops = 0;
         this.cachehit = false;
         this.found = false;
+        this.dest = s.contentCustodians.get(k);
+        this.route = Dijkstra.getShortestPath(src,dest);
 
     }
 

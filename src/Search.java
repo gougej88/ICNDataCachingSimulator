@@ -78,8 +78,6 @@ public class Search {
             test.addToTest(jump+p,k,n);
             Packet pack = new Packet(n,k);
             pack.cacheEnabled = cacheEnabled;
-            pack.dest = n.contentCustodians.get(k);
-            pack.route = Dijkstra.getShortestPath(pack.src,pack.dest);
             //Perform the search
             Packet r = findContent(pack,attackers);
                 if (r.cachehit)

@@ -125,8 +125,6 @@ public class AttackerNode extends Node {
         for(Content distinctFile : K)
         {
             Packet p = new Packet(attacker,distinctFile);
-            p.dest = attacker.contentCustodians.get(distinctFile);
-            p.route = Dijkstra.getShortestPath(p.src,p.dest);
             //Packet r = Search.findContent(p);
 
         }
@@ -137,8 +135,6 @@ public class AttackerNode extends Node {
         for(Content distinctFile : K)
         {
             Packet p = new Packet(attacker,distinctFile);
-            p.dest = attacker.contentCustodians.get(distinctFile);
-            p.route = Dijkstra.getShortestPath(p.src,p.dest);
             //Packet r = Search.findContent(p);
             //if(r.cachehit)
                 //SumCacheHits++;
