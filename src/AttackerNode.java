@@ -11,7 +11,6 @@ public class AttackerNode extends Node {
     int cacheSizeGuess;
     int characteristicTimeGuess;
     int finalCharTimeGuess;
-    int attackDuration;
     Node target;
     ArrayList<Node> custodians;
     ArrayList<Content> popularContent;
@@ -151,7 +150,6 @@ public class AttackerNode extends Node {
 
         }
 
-
         for(Content distinctFile : K)
         {
             Packet p = new Packet(attacker,distinctFile);
@@ -160,7 +158,6 @@ public class AttackerNode extends Node {
                 //SumCacheHits++;
         }
 
-        Collections.reverse(K);
 
         if(SumCacheHits == cacheSizeGuess)
         {
@@ -184,6 +181,12 @@ public class AttackerNode extends Node {
 
         p = p.next.receiveData(p);
 
+        //increment indexInList to request new file on next run
+        if(indexInList < (unpopularContent.size()-1)) {
+            indexInList++;
+        }else{
+            indexInList = 0;
+        }
 
             //Request each item in unpopular content
             //Need to make sure items are distinct and unique
@@ -217,7 +220,15 @@ public class AttackerNode extends Node {
             pack.route = Dijkstra.getShortestPath(this, pack.dest);
 
             pack = pack.next.receiveData(pack);
-        }//end else
+
+            //increment indexInList to request new file on next run
+            if(indexInList < (unpopularContent.size()-1)) {
+                indexInList++;
+            }else{
+                indexInList = 0;
+            }//end else for increment
+
+        }//end else for request decision
         return pack;
 
                 /*
@@ -237,13 +248,6 @@ public class AttackerNode extends Node {
                             Search.findContent(pop);
                         }
                     }//end for each
-
-                    try {
-                        Thread.sleep(characteristicTimeGuess);
-                    } catch(InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
-
 
                     x++;
                 }//end while
