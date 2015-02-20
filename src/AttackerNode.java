@@ -10,6 +10,7 @@ public class AttackerNode extends Node {
     int numRequestsServed;
     int cacheSizeGuess;
     int characteristicTimeGuess;
+    int finalCharTimeGuess;
     int attackDuration;
     Node target;
     ArrayList<Node> custodians;
@@ -17,6 +18,7 @@ public class AttackerNode extends Node {
     ArrayList<Content> unpopularContent;
     boolean donePolling;
     boolean readyToAttack;
+    int indexInList;
 
 
 
@@ -99,8 +101,28 @@ public class AttackerNode extends Node {
 
     public Packet sendData(Packet p)
     {
-        //Send content to next route
-        p = p.next.receiveData(p);
+        //Check if done polling, if so time to attack or guess characteristic time
+        //If not just send content along as usual
+        if(donePolling) {
+            //If this is the requester check what to poll or send instead
+            if(p.src == this) {
+                //if not ready to attack then still need to guess characteristic time
+                if(!readyToAttack) {
+                    GuessCharacteristicTime(target,cacheSizeGuess,characteristicTimeGuess, p);
+                }
+                //else ready to attack send attack request
+                else {
+                    p = sendAttack(p);
+
+                }
+
+            }
+
+        }else {
+            //Send content to next route
+            p = p.next.receiveData(p);
+            }//end else
+
         return p;
     }
 
@@ -129,8 +151,6 @@ public class AttackerNode extends Node {
 
         }
 
-        //Request same files in reverse order, recording number of cache hits
-        Collections.reverse(K);
 
         for(Content distinctFile : K)
         {
@@ -153,47 +173,52 @@ public class AttackerNode extends Node {
         return 1;
     }
 
-    public int GuessCharacteristicTime(Node target, int CacheSizeGuess, int CharacteristicTimeGuess) {
+    public Packet GuessCharacteristicTime(Node target, int CacheSizeGuess, int CharacteristicTimeGuess, Packet p) {
 
         boolean allPacketsFromCustodian = true;
 
-        for(Content k : unpopularContent)
-        {
+        //Alter the request and request an unpopular file
+        p.data = unpopularContent.get(indexInList);
+        p.dest = this.contentCustodians.get(p.data);
+        p.route = Dijkstra.getShortestPath(this, p.dest);
+
+        p = p.next.receiveData(p);
+
+
             //Request each item in unpopular content
             //Need to make sure items are distinct and unique
 
-        }
-
-        //Wait a long time
-        try {
-            Thread.sleep(characteristicTimeGuess*2);
-        } catch(InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
-
-        for(Content k : unpopularContent)
-        {
-            //Request each item in unpopular content
-            //Need to make sure items are distinct and unique
-        }
 
         //if all requests returned from custodian, then reduce T* guess
         if(allPacketsFromCustodian)
         {
-            CharacteristicTimeGuess = CharacteristicTimeGuess/2;
-            GuessCharacteristicTime(target, CacheSizeGuess, CharacteristicTimeGuess);
+            characteristicTimeGuess = CharacteristicTimeGuess/2;
         }//end if all packets from custodian
         else{
-            CharacteristicTimeGuess = CharacteristicTimeGuess + 2;
-            return CharacteristicTimeGuess;
+            finalCharTimeGuess = CharacteristicTimeGuess + 2;
+
         }//end else
 
-        //Should not get here...
-        return 1;
+        return p;
     }//end guessCharacteristicTime
 
-    public void sendAttack(){
+    public Packet sendAttack(Packet pack){
         //Run attack
+        //Every 10 requests, request a popular file i.e. leave it unaltered
+        if(indexInList % 10 ==0) {
+         pack = pack.next.receiveData(pack);
+        }
+        //Else request unpopular file
+        else {
+
+            //Alter the request and request an unpopular file
+            pack.data = unpopularContent.get(indexInList);
+            pack.dest = this.contentCustodians.get(pack.data);
+            pack.route = Dijkstra.getShortestPath(this, pack.dest);
+
+            pack = pack.next.receiveData(pack);
+        }//end else
+        return pack;
 
                 /*
                 int x = 0;
