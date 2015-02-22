@@ -18,6 +18,7 @@ public class Packet {
     Boolean cachehit;
     Boolean found;
     List<Node> route;
+    double time;
 
     public Packet(Node s, Content k){
         this.src = s;

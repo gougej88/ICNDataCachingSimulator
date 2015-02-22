@@ -27,18 +27,27 @@ public class Graph {
         this.alpha = alpha;
         this.cacheType = cacheType;
         this.numAttackers = numAttackers;
+
     }
 
     public void createGraph(){
 
-        //Assign random requester as attacker
+        ArrayList<Integer> attackIndexes = new ArrayList<Integer>();
+        int attackerindex = -1;
         Random rand = new Random(size);
-        int attackerindex = rand.nextInt(size);
+        //Assign random requester as attacker
+        if(numAttackers >0) {
+            for(int a = 0; a < numAttackers; a++){
+            attackerindex = rand.nextInt(size);
+                attackIndexes.add(attackerindex);
+            }//end for
+        }//end if
+
 
 
         for(int i = 0; i < size; i++)
         {
-            if(i == attackerindex) {
+            if(attackIndexes.contains(i)) {
                 AttackerNode att = new AttackerNode(i, cacheSize, cacheType);
                 attackers.add(att);
                 nodes.add(i, att);

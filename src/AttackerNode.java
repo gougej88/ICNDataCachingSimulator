@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Jeff on 2/14/2015.
@@ -17,11 +16,10 @@ public class AttackerNode extends Node {
     ArrayList<Content> unpopularContent;
     boolean donePolling;
     boolean readyToAttack;
+    boolean allPacketsFromCustodian;
     int indexInList;
-
-
-
-
+    int characteristicTimeStatus;
+    int startWait;
 
     public AttackerNode(int NodeID, int cacheSize, int cacheType){
         super(NodeID, cacheSize, cacheType);
@@ -33,6 +31,8 @@ public class AttackerNode extends Node {
         characteristicTimeGuess = cacheSize*4;
         donePolling = false;
         readyToAttack = false;
+        allPacketsFromCustodian = true;
+        characteristicTimeGuess = 1;
 
     }
 
@@ -41,7 +41,19 @@ public class AttackerNode extends Node {
         //Attacker counts number of requests received
         numRequestsServed++;
 
+        //Add content being searched for to attacker lists
+        if(!donePolling) {
+            if (unpopularContent.contains(p.search)) {
+                popularContent.add(p.search);
+                unpopularContent.remove(p.search);
+
+            } else {
+                unpopularContent.add(p.search);
+            }
+        }//end if not done polling
+
         //If this node is the dest
+        //This should not happen on the attacker node.
         if(p.dest.nodeID == this.nodeID)
         {
             p.hops++;
@@ -93,10 +105,7 @@ public class AttackerNode extends Node {
             return p;
         }
 
-
-
-
-    }
+    }//end receive data
 
     public Packet sendData(Packet p)
     {
@@ -108,14 +117,14 @@ public class AttackerNode extends Node {
                 //if not ready to attack then still need to guess characteristic time
                 if(!readyToAttack) {
                     GuessCharacteristicTime(target,cacheSizeGuess,characteristicTimeGuess, p);
-                }
+                }//end if not ready to attack
                 //else ready to attack send attack request
                 else {
                     p = sendAttack(p);
 
-                }
+                }//end else
 
-            }
+            }//end if done polling
 
         }else {
             //Send content to next route
@@ -172,36 +181,61 @@ public class AttackerNode extends Node {
 
     public Packet GuessCharacteristicTime(Node target, int CacheSizeGuess, int CharacteristicTimeGuess, Packet p) {
 
-        boolean allPacketsFromCustodian = true;
+        //Need to know where in the process we are
+        //Possible values
+        //1 - request unpopular content first run
+        //2 - waiting phase between requesting lists
+        //3 - request unpopular content second run
+        if(characteristicTimeGuess == 2) {
+            startWait++;
+            //if number of requests seen more than cache sise guess time to request again
+            if(startWait >= CacheSizeGuess){
+                characteristicTimeGuess = 3;
+            }
+            if (characteristicTimeGuess == 1 || characteristicTimeGuess == 3) {
+                //Alter the request and request an unpopular file
+                p.data = unpopularContent.get(indexInList);
+                p.dest = this.contentCustodians.get(p.data);
+                p.route = Dijkstra.getShortestPath(this, p.dest);
 
-        //Alter the request and request an unpopular file
-        p.data = unpopularContent.get(indexInList);
-        p.dest = this.contentCustodians.get(p.data);
-        p.route = Dijkstra.getShortestPath(this, p.dest);
+                p = p.next.receiveData(p);
+            }
+            //increment indexInList to request new file on next run
+            if (indexInList < (unpopularContent.size() - 1)) {
+                indexInList++;
+            }
+            //else we made through entire list of unpopular content
+            //start waiting
+            else {
+                if(characteristicTimeGuess ==1) {
+                    startWait = 0;
+                    characteristicTimeGuess = 2;
+                    indexInList = 0;
+                }
+                //Else done guessing characteristic time
+                else{
+                    //ready to attack?
+                    //how to see if all from custodian?
 
-        p = p.next.receiveData(p);
-
-        //increment indexInList to request new file on next run
-        if(indexInList < (unpopularContent.size()-1)) {
-            indexInList++;
-        }else{
-            indexInList = 0;
-        }
-
-            //Request each item in unpopular content
-            //Need to make sure items are distinct and unique
+                    startWait = 0;
+                    indexInList = 0;
 
 
-        //if all requests returned from custodian, then reduce T* guess
-        if(allPacketsFromCustodian)
-        {
-            characteristicTimeGuess = CharacteristicTimeGuess/2;
-        }//end if all packets from custodian
-        else{
-            finalCharTimeGuess = CharacteristicTimeGuess + 2;
+                    //if all requests returned from custodian, then reduce T* guess
+                    if (allPacketsFromCustodian) {
+                        characteristicTimeGuess = CharacteristicTimeGuess / 2;
+                        characteristicTimeStatus = 1;
+                    }//end if all packets from custodian
+                    else {
+                        finalCharTimeGuess = CharacteristicTimeGuess + 2;
+                        readyToAttack = true;
+                    }//end else
 
-        }//end else
+                }//end else. done with second request
+            }//end else
 
+
+        }//end if waiting phase
         return p;
     }//end guessCharacteristicTime
 
@@ -231,28 +265,7 @@ public class AttackerNode extends Node {
         }//end else for request decision
         return pack;
 
-                /*
-                int x = 0;
-                while(x < attackDuration)
-                {
-                    int count = 0;
-                    for(Content k : unpopularContent)
-                    {
-                        //Request Content
-
-                        //Every 10 requests
-                        if(count % 10 == 0)
-                        {
-                            //Requeset popular content
-                            Packet pop = new Packet(this,popularContent.get(0));
-                            Search.findContent(pop);
-                        }
-                    }//end for each
-
-                    x++;
-                }//end while
-                */
-    }
+    }//end sendAttack()
 
 
 

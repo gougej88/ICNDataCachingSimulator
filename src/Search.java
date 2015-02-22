@@ -78,6 +78,7 @@ public class Search {
             test.addToTest(jump+p,k,n);
             Packet pack = new Packet(n,k);
             pack.cacheEnabled = cacheEnabled;
+            pack.time = maxtime;
             //Perform the search
             Packet r = findContent(pack,attackers);
                 if (r.cachehit)
