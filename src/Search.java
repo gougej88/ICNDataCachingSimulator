@@ -122,7 +122,8 @@ public class Search {
                 //Check if starting node is attack node
                 if(attackers.contains(p.route.get(i)))
                 {
-                   p = attackers.get(0).sendData(p);
+                   int index = attackers.indexOf(p.route.get(i));
+                   p = attackers.get(index).sendData(p);
 
                 }else {
                     //else send data as usual
@@ -135,10 +136,12 @@ public class Search {
             }
                 i++;
         }
-        if(p.found) {
-            //System.out.println("Data found:" + p.data.toString() + " on Node:" + p.referrer.nodeID);
-            //System.out.println("Number of hops: " + p.hops.toString());
-            //System.out.println();
+
+        //Check if attacker is guessing characteristic time
+        //If so and there is a cache hit, then a packet was returned from a source other than the custodian
+        if(attackers.contains(p.src) && ((AttackerNode)p.src).donePolling && ((AttackerNode)p.src).characteristicTimeStatus !=2 && p.cachehit) {
+            (((AttackerNode) p.src).allPacketsFromCustodian) = false;
+
         }
         return p;
     }//end findContent

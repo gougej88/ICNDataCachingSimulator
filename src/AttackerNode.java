@@ -12,8 +12,7 @@ public class AttackerNode extends Node {
     int finalCharTimeGuess;
     Node target;
     ArrayList<Node> custodians;
-    ArrayList<Content> popularContent;
-    ArrayList<Content> unpopularContent;
+    ArrayList<Content> unpopularContent = new ArrayList<Content>();
     boolean donePolling;
     boolean readyToAttack;
     boolean allPacketsFromCustodian;
@@ -43,8 +42,8 @@ public class AttackerNode extends Node {
 
         //Add content being searched for to attacker lists
         if(!donePolling) {
+            //What defines popular or not?
             if (unpopularContent.contains(p.search)) {
-                popularContent.add(p.search);
                 unpopularContent.remove(p.search);
 
             } else {
@@ -98,6 +97,7 @@ public class AttackerNode extends Node {
                 target = FindBestTarget(this, custodians);
                 //estimate cacheSize
                 cacheSizeGuess = maxCacheSize;
+                allPacketsFromCustodian = true;
                 //estimate Characteristic Time
                 //characteristicTimeGuess = GuessCharacteristicTime(target,cacheSizeGuess,characteristicTimeGuess);
 
@@ -116,7 +116,8 @@ public class AttackerNode extends Node {
             if(p.src == this) {
                 //if not ready to attack then still need to guess characteristic time
                 if(!readyToAttack) {
-                    GuessCharacteristicTime(target,cacheSizeGuess,characteristicTimeGuess, p);
+
+                    GuessCharacteristicTime(target,cacheSizeGuess, p);
                 }//end if not ready to attack
                 //else ready to attack send attack request
                 else {
@@ -179,20 +180,20 @@ public class AttackerNode extends Node {
         return 1;
     }
 
-    public Packet GuessCharacteristicTime(Node target, int CacheSizeGuess, int CharacteristicTimeGuess, Packet p) {
+    public Packet GuessCharacteristicTime(Node target, int CacheSizeGuess, Packet p) {
 
         //Need to know where in the process we are
-        //Possible values
+        //Possible values characteristicsTimeStatus
         //1 - request unpopular content first run
         //2 - waiting phase between requesting lists
         //3 - request unpopular content second run
-        if(characteristicTimeGuess == 2) {
+        if(characteristicTimeStatus == 2) {
             startWait++;
             //if number of requests seen more than cache sise guess time to request again
             if(startWait >= CacheSizeGuess){
-                characteristicTimeGuess = 3;
+                characteristicTimeStatus = 3;
             }
-            if (characteristicTimeGuess == 1 || characteristicTimeGuess == 3) {
+            if (characteristicTimeStatus == 1 || characteristicTimeStatus == 3) {
                 //Alter the request and request an unpopular file
                 p.data = unpopularContent.get(indexInList);
                 p.dest = this.contentCustodians.get(p.data);
@@ -207,15 +208,15 @@ public class AttackerNode extends Node {
             //else we made through entire list of unpopular content
             //start waiting
             else {
-                if(characteristicTimeGuess ==1) {
+                if(characteristicTimeStatus ==1) {
                     startWait = 0;
-                    characteristicTimeGuess = 2;
+                    characteristicTimeStatus = 2;
                     indexInList = 0;
                 }
                 //Else done guessing characteristic time
                 else{
                     //ready to attack?
-                    //how to see if all from custodian?
+                    //all from custodian check done outside of class in search class
 
                     startWait = 0;
                     indexInList = 0;
@@ -223,11 +224,11 @@ public class AttackerNode extends Node {
 
                     //if all requests returned from custodian, then reduce T* guess
                     if (allPacketsFromCustodian) {
-                        characteristicTimeGuess = CharacteristicTimeGuess / 2;
+                        characteristicTimeGuess = characteristicTimeGuess / 2;
                         characteristicTimeStatus = 1;
                     }//end if all packets from custodian
                     else {
-                        finalCharTimeGuess = CharacteristicTimeGuess + 2;
+                        finalCharTimeGuess = characteristicTimeGuess + 2;
                         readyToAttack = true;
                     }//end else
 
