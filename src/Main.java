@@ -17,7 +17,7 @@ public class Main {
         //To change the number of tests change the integer for testsize
         int testsize = 10;
         double alpha = 1;
-        int numAttackers = 1;
+        int numAttackers = 2;
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType = 1;

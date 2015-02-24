@@ -31,7 +31,7 @@ public class AttackerNode extends Node {
         donePolling = false;
         readyToAttack = false;
         allPacketsFromCustodian = true;
-        characteristicTimeGuess = 1;
+        characteristicTimeStatus = 1;
 
     }
 
@@ -200,9 +200,10 @@ public class AttackerNode extends Node {
         else {
             if (characteristicTimeStatus == 1 || characteristicTimeStatus == 3) {
                 //Alter the request and request an unpopular file
-                p.data = unpopularContent.get(indexInList);
-                p.dest = this.contentCustodians.get(p.data);
+                p.search = unpopularContent.get(indexInList);
+                p.dest = this.contentCustodians.get(p.search);
                 p.route = Dijkstra.getShortestPath(this, p.dest);
+                p.next = p.route.get(1);
 
                 p = p.next.receiveData(p);
             }
@@ -255,9 +256,10 @@ public class AttackerNode extends Node {
         else {
 
             //Alter the request and request an unpopular file
-            pack.data = unpopularContent.get(indexInList);
-            pack.dest = this.contentCustodians.get(pack.data);
+            pack.search = unpopularContent.get(indexInList);
+            pack.dest = this.contentCustodians.get(pack.search);
             pack.route = Dijkstra.getShortestPath(this, pack.dest);
+            pack.next = pack.route.get(1);
 
             pack = pack.next.receiveData(pack);
 

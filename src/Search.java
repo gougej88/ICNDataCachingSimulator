@@ -118,6 +118,9 @@ public class Search {
         while(!p.found)
         {
             if(p.dest != p.src && i < p.route.size()) {
+                if(i+1 == p.route.size()){
+                    int x = 0;
+                }
                 p.next = p.route.get(i + 1);
                 //Check if starting node is attack node
                 if(attackers.contains(p.route.get(i)))
