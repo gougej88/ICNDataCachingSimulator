@@ -111,13 +111,12 @@ public class AttackerNode extends Node {
     {
         //Check if done polling, if so time to attack or guess characteristic time
         //If not just send content along as usual
-        if(donePolling) {
-            //If this is the requester check what to poll or send instead
-            if(p.src == this) {
+        if(donePolling && p.src == this) {
+
                 //if not ready to attack then still need to guess characteristic time
                 if(!readyToAttack) {
 
-                    GuessCharacteristicTime(target,cacheSizeGuess, p);
+                    p = GuessCharacteristicTime(target,cacheSizeGuess, p);
                 }//end if not ready to attack
                 //else ready to attack send attack request
                 else {
@@ -127,7 +126,7 @@ public class AttackerNode extends Node {
 
             }//end if done polling
 
-        }else {
+        else {
             //Send content to next route
             p = p.next.receiveData(p);
             }//end else
@@ -189,10 +188,16 @@ public class AttackerNode extends Node {
         //3 - request unpopular content second run
         if(characteristicTimeStatus == 2) {
             startWait++;
-            //if number of requests seen more than cache sise guess time to request again
+            //if number of requests seen more than cache size guess time to request again
             if(startWait >= CacheSizeGuess){
                 characteristicTimeStatus = 3;
             }
+
+            //Send content to next route
+            p = p.next.receiveData(p);
+
+        }//end if waiting phase
+        else {
             if (characteristicTimeStatus == 1 || characteristicTimeStatus == 3) {
                 //Alter the request and request an unpopular file
                 p.data = unpopularContent.get(indexInList);
@@ -206,15 +211,16 @@ public class AttackerNode extends Node {
                 indexInList++;
             }
             //else we made through entire list of unpopular content
-            //start waiting
+            //start waiting or set ready to attack
             else {
-                if(characteristicTimeStatus ==1) {
+                //if done with phase 1, start waiting
+                if (characteristicTimeStatus == 1) {
                     startWait = 0;
                     characteristicTimeStatus = 2;
                     indexInList = 0;
                 }
                 //Else done guessing characteristic time
-                else{
+                else {
                     //ready to attack?
                     //all from custodian check done outside of class in search class
 
@@ -235,8 +241,7 @@ public class AttackerNode extends Node {
                 }//end else. done with second request
             }//end else
 
-
-        }//end if waiting phase
+        }//end else for not in waiting phase
         return p;
     }//end guessCharacteristicTime
 

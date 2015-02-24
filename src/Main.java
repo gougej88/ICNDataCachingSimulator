@@ -37,12 +37,12 @@ public class Main {
                 if (y == 0) {
                     for (int n = 0; n < testsize; n++)
                         //Run without cache
-                        tests.add(Search.runTest(g, 1000, false, numAttackers));
+                        tests.add(Search.runTest(g, 100, false, numAttackers));
 
                 } else {
                     for (int x = 0; x < testsize; x++) {
                         //Run with cache. Increases by 10. Run 100000 tests
-                        tests.add(Search.runTest(g, 1000, true, numAttackers));
+                        tests.add(Search.runTest(g, 100, true, numAttackers));
                     }//end for number of tests
                 }//end else
             }//end for cachesize tests
