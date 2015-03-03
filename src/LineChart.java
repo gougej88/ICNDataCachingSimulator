@@ -92,24 +92,24 @@ public class LineChart extends JFrame {
                         seriesLRUCache.add(j * 10, result[j] / numTestsKept);
                         seriesLRUCache.add(j*10,max[j]);
                         seriesLRUCache.add(j*10,min[j]);
-                    }
+                    }//end if lru cache
                     //FIFO
                     if(t==1) {
                         seriesFIFOCache.add(j * 10, result[j] / numTestsKept);
                         seriesFIFOCache.add(j*10,max[j]);
                         seriesFIFOCache.add(j*10,min[j]);
-                    }
+                    }//end if fifo cache
                     //Random
                     if(t==2) {
                         seriesRandomCache.add(j * 10, result[j] / numTestsKept);
                         seriesRandomCache.add(j*10,max[j]);
                         seriesRandomCache.add(j*10,min[j]);
-                    }
-                }
+                    }//end if random cache
+                }//end for j
 
 
 
-        }
+        }//end for t
 
 
         final XYSeriesCollection dataset = new XYSeriesCollection();
