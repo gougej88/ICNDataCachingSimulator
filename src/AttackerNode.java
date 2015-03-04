@@ -251,6 +251,7 @@ public class AttackerNode extends Node {
         //Every 10 requests, request a popular file i.e. leave it unaltered
         if(indexInList % 10 ==0) {
          pack = pack.next.receiveData(pack);
+            indexInList++;
         }
         //Else request unpopular file
         else {
@@ -271,6 +272,7 @@ public class AttackerNode extends Node {
             }//end else for increment
 
         }//end else for request decision
+
         return pack;
 
     }//end sendAttack()

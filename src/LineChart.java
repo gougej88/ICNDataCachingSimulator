@@ -38,8 +38,15 @@ public class LineChart extends JFrame {
         final XYSeries seriesLRUCache = new XYSeries("LRU Cache Average Hops");
         final XYSeries seriesFIFOCache = new XYSeries("FIFO Cache Average Hops");
         final XYSeries seriesRandomCache = new XYSeries("Random Cache Average Hops");
+        int testsPerSize= 0;
+        double numTestsKept= 0;
 
         ArrayList<PacketTracer> singleTest = new ArrayList<PacketTracer>();
+
+        //Print space for final numbers to console
+        System.out.println();
+        System.out.println();
+        System.out.println("Final Results");
 
         //Combine all results
         for(int t=0; t< tests.size(); t++) {
@@ -49,8 +56,8 @@ public class LineChart extends JFrame {
             double[] result = new double[6];
             Arrays.fill(max,0);
             Arrays.fill(min,10);
-            int testsPerSize =singleTest.size()/6;
-            double numTestsKept = (double)testsize * .30;
+            testsPerSize =singleTest.size()/6;
+            numTestsKept = (double)testsize * .30;
 
             for (int i = 0; i < singleTest.size(); i++) {
                 int x = i / testsPerSize;
@@ -92,24 +99,35 @@ public class LineChart extends JFrame {
                         seriesLRUCache.add(j * 10, result[j] / numTestsKept);
                         seriesLRUCache.add(j*10,max[j]);
                         seriesLRUCache.add(j*10,min[j]);
+
+                        //Print results to the console
+                        System.out.println("Average hops for LRU with cache size "+j*10+" ="+result[j]/numTestsKept);
                     }//end if lru cache
                     //FIFO
                     if(t==1) {
                         seriesFIFOCache.add(j * 10, result[j] / numTestsKept);
                         seriesFIFOCache.add(j*10,max[j]);
                         seriesFIFOCache.add(j*10,min[j]);
+                        //Print results to the console
+                        System.out.println("Average hops for FIFO with cache size "+j*10+" ="+result[j]/numTestsKept);
                     }//end if fifo cache
                     //Random
                     if(t==2) {
                         seriesRandomCache.add(j * 10, result[j] / numTestsKept);
                         seriesRandomCache.add(j*10,max[j]);
                         seriesRandomCache.add(j*10,min[j]);
+
+                        //Print results to the console
+                        System.out.println("Average hops for Random with cache size "+j*10+" ="+result[j]/numTestsKept);
                     }//end if random cache
                 }//end for j
 
 
 
         }//end for t
+
+        //Print percentage of tests kept to console
+        System.out.println("All results collected had a 70% warm up phase. Out of "+testsPerSize+" tests, only "+numTestsKept+" tests were kept");
 
 
         final XYSeriesCollection dataset = new XYSeriesCollection();
