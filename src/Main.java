@@ -16,7 +16,7 @@ public class Main {
         int testsize = 20;
         int requestsPerTest = 100000;
         double alpha = .65;
-        int numAttackers = 0;
+        int numAttackers = 1;
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType;

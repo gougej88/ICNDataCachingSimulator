@@ -138,7 +138,7 @@ public class Search {
 
         //Check if attacker is guessing characteristic time
         //If so and there is a cache hit, then a packet was returned from a source other than the custodian
-        if(attackers.contains(p.src) && ((AttackerNode)p.src).donePolling && ((AttackerNode)p.src).characteristicTimeStatus ==3 && p.cachehit) {
+        if(attackers.contains(p.src) && ((AttackerNode)p.src).characteristicTimeStatus ==3 && p.cachehit) {
             (((AttackerNode) p.src).allPacketsFromCustodian) = false;
 
         }

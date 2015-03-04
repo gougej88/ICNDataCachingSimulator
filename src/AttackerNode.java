@@ -18,6 +18,7 @@ public class AttackerNode extends Node {
     boolean allPacketsFromCustodian;
     int indexInList;
     int characteristicTimeStatus;
+    int attackStatus;
     int startWait;
 
     public AttackerNode(int NodeID, int cacheSize, int cacheType){
@@ -32,6 +33,7 @@ public class AttackerNode extends Node {
         readyToAttack = false;
         allPacketsFromCustodian = true;
         characteristicTimeStatus = 1;
+        attackStatus = 1;
 
     }
 
@@ -188,8 +190,8 @@ public class AttackerNode extends Node {
         //3 - request unpopular content second run
         if(characteristicTimeStatus == 2) {
             startWait++;
-            //if number of requests seen more than cache size guess time to request again
-            if(startWait >= CacheSizeGuess){
+            //if number of requests seen more than characteristic time guess, then time to request again
+            if(startWait >= characteristicTimeGuess*2){
                 characteristicTimeStatus = 3;
             }
 
@@ -247,32 +249,58 @@ public class AttackerNode extends Node {
     }//end guessCharacteristicTime
 
     public Packet sendAttack(Packet pack){
-        //Run attack
-        //Every 10 requests, request a popular file i.e. leave it unaltered
-        if(indexInList % 10 ==0) {
-         pack = pack.next.receiveData(pack);
-            indexInList++;
-        }
-        //Else request unpopular file
-        else {
 
-            //Alter the request and request an unpopular file
-            pack.search = unpopularContent.get(indexInList);
-            pack.dest = this.contentCustodians.get(pack.search);
-            pack.route = Dijkstra.getShortestPath(this, pack.dest);
-            pack.next = pack.route.get(1);
+        //Need to know where in the process we are
+        //Possible values attackStatus
+        //1 - attacking
+        //2 - waiting phase between attack requests
+        if(attackStatus==2){
+            startWait++;
+            //if number of requests seen more than characteristic time guess, then time to request again
+            if(startWait >= finalCharTimeGuess){
+                attackStatus = 1;
+            }
 
             pack = pack.next.receiveData(pack);
+        }//end waiting
+        else {
+            //Run attack
+            //Every 10 requests, request a popular file i.e. leave it unaltered
+            if (indexInList % 10 == 0 && indexInList != 0) {
 
-            //increment indexInList to request new file on next run
-            if(indexInList < (unpopularContent.size()-1)) {
-                indexInList++;
-            }else{
-                indexInList = 0;
-            }//end else for increment
+                pack = pack.next.receiveData(pack);
 
-        }//end else for request decision
+                //increment indexInList to request new file on next run
+                if (indexInList < (unpopularContent.size() - 1)) {
+                    indexInList++;
+                } else {
+                    startWait = 0;
+                    attackStatus = 2;
+                    indexInList = 0;
+                }//end else for increment
+            }
+            //Else request unpopular file
+            else {
 
+                //Alter the request and request an unpopular file
+                pack.search = unpopularContent.get(indexInList);
+                pack.dest = this.contentCustodians.get(pack.search);
+                pack.route = Dijkstra.getShortestPath(this, pack.dest);
+                pack.next = pack.route.get(1);
+
+                pack = pack.next.receiveData(pack);
+
+                //increment indexInList to request new file on next run
+                if (indexInList < (unpopularContent.size() - 1)) {
+                    indexInList++;
+                } else {
+                    startWait = 0;
+                    attackStatus = 2;
+                    indexInList = 0;
+                }//end else for increment
+
+            }//end else for request decision
+        }//end else for waiting phase
         return pack;
 
     }//end sendAttack()
