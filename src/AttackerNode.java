@@ -81,15 +81,15 @@ public class AttackerNode extends Node {
             powerDrain(1);
             //System.out.println("Content Found in Cache!!!");
             p.cachehit = true;
-            return p;
-        }else{
+
+        }else {
             //Not found in cache, add to cache and forward to next hop
             //DISABLE/ENABLE CACHE HERE
-            if(p.cacheEnabled)
+            if (p.cacheEnabled)
                 addToCache(p.search);
             p.hops++;
             powerDrain(1);
-
+        }
             //Before return, check if poll done
             if(numRequestsServed == maxCacheSize*2)
             {
@@ -103,7 +103,7 @@ public class AttackerNode extends Node {
 
             }
             return p;
-        }
+
 
     }//end receive data
 

@@ -13,10 +13,10 @@ public class Main {
 
         //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
-        int testsize = 10;
-        int requestsPerTest = 20000;
+        int testsize = 20;
+        int requestsPerTest = 100000;
         double alpha = .65;
-        int numAttackers = 1;
+        int numAttackers = 0;
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType;
