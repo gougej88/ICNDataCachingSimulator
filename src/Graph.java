@@ -128,6 +128,47 @@ public class Graph {
                 nodes.get(contentCust).saveContent("This is a eighth piece of content on node "+contentCust);
                 nodes.get(contentCust).saveContent("This is a ninth piece of content on node "+contentCust);
                 nodes.get(contentCust).saveContent("This is a tenth piece of content on node "+contentCust);
+                nodes.get(contentCust).saveContent("This is content number 11 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 12 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 13 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 14 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 15 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 16 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 17 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 18 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 19 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 20 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 21 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 22 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 23 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 24 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 25 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 26 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 27 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 28 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 29 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 30 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 31 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 32 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 33 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 34 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 35 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 36 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 37 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 38 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 39 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 40 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 41 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 42 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 43 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 44 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 45 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 46 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 47 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 48 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 49 from node "+ contentCust);
+                nodes.get(contentCust).saveContent("This is content number 50 from node "+ contentCust);
+
 
             }
         }//end for

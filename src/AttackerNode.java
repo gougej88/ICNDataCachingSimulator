@@ -93,15 +93,14 @@ public class AttackerNode extends Node {
             powerDrain(1);
         }
             //Before return, check if poll done
-            if(numRequestsServed == maxCacheSize*2)
+            //Check if warmup phase is complete.
+            if(numRequestsServed == maxCacheSize*100)
             {
                 donePolling = true;
                 target = FindBestTarget(this, custodians);
                 //estimate cacheSize
                 cacheSizeGuess = maxCacheSize;
                 allPacketsFromCustodian = true;
-                //estimate Characteristic Time
-                //characteristicTimeGuess = GuessCharacteristicTime(target,cacheSizeGuess,characteristicTimeGuess);
 
             }
             return p;
