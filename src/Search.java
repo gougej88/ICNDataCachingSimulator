@@ -7,7 +7,7 @@ import java.text.*;
 
 public class Search {
 
-    public static PacketTracer runTest(Graph g, int numTests, Boolean cacheEnabled, int numAttackers){
+    public static PacketTracer runTest(Graph g, int numTests, double poissonRate, Boolean cacheEnabled){
 
         //Get all nodes that are not content custodians, thus requesters
         ArrayList<Node> requesters = new ArrayList<Node>();
@@ -47,13 +47,6 @@ public class Search {
         //Get a random requester (aka not a custodian)
         Random rand = new Random(requesters.size());
 
-
-
-        //Estimate Characteristic Time
-        //Start attack on target node by requesting all unpopular content in a row then waiting T*+2-4 time iterations
-
-
-
         //Each numTests is a time step
         int cachehits = 0;
         int totalHops = 0;
@@ -70,7 +63,7 @@ public class Search {
             jump = maxtime;
 
             //Mean is set here for rate at which to request content
-            p= Poisson.getPoisson(.65);
+            p= Poisson.getPoisson(poissonRate);
 
             Content k = g.getZipfContent();
             Node n = g.nodes.get(requesters.get(rand.nextInt(requesters.size())).nodeID);

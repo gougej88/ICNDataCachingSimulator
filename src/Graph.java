@@ -11,22 +11,26 @@ public class Graph {
     ArrayList<Node> nodes = new ArrayList<Node>();
     Hashtable<Content,Node> localContentCustodians = new Hashtable<Content, Node>();
     int size;
+    int numContentItems;
     double alpha;
     int cacheType;
     int numAttackers;
+    int numUnpopularItemsPerAttacker;
     ArrayList<Node> custodians = new ArrayList<Node>();
     ArrayList<AttackerNode> attackers = new ArrayList<AttackerNode>();
 
 
 
-    public Graph(int length, int width, int cacheSize, double alpha, int cacheType, int numAttackers) {
+    public Graph(int length, int width, int cacheSize, double alpha, int cacheType, int numAttackers, int numUnpopularItems) {
         this.length = length;
         this.width = width;
         this.cacheSize = cacheSize;
         size = length*width;
+        this.numContentItems = size*10;
         this.alpha = alpha;
         this.cacheType = cacheType;
         this.numAttackers = numAttackers;
+        this.numUnpopularItemsPerAttacker = numUnpopularItems;
 
     }
 
@@ -48,7 +52,7 @@ public class Graph {
         for(int i = 0; i < size; i++)
         {
             if(attackIndexes.contains(i)) {
-                AttackerNode att = new AttackerNode(i, cacheSize, cacheType);
+                AttackerNode att = new AttackerNode(i, cacheSize, cacheType, numUnpopularItemsPerAttacker);
                 attackers.add(att);
                 nodes.add(i, att);
             }else {
@@ -110,6 +114,7 @@ public class Graph {
         //Get 20% of the graph size and make them content custodians
         double temp = size * .2;
         int numCustodians = (int)temp;
+        numContentItems = numContentItems / numCustodians;
         Random rand = new Random();
         //Loop and create random nodes in the graph as content custodians
         for(int i = 0; i<numCustodians; i++)
@@ -118,56 +123,11 @@ public class Graph {
             if(!n.contains(contentCust)) {
                 n.add(contentCust);
                 custodians.add(nodes.get(contentCust));
-                nodes.get(contentCust).saveContent("This is content from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is a second piece of content on node "+contentCust);
-                nodes.get(contentCust).saveContent("This is a third piece of content on node "+contentCust);
-                nodes.get(contentCust).saveContent("This is a fourth piece of content on node "+contentCust);
-                nodes.get(contentCust).saveContent("This is a fifth piece of content on node "+contentCust);
-                nodes.get(contentCust).saveContent("This is a sixth piece of content on node "+contentCust);
-                nodes.get(contentCust).saveContent("This is a seventh piece of content on node "+contentCust);
-                nodes.get(contentCust).saveContent("This is a eighth piece of content on node "+contentCust);
-                nodes.get(contentCust).saveContent("This is a ninth piece of content on node "+contentCust);
-                nodes.get(contentCust).saveContent("This is a tenth piece of content on node "+contentCust);
-                nodes.get(contentCust).saveContent("This is content number 11 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 12 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 13 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 14 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 15 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 16 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 17 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 18 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 19 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 20 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 21 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 22 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 23 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 24 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 25 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 26 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 27 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 28 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 29 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 30 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 31 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 32 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 33 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 34 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 35 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 36 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 37 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 38 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 39 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 40 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 41 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 42 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 43 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 44 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 45 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 46 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 47 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 48 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 49 from node "+ contentCust);
-                nodes.get(contentCust).saveContent("This is content number 50 from node "+ contentCust);
+                for(int c = 0; c < numContentItems; c++)
+                {
+                    nodes.get(contentCust).saveContent("This is content number " + c + " from node "+ contentCust);
+
+                }
 
 
             }

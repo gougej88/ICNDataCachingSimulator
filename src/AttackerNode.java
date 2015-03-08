@@ -13,6 +13,8 @@ public class AttackerNode extends Node {
     Node target;
     ArrayList<Node> custodians;
     ArrayList<Content> unpopularContent = new ArrayList<Content>();
+    Map<Content,Integer> allContent;
+    int numUnpopularItems;
     boolean donePolling;
     boolean readyToAttack;
     boolean allPacketsFromCustodian;
@@ -21,10 +23,12 @@ public class AttackerNode extends Node {
     int attackStatus;
     int startWait;
 
-    public AttackerNode(int NodeID, int cacheSize, int cacheType){
+    public AttackerNode(int NodeID, int cacheSize, int cacheType, int numUnpopularItems){
         super(NodeID, cacheSize, cacheType);
         maxCacheSize = cacheSize;
         numRequestsServed = 0;
+        this.numUnpopularItems = numUnpopularItems;
+        allContent = new HashMap<Content, Integer>();
         //Guess Cache using theory that all nodes same size cache
         cacheSizeGuess = cacheSize;
         //Guess Characteristic Time to large value
@@ -43,15 +47,15 @@ public class AttackerNode extends Node {
         numRequestsServed++;
 
         //Add content being searched for to attacker lists
-        if(!donePolling) {
             //What defines popular or not?
-            if (unpopularContent.contains(p.search)) {
-                unpopularContent.remove(p.search);
+        if(allContent.containsKey(p.search))
+        {
+            int num = allContent.get(p.search);
+            allContent.replace(p.search,num+1);
+        }else {
+            allContent.put(p.search, 1);
+        }
 
-            } else {
-                unpopularContent.add(p.search);
-            }
-        }//end if not done polling
 
         //If this node is the dest
         //This should not happen on the attacker node.
@@ -102,6 +106,18 @@ public class AttackerNode extends Node {
                 cacheSizeGuess = maxCacheSize;
                 allPacketsFromCustodian = true;
 
+                //Sort all content and put least popular in unpopular list
+                Map sorted = sortByValue(allContent);
+                List<Map.Entry<Content,Integer>> sortedList = new LinkedList<Map.Entry<Content, Integer>>(sorted.entrySet());
+
+                //Add only up to size specified to unpopular content list
+                for(int s = 0; s < numUnpopularItems; s++){
+                    Map.Entry<Content,Integer> currentEntry = sortedList.get(s);
+                    unpopularContent.add(currentEntry.getKey());
+                }//end for
+
+
+
             }
             return p;
 
@@ -113,8 +129,7 @@ public class AttackerNode extends Node {
         //Check if done polling, if so time to attack or guess characteristic time
         //If not just send content along as usual
         if(donePolling && p.src == this) {
-
-                //if not ready to attack then still need to guess characteristic time
+              //if not ready to attack then still need to guess characteristic time
                 if(!readyToAttack) {
 
                     p = GuessCharacteristicTime(target,cacheSizeGuess, p);
@@ -304,7 +319,26 @@ public class AttackerNode extends Node {
 
     }//end sendAttack()
 
+    public static <K, V extends Comparable<? super V>> Map<K, V>
+    sortByValue( Map<K, V> map )
+    {
+        List<Map.Entry<K, V>> list =
+                new LinkedList<Map.Entry<K, V>>( map.entrySet() );
+        Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
+            public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        } );
+
+        Map<K, V> result = new LinkedHashMap<K, V>();
+        for (Map.Entry<K, V> entry : list)
+        {
+            result.put( entry.getKey(), entry.getValue() );
+        }
+        return result;
+    }
 
 
+}//end attackernode class
 
-}
+
