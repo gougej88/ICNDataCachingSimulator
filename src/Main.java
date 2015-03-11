@@ -13,12 +13,13 @@ public class Main {
 
         //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
-        int testsize = 30;
+        int testsize = 20;
         int requestsPerTest = 100000;
         double poissonRate = .65;
         double zipfianAlpha = .65;
         int numAttackers = 0;
-        int numUnpopularItems = 40;
+        int numUnpopularItems = 50;
+        int numContentItems = 250;
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType;
@@ -30,8 +31,8 @@ public class Main {
             //Loop for number of unique cache sizes
             for (int y = 0; y < 6; y++) {
 
-                //Create square graph(x,y,cacheSize,alpha, cacheType, numAttackers, numUnpopularItems)
-                g = new Graph(5, 5, y * 10, zipfianAlpha, cacheType, numAttackers, numUnpopularItems);
+                //Create square graph(x,y,cacheSize,alpha, cacheType, numAttackers, numUnpopularItems, numContentItems)
+                g = new Graph(5, 5, y * 10, zipfianAlpha, cacheType, numAttackers, numUnpopularItems, numContentItems);
                 g.createGraph();
 
                 //Start test

@@ -21,12 +21,12 @@ public class Graph {
 
 
 
-    public Graph(int length, int width, int cacheSize, double alpha, int cacheType, int numAttackers, int numUnpopularItems) {
+    public Graph(int length, int width, int cacheSize, double alpha, int cacheType, int numAttackers, int numUnpopularItems, int numContentItems) {
         this.length = length;
         this.width = width;
         this.cacheSize = cacheSize;
         size = length*width;
-        this.numContentItems = size*10;
+        this.numContentItems = numContentItems;
         this.alpha = alpha;
         this.cacheType = cacheType;
         this.numAttackers = numAttackers;
