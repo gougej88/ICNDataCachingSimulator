@@ -17,8 +17,8 @@ public class Main {
         int requestsPerTest = 100000;
         double poissonRate = .65;
         double zipfianAlpha = .65;
-        int numAttackers = 0;
-        int numUnpopularItems = 50;
+        int numAttackers = 1;
+        int numUnpopularItems = 20;
         int numContentItems = 250;
 
         //1 = LRU, 2 = FIFO, 3=Random
@@ -32,7 +32,7 @@ public class Main {
             for (int y = 0; y < 6; y++) {
 
                 //Create square graph(x,y,cacheSize,alpha, cacheType, numAttackers, numUnpopularItems, numContentItems)
-                g = new Graph(5, 5, y * 10, zipfianAlpha, cacheType, numAttackers, numUnpopularItems, numContentItems);
+                g = new Graph(5, 5, y * 10, zipfianAlpha, cacheType, numAttackers, numUnpopularItems, numContentItems, requestsPerTest);
                 g.createGraph();
 
                 //Start test

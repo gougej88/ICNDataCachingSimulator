@@ -12,6 +12,7 @@ public class Graph {
     Hashtable<Content,Node> localContentCustodians = new Hashtable<Content, Node>();
     int size;
     int numContentItems;
+    int numRequestsPerTest;
     double alpha;
     int cacheType;
     int numAttackers;
@@ -21,7 +22,7 @@ public class Graph {
 
 
 
-    public Graph(int length, int width, int cacheSize, double alpha, int cacheType, int numAttackers, int numUnpopularItems, int numContentItems) {
+    public Graph(int length, int width, int cacheSize, double alpha, int cacheType, int numAttackers, int numUnpopularItems, int numContentItems, int numRequests) {
         this.length = length;
         this.width = width;
         this.cacheSize = cacheSize;
@@ -31,6 +32,7 @@ public class Graph {
         this.cacheType = cacheType;
         this.numAttackers = numAttackers;
         this.numUnpopularItemsPerAttacker = numUnpopularItems;
+        this.numRequestsPerTest = numRequests;
 
     }
 
@@ -52,7 +54,7 @@ public class Graph {
         for(int i = 0; i < size; i++)
         {
             if(attackIndexes.contains(i)) {
-                AttackerNode att = new AttackerNode(i, cacheSize, cacheType, numUnpopularItemsPerAttacker);
+                AttackerNode att = new AttackerNode(i, cacheSize, cacheType, numUnpopularItemsPerAttacker,numRequestsPerTest);
                 attackers.add(att);
                 nodes.add(i, att);
             }else {

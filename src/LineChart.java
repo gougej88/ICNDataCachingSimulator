@@ -101,7 +101,7 @@ public class LineChart extends JFrame {
                         seriesLRUCache.add(j*10,min[j]);
 
                         //Print results to the console
-                        System.out.println("Average hops for LRU with cache size "+j*10+" ="+result[j]/numTestsKept);
+                        System.out.println("Average hops for LRU with cache size "+j*10+" = "+result[j]/numTestsKept);
                     }//end if lru cache
                     //FIFO
                     if(t==1) {
@@ -109,7 +109,7 @@ public class LineChart extends JFrame {
                         seriesFIFOCache.add(j*10,max[j]);
                         seriesFIFOCache.add(j*10,min[j]);
                         //Print results to the console
-                        System.out.println("Average hops for FIFO with cache size "+j*10+" ="+result[j]/numTestsKept);
+                        System.out.println("Average hops for FIFO with cache size "+j*10+" = "+result[j]/numTestsKept);
                     }//end if fifo cache
                     //Random
                     if(t==2) {
@@ -118,7 +118,7 @@ public class LineChart extends JFrame {
                         seriesRandomCache.add(j*10,min[j]);
 
                         //Print results to the console
-                        System.out.println("Average hops for Random with cache size "+j*10+" ="+result[j]/numTestsKept);
+                        System.out.println("Average hops for Random with cache size "+j*10+" = "+result[j]/numTestsKept);
                     }//end if random cache
                 }//end for j
 

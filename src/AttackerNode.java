@@ -14,6 +14,7 @@ public class AttackerNode extends Node {
     ArrayList<Node> custodians;
     ArrayList<Content> unpopularContent = new ArrayList<Content>();
     Map<Content,Integer> allContent;
+    int numRequestsTotal;
     int numUnpopularItems;
     boolean donePolling;
     boolean readyToAttack;
@@ -23,16 +24,17 @@ public class AttackerNode extends Node {
     int attackStatus;
     int startWait;
 
-    public AttackerNode(int NodeID, int cacheSize, int cacheType, int numUnpopularItems){
+    public AttackerNode(int NodeID, int cacheSize, int cacheType, int numUnpopularItems, int numRequests){
         super(NodeID, cacheSize, cacheType);
         maxCacheSize = cacheSize;
         numRequestsServed = 0;
+        this.numRequestsTotal = numRequests;
         this.numUnpopularItems = numUnpopularItems;
         allContent = new HashMap<Content, Integer>();
         //Guess Cache using theory that all nodes same size cache
         cacheSizeGuess = cacheSize;
         //Guess Characteristic Time to large value
-        characteristicTimeGuess = cacheSize*4;
+        characteristicTimeGuess = cacheSize*numUnpopularItems;
         donePolling = false;
         readyToAttack = false;
         allPacketsFromCustodian = true;
@@ -98,6 +100,7 @@ public class AttackerNode extends Node {
         }
             //Before return, check if poll done
             //Check if warmup phase is complete.
+            //Warmup phase = Whats the best way for this?
             if(numRequestsServed == maxCacheSize*100)
             {
                 donePolling = true;
@@ -205,7 +208,7 @@ public class AttackerNode extends Node {
         if(characteristicTimeStatus == 2) {
             startWait++;
             //if number of requests seen more than characteristic time guess, then time to request again
-            if(startWait >= characteristicTimeGuess*2){
+            if(startWait >= characteristicTimeGuess){
                 characteristicTimeStatus = 3;
             }
 
