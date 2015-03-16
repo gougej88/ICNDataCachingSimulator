@@ -57,38 +57,38 @@ public class LineChart extends JFrame {
             Arrays.fill(max,0);
             Arrays.fill(min,10);
             testsPerSize =singleTest.size()/6;
-            numTestsKept = (double)testsize * .30;
+            numTestsKept = (double)testsize;
 
             for (int i = 0; i < singleTest.size(); i++) {
                 int x = i / testsPerSize;
-                int z = i % testsPerSize;
+                //int z = i % testsPerSize;
                 if (t == 0) {
-                    if (z >= testsPerSize * .70) {
+                    //if (z >= testsPerSize * .70) {
                         if (singleTest.get(i).averageHops < min[x])
                             min[x] = singleTest.get(i).averageHops;
                         if (singleTest.get(i).averageHops > max[x])
                             max[x] = singleTest.get(i).averageHops;
                         result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
-                    }
+                    //}
                 }
 
                 if (t == 1) {
-                    if (z >= testsPerSize * .70) {
+                    //if (z >= testsPerSize * .70) {
                         if (singleTest.get(i).averageHops < min[x])
                             min[x] = singleTest.get(i).averageHops;
                         if (singleTest.get(i).averageHops > max[x])
                             max[x] = singleTest.get(i).averageHops;
                         result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
-                    }
+                    //}
                 }
                 if (t == 2) {
-                    if (z >= testsPerSize * .70) {
+                    //if (z >= testsPerSize * .70) {
                         if (singleTest.get(i).averageHops < min[x])
                             min[x] = singleTest.get(i).averageHops;
                         if (singleTest.get(i).averageHops > max[x])
                             max[x] = singleTest.get(i).averageHops;
                         result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
-                    }
+                    //}
                 }
                 //result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
             }
@@ -127,7 +127,7 @@ public class LineChart extends JFrame {
         }//end for t
 
         //Print percentage of tests kept to console
-        System.out.println("All results collected had a 70% warm up phase. Out of "+testsPerSize+" tests, only "+numTestsKept+" tests were kept");
+        System.out.println("All results collected had a 70% warm up phase.");
 
 
         final XYSeriesCollection dataset = new XYSeriesCollection();

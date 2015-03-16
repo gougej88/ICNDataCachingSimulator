@@ -205,6 +205,7 @@ public class AttackerNode extends Node {
         //1 - request unpopular content first run
         //2 - waiting phase between requesting lists
         //3 - request unpopular content second run
+        //4 - ready to decide on value
         if(characteristicTimeStatus == 2) {
             startWait++;
             //if number of requests seen more than characteristic time guess, then time to request again
@@ -219,35 +220,29 @@ public class AttackerNode extends Node {
         else {
             if (characteristicTimeStatus == 1 || characteristicTimeStatus == 3) {
                 //Alter the request and request an unpopular file
-                p.search = unpopularContent.get(indexInList);
+                p.search = unpopularContent.get(0);
                 p.dest = this.contentCustodians.get(p.search);
                 p.route = Dijkstra.getShortestPath(this, p.dest);
                 p.next = p.route.get(1);
 
                 p = p.next.receiveData(p);
             }
-            //increment indexInList to request new file on next run
-            if (indexInList < (unpopularContent.size() - 1)) {
-                indexInList++;
-            }
-            //else we made through entire list of unpopular content
+
             //start waiting or set ready to attack
-            else {
                 //if done with phase 1, start waiting
                 if (characteristicTimeStatus == 1) {
                     startWait = 0;
                     characteristicTimeStatus = 2;
-                    indexInList = 0;
                 }
                 //Else done guessing characteristic time
-                else {
+                if(characteristicTimeStatus == 3) {
                     //ready to attack?
                     //all from custodian check done outside of class in search class
 
                     startWait = 0;
-                    indexInList = 0;
-
-
+                    characteristicTimeStatus = 4;
+                }//end if
+                if(characteristicTimeStatus == 4){
                     //if all requests returned from custodian, then reduce T* guess
                     if (allPacketsFromCustodian) {
                         characteristicTimeGuess = characteristicTimeGuess / 2;
@@ -255,11 +250,11 @@ public class AttackerNode extends Node {
                     }//end if all packets from custodian
                     else {
                         finalCharTimeGuess = characteristicTimeGuess + 2;
+                        characteristicTimeStatus = 1;
                         readyToAttack = true;
                     }//end else
 
-                }//end else. done with second request
-            }//end else
+                }//end if
 
         }//end else for not in waiting phase
         return p;
