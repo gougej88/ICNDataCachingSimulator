@@ -118,10 +118,16 @@ public class Graph {
         int numCustodians = (int)temp;
         numContentItems = numContentItems / numCustodians;
         Random rand = new Random();
+
+        //Add attackers to local variable so they do not become custodians
+        for(Node x : attackers) {
+            n.add(x.nodeID);
+        }
         //Loop and create random nodes in the graph as content custodians
         for(int i = 0; i<numCustodians; i++)
         {
             int contentCust = rand.nextInt(size);
+
             if(!n.contains(contentCust)) {
                 n.add(contentCust);
                 custodians.add(nodes.get(contentCust));

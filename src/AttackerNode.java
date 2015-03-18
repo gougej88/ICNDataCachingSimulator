@@ -110,11 +110,23 @@ public class AttackerNode extends Node {
                 allPacketsFromCustodian = true;
 
                 //Sort all content and put least popular in unpopular list
-                Map sorted = sortByValue(allContent);
+                //Map sorted = sortByValue(allContent);
+                //List<Map.Entry<Content,Integer>> sortedList = new LinkedList<Map.Entry<Content, Integer>>(sorted.entrySet());
+
+                //Grab most unpopular in graph
+                Map<Content, Double> popContent = new HashMap<Content, Double>();
+                ArrayList<Content> all = new ArrayList<Content>();
+                Enumeration e = contentCustodians.keys();
+                while(e.hasMoreElements()){
+                    Content d = (Content) e.nextElement();
+                    popContent.put(d,d.probability);
+                }
+                Map sorted = sortByValue(popContent);
                 List<Map.Entry<Content,Integer>> sortedList = new LinkedList<Map.Entry<Content, Integer>>(sorted.entrySet());
 
                 //Add only up to size specified to unpopular content list
                 for(int s = 0; s < numUnpopularItems; s++){
+                    //Add unpopular files to variable
                     Map.Entry<Content,Integer> currentEntry = sortedList.get(s);
                     unpopularContent.add(currentEntry.getKey());
                 }//end for
