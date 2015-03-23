@@ -85,12 +85,13 @@ public class Search {
             //Write each query out to text file
             //writer.write("Test:"+x+" | Time:"+maxtime+" | Source:"+r.src.nodeID+" | Content:"+r.search.contentID+" | Destination:"+r.dest.nodeID+" | Data found on:"+r.referrer.nodeID+" | Number of hops:"+r.hops+" | Cache hit?:"+r.cachehit+"\r\n");
         }
-        System.out.println("Maxtime: " + maxtime);
+
+        //System.out.println("Maxtime: " + maxtime);
         percent = (double)cachehits/(double)numTests *100;
-        System.out.println("Number of tests performed: "+ numTests);
-        System.out.println("Number of hops in test: "+ totalHops);
+        System.out.println("Number of requests: "+ numTests);
+        //System.out.println("Number of hops in test: "+ totalHops);
         System.out.println("Cache Size: "+ cacheSize);
-        System.out.println("Number of cache hits in test: "+ cachehits);
+        //System.out.println("Number of cache hits in test: "+ cachehits);
         System.out.println("Percentage of cache hits: "+ percent+"%");
         averagehops = (double)totalHops/(double)numTestsKept;
         System.out.println("Average hops per request: "+ averagehops);

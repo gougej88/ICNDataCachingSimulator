@@ -38,6 +38,7 @@ public class Main {
                         g = new Graph(5, 5, y * 10, zipfianAlpha, cacheType, numAttackers, numUnpopularItems, numContentItems, requestsPerTest);
                         g.createGraph();
                         //Run without cache
+                        System.out.println("Test Number: " +n);
                         tests.add(Search.runTest(g, requestsPerTest, poissonRate, false));
                     }
 
@@ -47,6 +48,7 @@ public class Main {
                         g = new Graph(5, 5, y * 10, zipfianAlpha, cacheType, numAttackers, numUnpopularItems, numContentItems, requestsPerTest);
                         g.createGraph();
                         //Run with cache.
+                        System.out.println("Test Number: " +x);
                         tests.add(Search.runTest(g, requestsPerTest, poissonRate, true));
                     }//end for number of tests
                 }//end else
