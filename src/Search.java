@@ -59,6 +59,8 @@ public class Search {
         int cacheType = g.cacheType;
         int startKeepingStats = (int)(numTests*.70);
         int numTestsKept = numTests - startKeepingStats;
+        Node n = requesters.get(0);
+        Node last = requesters.get(0);
 
         for(int x=0; x<numTests; x++) {
             //Get the number of requests to create per time step
@@ -68,7 +70,15 @@ public class Search {
             p= Poisson.getPoisson(poissonRate);
 
             Content k = g.getZipfContent();
-            Node n = g.nodes.get(requesters.get(rand.nextInt(requesters.size())).nodeID);
+            if(attackers.contains(last) && ((AttackerNode)last).readyToAttack && ((AttackerNode)last).attackStatus == 1 && x <= startKeepingStats)
+            {
+               n = last;
+            }else {
+                n = g.nodes.get(requesters.get(rand.nextInt(requesters.size())).nodeID);
+                last = n;
+            }
+
+
             test.addToTest(jump+p,k,n);
             Packet pack = new Packet(n,k);
             pack.cacheEnabled = cacheEnabled;
