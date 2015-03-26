@@ -14,10 +14,10 @@ public class Main {
         //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
         int testsize = 5;
-        int requestsPerTest = 200000;
+        int requestsPerTest = 500000;
         double poissonRate = .65;
         double zipfianAlpha = .65;
-        int numAttackers = 2;
+        int numAttackers = 0;
         int numUnpopularItems = 50;
         int numContentItems = 1000;
 

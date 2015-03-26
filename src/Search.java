@@ -63,6 +63,7 @@ public class Search {
         Node last = requesters.get(0);
         int numUnpopularKept = 0;
         int numPopularKept = 0;
+        int numUnpopularTotal = 0;
 
         for(int x=0; x<numTests; x++) {
 
@@ -77,6 +78,7 @@ public class Search {
             if(attackers.contains(last) && ((AttackerNode)last).readyToAttack && ((AttackerNode)last).attackStatus == 1 && x >= startKeepingStats)
             {
                n = last;
+                numUnpopularKept++;
 
             }else {
                 n = g.nodes.get(requesters.get(rand.nextInt(requesters.size())).nodeID);
@@ -105,11 +107,13 @@ public class Search {
         {
             for(int a=0; a < attackers.size(); a++){
                 int unpop = attackers.get(a).numattacks;
-                numUnpopularKept+=unpop;
+                numUnpopularTotal+=unpop;
             }
-            numPopularKept = numTestsKept-numUnpopularKept;
+
         }//end if
 
+        numPopularKept = numTestsKept-numUnpopularKept;
+        System.out.println("Number of unpopular requests total: "+numUnpopularTotal);
         System.out.println("Number of unpopular requests kept: "+numUnpopularKept);
         System.out.println("Number of regular requests kept: "+numPopularKept);
         //System.out.println("Maxtime: " + maxtime);
