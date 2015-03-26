@@ -61,8 +61,12 @@ public class Search {
         int numTestsKept = numTests - startKeepingStats;
         Node n = requesters.get(0);
         Node last = requesters.get(0);
+        int numUnpopularKept = 0;
+        int numPopularKept = 0;
 
         for(int x=0; x<numTests; x++) {
+
+
             //Get the number of requests to create per time step
             jump = maxtime;
 
@@ -70,9 +74,10 @@ public class Search {
             p= Poisson.getPoisson(poissonRate);
 
             Content k = g.getZipfContent();
-            if(attackers.contains(last) && ((AttackerNode)last).readyToAttack && ((AttackerNode)last).attackStatus == 1 && x <= startKeepingStats)
+            if(attackers.contains(last) && ((AttackerNode)last).readyToAttack && ((AttackerNode)last).attackStatus == 1 && x >= startKeepingStats)
             {
                n = last;
+
             }else {
                 n = g.nodes.get(requesters.get(rand.nextInt(requesters.size())).nodeID);
                 last = n;
@@ -94,8 +99,19 @@ public class Search {
                 maxtime += p;
             //Write each query out to text file
             //writer.write("Test:"+x+" | Time:"+maxtime+" | Source:"+r.src.nodeID+" | Content:"+r.search.contentID+" | Destination:"+r.dest.nodeID+" | Data found on:"+r.referrer.nodeID+" | Number of hops:"+r.hops+" | Cache hit?:"+r.cachehit+"\r\n");
-        }
+        }//end for
+        //Testing for number of attacks run
+        if(g.attackers.size() >=1)
+        {
+            for(int a=0; a < attackers.size(); a++){
+                int unpop = attackers.get(a).numattacks;
+                numUnpopularKept+=unpop;
+            }
+            numPopularKept = numTestsKept-numUnpopularKept;
+        }//end if
 
+        System.out.println("Number of unpopular requests kept: "+numUnpopularKept);
+        System.out.println("Number of regular requests kept: "+numPopularKept);
         //System.out.println("Maxtime: " + maxtime);
         percent = (double)cachehits/(double)numTests *100;
         System.out.println("Number of requests: "+ numTests);
@@ -106,7 +122,7 @@ public class Search {
         averagehops = (double)totalHops/(double)numTestsKept;
         System.out.println("Average hops per request: "+ averagehops);
         //Set totals in packetTracer
-        test.setTotals(cacheType,cacheSize,numTests,numTestsKept,totalHops,cachehits,averagehops);
+        test.setTotals(cacheType,cacheSize,numTests,numTestsKept,numPopularKept,numUnpopularKept,totalHops,cachehits,averagehops);
 
         //Write output to log file
         //writer.write("Number of requests:"+numTests+" | Total number of hops:"+totalHops+" | Number of cache hits:"+cachehits+" | Percentage cache hits:"+percent+"%"+ " | Average hops per request"+ averagehops );

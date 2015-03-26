@@ -23,6 +23,7 @@ public class AttackerNode extends Node {
     int characteristicTimeStatus;
     int attackStatus;
     int startWait;
+    int numattacks = 0;
 
     public AttackerNode(int NodeID, int cacheSize, int cacheType, int numUnpopularItems, int numRequests){
         super(NodeID, cacheSize, cacheType);
@@ -101,7 +102,7 @@ public class AttackerNode extends Node {
             //Before return, check if poll done
             //Check if warmup phase is complete.
             //Warmup phase = Whats the best way for this?
-            if(numRequestsServed == maxCacheSize*100)
+            if(numRequestsServed == 500)
             {
                 donePolling = true;
                 target = FindBestTarget(this, custodians);
@@ -278,6 +279,8 @@ public class AttackerNode extends Node {
         //Possible values attackStatus
         //1 - attacking
         //2 - waiting phase between attack requests
+
+        numattacks++;
         if(attackStatus==2){
             startWait++;
             //if number of requests seen more than characteristic time guess, then time to request again
