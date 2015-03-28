@@ -9,16 +9,16 @@ public class Main {
         //Create an arraylist of all tests, and results
         ArrayList<ArrayList<PacketTracer>> allTests = new ArrayList<ArrayList<PacketTracer>>();
         //Create graph grid of nodes(length, width, cacheSize)
-        Graph g;
+        LineGraph g;
 
         //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
         int testsize = 5;
-        int requestsPerTest = 500000;
+        int requestsPerTest = 300000;
         double poissonRate = .65;
         double zipfianAlpha = .65;
-        int numAttackers = 0;
-        int numUnpopularItems = 50;
+        int numAttackers = 5;
+        int numUnpopularItems = 20;
         int numContentItems = 1000;
 
         //1 = LRU, 2 = FIFO, 3=Random
@@ -34,22 +34,35 @@ public class Main {
                 //Start test
                 if (y == 0) {
                     for (int n = 0; n < testsize; n++) {
+
+                        /* SQUARE GRAPH
                         //Create square graph(x,y,cacheSize,alpha, cacheType, numAttackers, numUnpopularItems, numContentItems)
                         g = new Graph(5, 5, y * 10, zipfianAlpha, cacheType, numAttackers, numUnpopularItems, numContentItems, requestsPerTest);
                         g.createGraph();
                         //Run without cache
                         System.out.println("Test Number: " +n);
                         tests.add(Search.runTest(g, requestsPerTest, poissonRate, false));
+                        */
+
+                        //LineGraph
+                        g = new LineGraph(5, y * 10, zipfianAlpha, cacheType, numAttackers, numUnpopularItems, numContentItems, requestsPerTest);
+                        g.createLineGraph();
                     }
 
                 } else {
                     for (int x = 0; x < testsize; x++) {
+                        /* SQUARE GRAPH
                         //Create square graph(x,y,cacheSize,alpha, cacheType, numAttackers, numUnpopularItems, numContentItems)
                         g = new Graph(5, 5, y * 10, zipfianAlpha, cacheType, numAttackers, numUnpopularItems, numContentItems, requestsPerTest);
                         g.createGraph();
                         //Run with cache.
                         System.out.println("Test Number: " +x);
                         tests.add(Search.runTest(g, requestsPerTest, poissonRate, true));
+                        */
+                        //LineGraph
+                        g = new LineGraph(5, y * 10, zipfianAlpha, cacheType, numAttackers, numUnpopularItems, numContentItems, requestsPerTest);
+                        g.createLineGraph();
+
                     }//end for number of tests
                 }//end else
             }//end for cachesize tests
