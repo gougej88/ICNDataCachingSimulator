@@ -14,12 +14,12 @@ public class Main {
         //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
         int testsize = 5;
-        int requestsPerTest = 300000;
+        int requestsPerTest = 30000;
         double poissonRate = .65;
         double zipfianAlpha = .65;
-        int numAttackers = 5;
-        int numUnpopularItems = 20;
-        int numContentItems = 1000;
+        int numAttackers = 1;
+        int numUnpopularItems = 10;
+        int numContentItems = 100;
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType;
@@ -47,6 +47,9 @@ public class Main {
                         //LineGraph
                         g = new LineGraph(5, y * 10, zipfianAlpha, cacheType, numAttackers, numUnpopularItems, numContentItems, requestsPerTest);
                         g.createLineGraph();
+                        //Run without cache
+                        System.out.println("Test Number: " +n);
+                        tests.add(SearchLineGraph.runTest(g, requestsPerTest, poissonRate, false));
                     }
 
                 } else {
@@ -62,6 +65,9 @@ public class Main {
                         //LineGraph
                         g = new LineGraph(5, y * 10, zipfianAlpha, cacheType, numAttackers, numUnpopularItems, numContentItems, requestsPerTest);
                         g.createLineGraph();
+                        //Run with cache.
+                        System.out.println("Test Number: " +x);
+                        tests.add(SearchLineGraph.runTest(g, requestsPerTest, poissonRate, true));
 
                     }//end for number of tests
                 }//end else
@@ -71,8 +77,8 @@ public class Main {
 
 
         LineChart demo = new LineChart("Average hops per request. Alpha:"+zipfianAlpha +" Nodes:25 Requests per test:"+requestsPerTest+" Number of tests:"+testsize,"Average hops per request",testsize, allTests);
-        //demo.pack();
-        //demo.setVisible(true);
+        demo.pack();
+        demo.setVisible(true);
 
 
 
