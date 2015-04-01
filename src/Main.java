@@ -18,8 +18,8 @@ public class Main {
         double poissonRate = .65;
         double zipfianAlpha = .65;
         int numAttackers = 1;
-        int numUnpopularItems = 10;
-        int numContentItems = 100;
+        int numUnpopularItems = 50;
+        int numContentItems = 250;
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType;

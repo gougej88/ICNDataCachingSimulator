@@ -21,6 +21,7 @@ public class AttackerNode extends Node {
     boolean allPacketsFromCustodian;
     int indexInList;
     int characteristicTimeStatus;
+    int characteristicTimeUnpopCounter = 0;
     int attackStatus;
     int startWait;
     int numattacks = 0;
@@ -233,7 +234,7 @@ public class AttackerNode extends Node {
         else {
             if (characteristicTimeStatus == 1 || characteristicTimeStatus == 3) {
                 //Alter the request and request an unpopular file
-                p.search = unpopularContent.get(0);
+                p.search = unpopularContent.get(characteristicTimeUnpopCounter);
                 p.dest = this.contentCustodians.get(p.search);
                 p.route = Dijkstra.getShortestPath(this, p.dest);
                 p.next = p.route.get(1);
@@ -260,6 +261,12 @@ public class AttackerNode extends Node {
                     if (allPacketsFromCustodian) {
                         characteristicTimeGuess = characteristicTimeGuess / 2;
                         characteristicTimeStatus = 1;
+
+                        if (characteristicTimeUnpopCounter < (unpopularContent.size() - 1)) {
+                            characteristicTimeUnpopCounter++;
+                        } else {
+                            characteristicTimeUnpopCounter = 0;
+                        }//end else for increment
                     }//end if all packets from custodian
                     else {
                         finalCharTimeGuess = characteristicTimeGuess + 2;

@@ -64,10 +64,11 @@ public class SearchLineGraph {
             p= Poisson.getPoisson(poissonRate);
 
             Content k = g.getZipfContent();
-            if(attackers.contains(last) && ((AttackerNode)last).readyToAttack && ((AttackerNode)last).attackStatus == 1 && x >= startKeepingStats)
+            if(x%2==1 && attackers.size() > 0 && x >= numTests*.2)
             {
-                n = last;
-                numUnpopularKept++;
+                n = attackers.get(0);
+                if(((AttackerNode)n).readyToAttack && x >= startKeepingStats)
+                    numUnpopularKept++;
 
             }else {
                 n = g.nodes.get(0);

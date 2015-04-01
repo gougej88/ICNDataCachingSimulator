@@ -28,6 +28,7 @@ public class Search {
         }
 
         attackers = g.attackers;
+
         for(AttackerNode att : attackers)
         {
             att.SetCustodians(custodians);

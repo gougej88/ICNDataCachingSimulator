@@ -58,6 +58,7 @@ public class LineGraph {
                 AttackerNode att = new AttackerNode(i, cacheSize, cacheType, numUnpopularItemsPerAttacker,numRequestsPerTest);
                 attackers.add(att);
                 nodes.add(i, att);
+
             }else {
                 Node a = new Node(i, cacheSize, cacheType);
                 nodes.add(i, a);
@@ -82,6 +83,34 @@ public class LineGraph {
 
         //Use Distribution to assign popularity to each piece of content in the graph
         assignPopularityDistribution(alpha);
+
+        for(AttackerNode att : attackers){
+            //Simulate polling done and ready to guess characteristic time.
+            att.numRequestsServed = 500;
+            att.donePolling = true;
+            //att.target = att.FindBestTarget(att, custodians);
+            //estimate cacheSize
+            att.cacheSizeGuess = att.maxCacheSize;
+            att.allPacketsFromCustodian = true;
+
+            //Grab most unpopular in graph
+            Map<Content, Double> popContent = new HashMap<Content, Double>();
+            ArrayList<Content> all = new ArrayList<Content>();
+            Enumeration e = att.contentCustodians.keys();
+            while(e.hasMoreElements()){
+                Content d = (Content) e.nextElement();
+                popContent.put(d,d.probability);
+            }
+            Map sorted = att.sortByValue(popContent);
+            List<Map.Entry<Content,Integer>> sortedList = new LinkedList<Map.Entry<Content, Integer>>(sorted.entrySet());
+
+            //Add only up to size specified to unpopular content list
+            for(int s = 0; s < att.numUnpopularItems; s++){
+                //Add unpopular files to variable
+                Map.Entry<Content,Integer> currentEntry = sortedList.get(s);
+                att.unpopularContent.add(currentEntry.getKey());
+            }//end for
+        }//end for
 
 
     }//end createLineGraph()
@@ -211,7 +240,7 @@ public class LineGraph {
         //It must be called after creating all content custodians
 
         //Start at each node and check the number of content items on that node
-        for (int i = 0; i < length; i++)
+        for (int i = 0; i < totalNodes; i++)
         {
             int kPerNode = nodes.get(i).content.size();
             //Loop through each piece of content on that node and all it to the local variable hashtable
@@ -220,7 +249,7 @@ public class LineGraph {
             }
         }
         //Loop through all the nodes and assign the local hashtable to the hashtable on each node
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < totalNodes; i++) {
             nodes.get(i).contentCustodians = localContentCustodians;
         }
 
