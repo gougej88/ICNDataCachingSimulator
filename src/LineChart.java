@@ -50,13 +50,15 @@ public class LineChart extends JFrame {
 
         //Combine all results
         for(int t=0; t< tests.size(); t++) {
+
+            //change all values back to 6
             singleTest = tests.get(t);
-            double[] max = new double[6];
-            double[] min = new double[6];
-            double[] result = new double[6];
+            double[] max = new double[2];
+            double[] min = new double[2];
+            double[] result = new double[2];
             Arrays.fill(max,0);
             Arrays.fill(min,10);
-            testsPerSize =singleTest.size()/6;
+            testsPerSize =singleTest.size()/2;
             numTestsKept = (double)testsize;
 
             for (int i = 0; i < singleTest.size(); i++) {
@@ -68,7 +70,8 @@ public class LineChart extends JFrame {
                             min[x] = singleTest.get(i).averageHops;
                         if (singleTest.get(i).averageHops > max[x])
                             max[x] = singleTest.get(i).averageHops;
-                        result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
+                        //result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
+                    result[singleTest.get(i).cacheSize] += singleTest.get(i).averageHops;
                     //}
                 }
 
@@ -78,7 +81,8 @@ public class LineChart extends JFrame {
                             min[x] = singleTest.get(i).averageHops;
                         if (singleTest.get(i).averageHops > max[x])
                             max[x] = singleTest.get(i).averageHops;
-                        result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
+                        //result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
+                    result[singleTest.get(i).cacheSize] += singleTest.get(i).averageHops;
                     //}
                 }
                 if (t == 2) {
@@ -87,44 +91,46 @@ public class LineChart extends JFrame {
                             min[x] = singleTest.get(i).averageHops;
                         if (singleTest.get(i).averageHops > max[x])
                             max[x] = singleTest.get(i).averageHops;
-                        result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
+                        //result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
+                    result[singleTest.get(i).cacheSize] += singleTest.get(i).averageHops;
                     //}
                 }
-                //result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
+
             }
                 //Divide the result sums by the number of tests and add to series
+            //ALL NEED j*10 added back
                 for (int j = 0; j < result.length; j++) {
                     //LRU
                     if(t==0) {
-                        seriesLRUCache.add(j * 10, result[j] / numTestsKept);
-                        seriesLRUCache.add(j*10,max[j]);
-                        seriesLRUCache.add(j*10,min[j]);
+                        seriesLRUCache.add(j, result[j] / numTestsKept);
+                        seriesLRUCache.add(j,max[j]);
+                        seriesLRUCache.add(j,min[j]);
 
                         //Print results to the console
-                        System.out.println("Average hops for LRU with cache size "+j*10+" = "+result[j]/numTestsKept);
-                        System.out.println("Max hops for LRU with cache size "+j*10+" = "+max[j]);
-                        System.out.println("Min hops for LRU with cache size "+j*10+" = "+min[j]);
+                        System.out.println("Average hops for LRU with cache size "+j+" = "+result[j]/numTestsKept);
+                        System.out.println("Max hops for LRU with cache size "+j+" = "+max[j]);
+                        System.out.println("Min hops for LRU with cache size "+j+" = "+min[j]);
                     }//end if lru cache
                     //FIFO
                     if(t==1) {
-                        seriesFIFOCache.add(j * 10, result[j] / numTestsKept);
-                        seriesFIFOCache.add(j*10,max[j]);
-                        seriesFIFOCache.add(j*10,min[j]);
+                        seriesFIFOCache.add(j, result[j] / numTestsKept);
+                        seriesFIFOCache.add(j,max[j]);
+                        seriesFIFOCache.add(j,min[j]);
                         //Print results to the console
-                        System.out.println("Average hops for FIFO with cache size "+j*10+" = "+result[j]/numTestsKept);
-                        System.out.println("Max hops for FIFO with cache size "+j*10+" = "+max[j]);
-                        System.out.println("Min hops for FIFO with cache size "+j*10+" = "+min[j]);
+                        System.out.println("Average hops for FIFO with cache size "+j+" = "+result[j]/numTestsKept);
+                        System.out.println("Max hops for FIFO with cache size "+j+" = "+max[j]);
+                        System.out.println("Min hops for FIFO with cache size "+j+" = "+min[j]);
                     }//end if fifo cache
                     //Random
                     if(t==2) {
-                        seriesRandomCache.add(j * 10, result[j] / numTestsKept);
-                        seriesRandomCache.add(j*10,max[j]);
-                        seriesRandomCache.add(j*10,min[j]);
+                        seriesRandomCache.add(j, result[j] / numTestsKept);
+                        seriesRandomCache.add(j,max[j]);
+                        seriesRandomCache.add(j,min[j]);
 
                         //Print results to the console
-                        System.out.println("Average hops for Random with cache size "+j*10+" = "+result[j]/numTestsKept);
-                        System.out.println("Max hops for Random with cache size "+j*10+" = "+max[j]);
-                        System.out.println("Min hops for Random with cache size "+j*10+" = "+min[j]);
+                        System.out.println("Average hops for Random with cache size "+j+" = "+result[j]/numTestsKept);
+                        System.out.println("Max hops for Random with cache size "+j+" = "+max[j]);
+                        System.out.println("Min hops for Random with cache size "+j+" = "+min[j]);
                     }//end if random cache
                 }//end for j
 

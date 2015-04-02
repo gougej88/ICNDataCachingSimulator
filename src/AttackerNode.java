@@ -309,7 +309,8 @@ public class AttackerNode extends Node {
                     indexInList++;
                 } else {
                     startWait = 0;
-                    attackStatus = 2;
+                    //This would cause attack to enter the waiting state
+                    //attackStatus = 2;
                     indexInList = 0;
                 }//end else for increment
             }
@@ -329,7 +330,8 @@ public class AttackerNode extends Node {
                     indexInList++;
                 } else {
                     startWait = 0;
-                    attackStatus = 2;
+                    //This would cause attack to enter the waiting state
+                    //attackStatus = 2;
                     indexInList = 0;
                 }//end else for increment
 

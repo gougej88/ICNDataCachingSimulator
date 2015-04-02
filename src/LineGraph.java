@@ -110,6 +110,10 @@ public class LineGraph {
                 Map.Entry<Content,Integer> currentEntry = sortedList.get(s);
                 att.unpopularContent.add(currentEntry.getKey());
             }//end for
+
+            att.finalCharTimeGuess = 0;
+            att.readyToAttack = true;
+
         }//end for
 
 

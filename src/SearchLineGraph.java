@@ -62,8 +62,13 @@ public class SearchLineGraph {
 
             //Mean is set here for rate at which to request content
             p= Poisson.getPoisson(poissonRate);
-
             Content k = g.getZipfContent();
+            int unpopIndex=0;
+            if(attackers.size() >0) {
+                k = attackers.get(0).unpopularContent.get(0);
+                unpopIndex = custodians.get(0).content.indexOf(k);
+            }
+
             if(x%2==1 && attackers.size() > 0 && x >= numTests*.2)
             {
                 n = attackers.get(0);
@@ -72,6 +77,12 @@ public class SearchLineGraph {
 
             }else {
                 n = g.nodes.get(0);
+                if(attackers.size() >0) {
+                    if (unpopIndex == 1)
+                        k = custodians.get(0).getContent(0);
+                    else
+                        k = custodians.get(0).getContent(1);
+                }
                 last = n;
             }
 
