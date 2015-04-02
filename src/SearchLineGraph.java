@@ -49,10 +49,16 @@ public class SearchLineGraph {
         int startKeepingStats = (int)(numTests*.70);
         int numTestsKept = numTests - startKeepingStats;
         Node n = requesters.get(0);
+        Node at = requesters.get(0);
         Node last = requesters.get(0);
         int numUnpopularKept = 0;
         int numPopularKept = 0;
         int numUnpopularTotal = 0;
+        int poissonIndex = 0;
+        int nodeType = 0;
+
+        if(attackers.size() >0)
+            at = attackers.get(0);
 
         for(int x=0; x<numTests; x++) {
 
@@ -61,48 +67,54 @@ public class SearchLineGraph {
             jump = maxtime;
 
             //Mean is set here for rate at which to request content
-            p= Poisson.getPoisson(poissonRate);
-            Content k = g.getZipfContent();
-            int unpopIndex=0;
-            if(attackers.size() >0) {
-                k = attackers.get(0).unpopularContent.get(0);
-                unpopIndex = custodians.get(0).content.indexOf(k);
-            }
-
-            if(x%2==1 && attackers.size() > 0 && x >= numTests*.2)
-            {
-                n = attackers.get(0);
-                if(((AttackerNode)n).readyToAttack && x >= startKeepingStats)
-                    numUnpopularKept++;
-
+            if(poissonIndex > 0){
+                poissonIndex--;
             }else {
-                n = g.nodes.get(0);
-                if(attackers.size() >0) {
-                    if (unpopIndex == 1)
-                        k = custodians.get(0).getContent(0);
-                    else
-                        k = custodians.get(0).getContent(1);
+                p = Poisson.getPoisson(poissonRate);
+                poissonIndex = p;
+                nodeType = x%2;
+
+            }
+                Content k = g.getZipfContent();
+                int unpopIndex = 0;
+
+                if (attackers.size() > 0) {
+                    k = attackers.get(0).unpopularContent.get(0);
+                    unpopIndex = custodians.get(0).content.indexOf(k);
                 }
-                last = n;
-            }
+
+                if (nodeType == 1 && attackers.size() > 0 && x >= numTests * .2) {
+                    n = at;
+                    if (((AttackerNode) n).readyToAttack && x >= startKeepingStats)
+                        numUnpopularKept++;
+
+                } else {
+                    n = requesters.get(0);
+                    if (attackers.size() > 0) {
+                        if (unpopIndex == 1)
+                            k = custodians.get(0).getContent(0);
+                        else
+                            k = custodians.get(0).getContent(1);
+                    }
+                }
 
 
-            test.addToTest(jump+p,k,n);
-            Packet pack = new Packet(n,k);
-            pack.cacheEnabled = cacheEnabled;
-            pack.time = maxtime;
-            //Perform the search
-            Packet r = findContent(pack,attackers);
-            if(x >= startKeepingStats) {
-                if (r.cachehit)
-                    cachehits++;
+                test.addToTest(jump + p, k, n);
+                Packet pack = new Packet(n, k);
+                pack.cacheEnabled = cacheEnabled;
+                pack.time = maxtime;
+                //Perform the search
+                Packet r = findContent(pack, attackers);
+                if (x >= startKeepingStats) {
+                    if (r.cachehit)
+                        cachehits++;
 
-                totalHops += r.hops;
-            }
-            maxtime += p;
-            //Write each query out to text file
-            //writer.write("Test:"+x+" | Time:"+maxtime+" | Source:"+r.src.nodeID+" | Content:"+r.search.contentID+" | Destination:"+r.dest.nodeID+" | Data found on:"+r.referrer.nodeID+" | Number of hops:"+r.hops+" | Cache hit?:"+r.cachehit+"\r\n");
-        }//end for
+                    totalHops += r.hops;
+                }
+                maxtime += p;
+                //Write each query out to text file
+                //writer.write("Test:"+x+" | Time:"+maxtime+" | Source:"+r.src.nodeID+" | Content:"+r.search.contentID+" | Destination:"+r.dest.nodeID+" | Data found on:"+r.referrer.nodeID+" | Number of hops:"+r.hops+" | Cache hit?:"+r.cachehit+"\r\n");
+        }//end for num tests
         //Testing for number of attacks run
         if(g.attackers.size() >=1)
         {
