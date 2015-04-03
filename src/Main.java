@@ -17,7 +17,7 @@ public class Main {
         int requestsPerTest = 500;
         double poissonRate = .65;
         double zipfianAlpha = .65;
-        int numAttackers = 0;
+        int numAttackers = 1;
         int numUnpopularItems = 1;
         int numContentItems = 2;
 

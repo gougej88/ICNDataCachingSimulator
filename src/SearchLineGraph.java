@@ -51,6 +51,8 @@ public class SearchLineGraph {
         Node n = requesters.get(0);
         Node at = requesters.get(0);
         Node last = requesters.get(0);
+        Content attackContent = new Content();
+        Content popContent = new Content();
         int numUnpopularKept = 0;
         int numPopularKept = 0;
         int numUnpopularTotal = 0;
@@ -59,6 +61,20 @@ public class SearchLineGraph {
 
         if(attackers.size() >0)
             at = attackers.get(0);
+
+        Content k = g.getZipfContent();
+        int unpopIndex = 0;
+
+        if (attackers.size() > 0) {
+            k = attackers.get(0).unpopularContent.get(0);
+            unpopIndex = custodians.get(0).content.indexOf(k);
+        }
+            if (unpopIndex == 1)
+                popContent = custodians.get(0).getContent(0);
+            else
+                popContent = custodians.get(0).getContent(1);
+            attackContent = custodians.get(0).content.get(unpopIndex);
+
 
         for(int x=0; x<numTests; x++) {
 
@@ -75,27 +91,15 @@ public class SearchLineGraph {
                 nodeType = x%2;
 
             }
-                Content k = g.getZipfContent();
-                int unpopIndex = 0;
 
-                if (attackers.size() > 0) {
-                    k = attackers.get(0).unpopularContent.get(0);
-                    unpopIndex = custodians.get(0).content.indexOf(k);
-                }
-
-                if (nodeType == 1 && attackers.size() > 0 && x >= numTests * .2) {
+                if (nodeType == 1 && attackers.size() > 0) {
                     n = at;
-                    if (((AttackerNode) n).readyToAttack && x >= startKeepingStats)
-                        numUnpopularKept++;
+                    k = attackContent;
+                    numUnpopularKept++;
 
                 } else {
                     n = requesters.get(0);
-                    if (attackers.size() > 0) {
-                        if (unpopIndex == 1)
-                            k = custodians.get(0).getContent(0);
-                        else
-                            k = custodians.get(0).getContent(1);
-                    }
+                    k = popContent;
                 }
 
 
