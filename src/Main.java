@@ -18,10 +18,10 @@ public class Main {
         int requestsPerTest = 10000;
         double poissonRate = .65;
         double zipfianAlpha = .65;
-        int numAttackers = 5;
+        int numAttackers = 6;
         int numUnpopularItems = 50;
         int numContentItems = 500;
-        double requestRate = 1.0;
+        double AttackerRequestRate = 3;
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType;
@@ -44,7 +44,7 @@ public class Main {
                         g.createGraph();
                         //Run without cache
                         System.out.println("Test Number: " +n);
-                        tests.add(Search.runTest(g, requestsPerTest, poissonRate, requestRate, false));
+                        tests.add(Search.runTest(g, requestsPerTest, poissonRate, AttackerRequestRate, false));
 
 
                         /* //LineGraph
@@ -65,7 +65,7 @@ public class Main {
                         g.createGraph();
                         //Run with cache.
                         System.out.println("Test Number: " +x);
-                        tests.add(Search.runTest(g, requestsPerTest, poissonRate, requestRate, true));
+                        tests.add(Search.runTest(g, requestsPerTest, poissonRate, AttackerRequestRate, true));
 
                         /*
                         //LineGraph

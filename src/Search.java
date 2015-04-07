@@ -7,7 +7,7 @@ import java.text.*;
 
 public class Search {
 
-    public static PacketTracer runTest(Graph g, int numTests, double poissonRate, double requestRate, Boolean cacheEnabled){
+    public static PacketTracer runTest(Graph g, int numTests, double poissonRate, double AttackerRequestRate, Boolean cacheEnabled){
 
         //Get all nodes that are not content custodians, thus requesters
         ArrayList<Node> requesters = new ArrayList<Node>();
@@ -84,7 +84,7 @@ public class Search {
             Content k = g.getZipfContent();
 
             if(numAttackers >0) {
-                if (x % (numRequesters/3) == 0) {
+                if (x % (numRequesters/AttackerRequestRate) == 0) {
                     //Request unpopular file
                     n = g.nodes.get(requesters.get(randUnPop.nextInt(numAttackers)).nodeID);
 

@@ -45,7 +45,12 @@ public class Graph {
         if(numAttackers >0) {
             for(int a = 0; a < numAttackers; a++){
             attackerindex = rand.nextInt(size);
-                attackIndexes.add(attackerindex);
+                if(attackIndexes.contains(attackerindex))
+                {
+                    a--;
+                }else {
+                    attackIndexes.add(attackerindex);
+                }
             }//end for
         }//end if
 
