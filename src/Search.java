@@ -7,7 +7,7 @@ import java.text.*;
 
 public class Search {
 
-    public static PacketTracer runTest(Graph g, int numTests, double poissonRate, Boolean cacheEnabled){
+    public static PacketTracer runTest(Graph g, int numTests, double poissonRate, double requestRate, Boolean cacheEnabled){
 
         //Get all nodes that are not content custodians, thus requesters
         ArrayList<Node> requesters = new ArrayList<Node>();
@@ -35,18 +35,24 @@ public class Search {
         }
 
         //Create a new log file of a test
+        /*
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
         Date d = new Date();
         String file_name = "C:\\temp\\manet\\"+dateFormat.format(d)+".txt";
         //File file = new File("C:\\temp\\manet\\");
         //file.mkdirs();
         //Writer writer = null;
+        */
         PacketTracer test = new PacketTracer(cacheEnabled);
         //try {
              //writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file_name), "utf-8"));
 
         //Get a random requester (aka not a custodian)
-        Random rand = new Random(requesters.size());
+        int numRequesters = requesters.size();
+        int numAttackers = attackers.size();
+        Random randPop = new Random(numRequesters);
+        Random randUnPop = new Random(numAttackers);
+
 
         //Each numTests is a time step
         int cachehits = 0;
@@ -61,7 +67,7 @@ public class Search {
         int startKeepingStats = (int)(numTests*.70);
         int numTestsKept = numTests - startKeepingStats;
         Node n = requesters.get(0);
-        Node last = requesters.get(0);
+        //Node last = requesters.get(0);
         int numUnpopularKept = 0;
         int numPopularKept = 0;
         int numUnpopularTotal = 0;
@@ -76,6 +82,21 @@ public class Search {
             p= Poisson.getPoisson(poissonRate);
 
             Content k = g.getZipfContent();
+
+            if(numAttackers >0) {
+                if (x % (numRequesters/3) == 0) {
+                    //Request unpopular file
+                    n = g.nodes.get(requesters.get(randUnPop.nextInt(numAttackers)).nodeID);
+
+                } else {
+                    //Request regular file
+                    n = g.nodes.get(requesters.get(randPop.nextInt(numRequesters)).nodeID);
+                }
+            }else
+            {
+                n = g.nodes.get(requesters.get(randPop.nextInt(numRequesters)).nodeID);
+            }
+            /*
             if(attackers.contains(last) && ((AttackerNode)last).readyToAttack && ((AttackerNode)last).attackStatus == 1 && x >= startKeepingStats)
             {
                n = last;
@@ -86,6 +107,7 @@ public class Search {
                 last = n;
             }
 
+            */
 
             test.addToTest(jump+p,k,n);
             Packet pack = new Packet(n,k);

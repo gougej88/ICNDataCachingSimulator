@@ -78,6 +78,39 @@ public class Graph {
         //Use Distribution to assign popularity to each piece of content in the graph
         assignPopularityDistribution(alpha);
 
+        //Force attackers to attack from beginning
+        for(AttackerNode att : attackers){
+            //Simulate polling done and ready to guess characteristic time.
+            att.numRequestsServed = 500;
+            att.donePolling = true;
+            //att.target = att.FindBestTarget(att, custodians);
+            //estimate cacheSize
+            att.cacheSizeGuess = att.maxCacheSize;
+            att.allPacketsFromCustodian = true;
+
+            //Grab most unpopular in graph
+            Map<Content, Double> popContent = new HashMap<Content, Double>();
+            ArrayList<Content> all = new ArrayList<Content>();
+            Enumeration e = att.contentCustodians.keys();
+            while(e.hasMoreElements()){
+                Content d = (Content) e.nextElement();
+                popContent.put(d,d.probability);
+            }
+            Map sorted = att.sortByValue(popContent);
+            List<Map.Entry<Content,Integer>> sortedList = new LinkedList<Map.Entry<Content, Integer>>(sorted.entrySet());
+
+            //Add only up to size specified to unpopular content list
+            for(int s = 0; s < att.numUnpopularItems; s++){
+                //Add unpopular files to variable
+                Map.Entry<Content,Integer> currentEntry = sortedList.get(s);
+                att.unpopularContent.add(currentEntry.getKey());
+            }//end for
+
+            att.finalCharTimeGuess = 0;
+            att.readyToAttack = true;
+
+        }//end for
+
 
     }
 

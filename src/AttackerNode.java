@@ -299,10 +299,12 @@ public class AttackerNode extends Node {
         }//end waiting
         else {
             //Run attack
-            //Every 10 requests, request a popular file i.e. leave it unaltered
-            if (indexInList % 10 == 0 && indexInList != 0) {
 
-                pack = pack.next.receiveData(pack);
+            //Section to help prevent detection
+            //Every 10 requests, request a popular file i.e. leave it unaltered
+            //if (indexInList % 10 == 0 && indexInList != 0) {
+
+                //pack = pack.next.receiveData(pack);
 
                 //increment indexInList to request new file on next run
                 if (indexInList < (unpopularContent.size() - 1)) {
@@ -313,9 +315,9 @@ public class AttackerNode extends Node {
                     //attackStatus = 2;
                     indexInList = 0;
                 }//end else for increment
-            }
+            //}//end if for every 10 requests
             //Else request unpopular file
-            else {
+            //else {
 
                 //Alter the request and request an unpopular file
                 pack.search = unpopularContent.get(indexInList);
@@ -335,7 +337,7 @@ public class AttackerNode extends Node {
                     indexInList = 0;
                 }//end else for increment
 
-            }//end else for request decision
+            //}//end else for request decision
         }//end else for waiting phase
         return pack;
 
