@@ -106,6 +106,8 @@ public class Search {
             }
 
             */
+            if(x >= startKeepingStats && attackers.contains(n))
+                numUnpopularKept++;
 
             test.addToTest(jump+p,k,n);
             Packet pack = new Packet(n,k);
