@@ -115,7 +115,7 @@ public class Search {
             pack.time = maxtime;
             //Perform the search
             Packet r = findContent(pack,attackers);
-            if(x >= startKeepingStats) {
+            if(x >= startKeepingStats && !attackers.contains(n)) {
                 if (r.cachehit)
                     cachehits++;
 
@@ -146,7 +146,9 @@ public class Search {
         System.out.println("Cache Size: "+ cacheSize);
         //System.out.println("Number of cache hits in test: "+ cachehits);
         System.out.println("Percentage of cache hits: "+ percent+"%");
-        averagehops = (double)totalHops/(double)numTestsKept;
+
+        //Need to show just the regular reguests average
+        averagehops = (double)totalHops/(double)numPopularKept;
         System.out.println("Average hops per request: "+ averagehops);
         //Set totals in packetTracer
         test.setTotals(cacheType,cacheSize,numTests,numTestsKept,numPopularKept,numUnpopularKept,totalHops,cachehits,averagehops);
