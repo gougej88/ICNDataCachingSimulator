@@ -18,10 +18,10 @@ public class Main {
         int requestsPerTest = 10000;
         double poissonRate = .65;
         double zipfianAlpha = .65;
-        int numAttackers = 6;
+        int numAttackers = 5;
         int numUnpopularItems = 50;
         int numContentItems = 500;
-        double AttackerRequestRate = 3;
+        double AttackerRequestRate = 10;
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType;

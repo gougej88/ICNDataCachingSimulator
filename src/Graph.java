@@ -225,28 +225,20 @@ public class Graph {
         double totalSum = 0.0;
         double x = Math.random();
         Content r = new Content();
-        //ArrayList<Content> allContent = new ArrayList<Content>();
-        //for(int i=0; i<size;i++) {
-            //allContent.add(i * 2, nodes.get(i).content.get(0));
-           // allContent.add(i * 2 + 1, nodes.get(i).content.get(1));
-       // }
+
         ArrayList<Content> allContent = new ArrayList<Content>();
         Enumeration e = localContentCustodians.keys();
-        //int i =0;
+
         while(e.hasMoreElements()){
 
             Content t = (Content) e.nextElement();
             allContent.add(t);
-            //System.out.println("Adding to allcontent: "+ allContent.get(i).contentID);
-            //i++;
         }
 
-        //Test for popularity search
-        //System.out.println("Random x = " + x);
         for(Content k : allContent )
         {
             totalSum += k.probability;
-            //System.out.print(" k prob : "+ k.probability + "content id " + k.contentID);
+
             if(x <= totalSum)
             {
                 r = k;
@@ -254,7 +246,7 @@ public class Graph {
             }
         }
        return r;
-    }
+    }//end getZipfContent
 
     public void distributeContentCustodians() {
     //This method is used to pass a hashtable of all content and respective nodes to all nodes

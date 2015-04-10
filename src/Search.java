@@ -50,8 +50,17 @@ public class Search {
         //Get a random requester (aka not a custodian)
         int numRequesters = requesters.size();
         int numAttackers = attackers.size();
-        Random randPop = new Random(numRequesters);
-        Random randUnPop = new Random(numAttackers);
+        double totalReqPerRound = (numRequesters-numAttackers)+(numAttackers*AttackerRequestRate);
+        for(int n = 0; n < requesters.size(); n++)
+        {
+            if(attackers.contains(requesters.get(n)))
+            {
+                requesters.get(n).requestProbability = (AttackerRequestRate/totalReqPerRound);
+            }
+            else {
+                requesters.get(n).requestProbability = (1 / totalReqPerRound);
+            }//end else
+        }//end if
 
 
         //Each numTests is a time step
@@ -83,19 +92,8 @@ public class Search {
 
             Content k = g.getZipfContent();
 
-            if(numAttackers >0) {
-                if (x % (numRequesters/AttackerRequestRate) == 0) {
-                    //Request unpopular file
-                    n = g.nodes.get(requesters.get(randUnPop.nextInt(numAttackers)).nodeID);
+            n = g.nodes.get(getNodeByProb(requesters).nodeID);
 
-                } else {
-                    //Request regular file
-                    n = g.nodes.get(requesters.get(randPop.nextInt(numRequesters)).nodeID);
-                }
-            }else
-            {
-                n = g.nodes.get(requesters.get(randPop.nextInt(numRequesters)).nodeID);
-            }
             /*
             if(attackers.contains(last) && ((AttackerNode)last).readyToAttack && ((AttackerNode)last).attackStatus == 1 && x >= startKeepingStats)
             {
@@ -195,4 +193,24 @@ public class Search {
         }
         return p;
     }//end findContent
-}
+
+    public static Node getNodeByProb(ArrayList<Node> allRequesters)
+    {
+        //This method will grab a random piece of content based on its popularity
+        double totalSum = 0.0;
+        double x = Math.random();
+        Node r = allRequesters.get(0);
+
+        for(Node k : allRequesters )
+        {
+            totalSum += k.requestProbability;
+            if(x <= totalSum)
+            {
+                r = k;
+                break;
+            }
+        }
+        return r;
+    }//end getNodeByProb
+
+}//end search class
