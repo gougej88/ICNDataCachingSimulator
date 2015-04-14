@@ -306,6 +306,7 @@ public class AttackerNode extends Node {
 
                 //pack = pack.next.receiveData(pack);
 
+            /*
                 //increment indexInList to request new file on next run
                 if (indexInList < (unpopularContent.size() - 1)) {
                     indexInList++;
@@ -315,12 +316,15 @@ public class AttackerNode extends Node {
                     //attackStatus = 2;
                     indexInList = 0;
                 }//end else for increment
+                */
             //}//end if for every 10 requests
             //Else request unpopular file
             //else {
 
+                //Random file taken from list
+                Random rand = new Random();
                 //Alter the request and request an unpopular file
-                pack.search = unpopularContent.get(indexInList);
+                pack.search = unpopularContent.get(rand.nextInt(unpopularContent.size()));
                 pack.dest = this.contentCustodians.get(pack.search);
                 pack.route = Dijkstra.getShortestPath(this, pack.dest);
                 pack.next = pack.route.get(1);
