@@ -177,5 +177,11 @@ public class Node {
         return content.size();
     }
 
+    public void resetNodeStats(){
+        cache.clear();
+
+
+    }//end resetNodeStats()
+
 
 }

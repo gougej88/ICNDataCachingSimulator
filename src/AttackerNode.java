@@ -366,6 +366,16 @@ public class AttackerNode extends Node {
         return result;
     }
 
+    public void resetAttackerStats(){
+
+        numRequestsServed=0;
+        numRequestsTotal=0;
+        numattacks=0;
+        allPacketsFromCustodian=true;
+        characteristicTimeGuess=1;
+        attackStatus=1;
+    }//end resetAttackerStats
+
 
 }//end attackernode class
 

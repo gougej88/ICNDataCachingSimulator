@@ -19,6 +19,7 @@ public class Graph {
     int numUnpopularItemsPerAttacker;
     ArrayList<Node> custodians = new ArrayList<Node>();
     ArrayList<AttackerNode> attackers = new ArrayList<AttackerNode>();
+    ArrayList<Integer> attackIndexes = new ArrayList<Integer>();
 
 
 
@@ -38,7 +39,7 @@ public class Graph {
 
     public void createGraph(){
 
-        ArrayList<Integer> attackIndexes = new ArrayList<Integer>();
+
         int attackerindex = -1;
         Random rand = new Random(size);
         //Assign random requester as attacker
@@ -266,16 +267,18 @@ public class Graph {
             nodes.get(i).contentCustodians = localContentCustodians;
         }
 
+    }//end distribute content
+
+    public void resetGraphStats() {
+
+        for(Node n : nodes){
+            //Reset stats for each node
+            n.resetNodeStats();
+        }
+        for(AttackerNode a : attackers){
+            //Reset all stats for each attacker
+            a.resetAttackerStats();
+        }
     }
 
-
-
-
-
-
-
-
-
-
-
-}
+}//end graph
