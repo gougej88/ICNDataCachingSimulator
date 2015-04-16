@@ -15,16 +15,17 @@ public class Main {
         //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
         int testsize = 10;
-        int requestsPerTest = 250000;
+        int requestsPerTest = 100000;
         double poissonRate = .65;
         double zipfianAlpha = .65;
-        int numAttackers = 0;
-        int numUnpopularItems = 50;
+        int numAttackers = 2;
+        int numUnpopularItems = 100;
         int numContentItems = 500;
-        double AttackerRequestRate = 6;
+        double AttackerRequestRate = 2;
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType;
+
 
         //Loop for number of cache types
         for(int c = 1; c < 4; c++) {
@@ -33,6 +34,9 @@ public class Main {
             //Loop for number of unique cache sizes
             //change y back to 6 for full test
             for (int y = 0; y < 6; y++) {
+                int unpopPerCache = (int)((y*10)*.8);
+                if(unpopPerCache==0)
+                    unpopPerCache=10;
 
                 //Start test
                 if (y == 0) {
@@ -40,7 +44,7 @@ public class Main {
 
                         //SQUARE GRAPH
                         //Create square graph(x,y,cacheSize,alpha, cacheType, numAttackers, numUnpopularItems, numContentItems)
-                        g = new Graph(5, 5, y * 10, zipfianAlpha, cacheType, numAttackers, numUnpopularItems, numContentItems, requestsPerTest);
+                        g = new Graph(5, 5, y * 10, zipfianAlpha, cacheType, numAttackers, unpopPerCache, numContentItems, requestsPerTest);
                         g.createGraph();
                         //Run without cache
                         System.out.println("Test Number: " +n);
@@ -61,7 +65,7 @@ public class Main {
                     for (int x = 0; x < testsize; x++) {
                         //SQUARE GRAPH
                         //Create square graph(x,y,cacheSize,alpha, cacheType, numAttackers, numUnpopularItems, numContentItems)
-                        g = new Graph(5, 5, y * 10, zipfianAlpha, cacheType, numAttackers, numUnpopularItems, numContentItems, requestsPerTest);
+                        g = new Graph(5, 5, y * 10, zipfianAlpha, cacheType, numAttackers, unpopPerCache, numContentItems, requestsPerTest);
                         g.createGraph();
                         //Run with cache.
                         System.out.println("Test Number: " +x);
