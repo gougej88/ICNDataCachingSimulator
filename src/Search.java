@@ -151,7 +151,7 @@ public class Search {
         averagehops = (double)totalHops/(double)numPopularKept;
         System.out.println("Average hops per request: "+ averagehops);
         //Set totals in packetTracer
-        test.setTotals(cacheType,cacheSize,numTests,numTestsKept,numPopularKept,numUnpopularKept,totalHops,cachehits,averagehops);
+        test.setTotals(cacheType,cacheSize,numTests,numAttackers,AttackerRequestRate,numTestsKept,numPopularKept,numUnpopularKept,totalHops,cachehits,averagehops);
 
         //Write output to log file
         //writer.write("Number of requests:"+numTests+" | Total number of hops:"+totalHops+" | Number of cache hits:"+cachehits+" | Percentage cache hits:"+percent+"%"+ " | Average hops per request"+ averagehops );

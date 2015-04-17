@@ -20,6 +20,7 @@ public class Graph {
     ArrayList<Node> custodians = new ArrayList<Node>();
     ArrayList<AttackerNode> attackers = new ArrayList<AttackerNode>();
     ArrayList<Integer> attackIndexes = new ArrayList<Integer>();
+    ArrayList<Integer> custodianIndexes = new ArrayList<Integer>();
 
 
 
@@ -279,6 +280,98 @@ public class Graph {
             //Reset all stats for each attacker
             a.resetAttackerStats();
         }
-    }
+    }//end resetGraphStats()
+
+    public void addAttackersToExistingGraph(int num){
+        //Grab current number of attackers and compare to new value
+        int currentAttackers = attackers.size();
+        if(num>currentAttackers){
+            numAttackers = num;
+            int attackerindex = -1;
+            Random rand = new Random(size);
+            for(Node a : nodes){
+                if(custodians.contains(a)){
+                    custodianIndexes.add(a.nodeID);
+                }
+            }
+            for(int a = 0; a < num-currentAttackers; a++){
+                attackerindex = rand.nextInt(size);
+                if(attackIndexes.contains(attackerindex) || custodianIndexes.contains(attackerindex))
+                {
+                    a--;
+                }else {
+                    attackIndexes.add(attackerindex);
+                    AttackerNode act = new AttackerNode(attackerindex, cacheSize, cacheType, numUnpopularItemsPerAttacker,numRequestsPerTest);
+                    attackers.add(act);
+                    nodes.set(attackerindex,act);
+
+                    setSpecificEdges(attackerindex);
+                    distributeContentCustodians();
+
+                    //Force attackers to attack from beginning
+                    for(AttackerNode att : attackers){
+                        //Simulate polling done and ready to guess characteristic time.
+                        att.numRequestsServed = 500;
+                        att.donePolling = true;
+                        //att.target = att.FindBestTarget(att, custodians);
+                        //estimate cacheSize
+                        att.cacheSizeGuess = att.maxCacheSize;
+                        att.allPacketsFromCustodian = true;
+
+                        //Grab most unpopular in graph
+                        Map<Content, Double> popContent = new HashMap<Content, Double>();
+                        ArrayList<Content> all = new ArrayList<Content>();
+                        Enumeration e = att.contentCustodians.keys();
+                        while(e.hasMoreElements()){
+                            Content d = (Content) e.nextElement();
+                            popContent.put(d,d.probability);
+                        }
+                        Map sorted = att.sortByValue(popContent);
+                        List<Map.Entry<Content,Integer>> sortedList = new LinkedList<Map.Entry<Content, Integer>>(sorted.entrySet());
+
+                        //Add only up to size specified to unpopular content list
+                        for(int s = 0; s < att.numUnpopularItems; s++){
+                            //Add unpopular files to variable
+                            Map.Entry<Content,Integer> currentEntry = sortedList.get(s);
+                            att.unpopularContent.add(currentEntry.getKey());
+                        }//end for
+
+                        att.finalCharTimeGuess = 0;
+                        att.readyToAttack = true;
+
+                    }//end for
+                }
+            }//end for
+        }
+    }//end addAttackersToExistingGraph
+
+    public void setSpecificEdges(int nodeID){
+
+        int i = nodeID;
+            //Check if node has a neighbor to the right
+            if(i%width < width-1) {
+                //System.out.println("Set right edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i+1).nodeID);
+                nodes.get(i).setEdge(nodes.get(i+1), 1);
+
+            }
+            //Check if node has a neighbor to the bottom
+            if(i < (size-width)) {
+                //System.out.println("Set bottom edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i+width).nodeID);
+                nodes.get(i).setEdge(nodes.get(i+width), 1);
+            }
+            //Check if node has a neighbor to the top
+            if(i >= length)
+            {
+                //System.out.println("Set top edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i-length).nodeID);
+                nodes.get(i).setEdge(nodes.get(i-length),1);
+            }
+            //Check if node has a neighbor to the left
+            if(i%length > 0)
+            {
+                //System.out.println("Set left edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i-1).nodeID);
+                nodes.get(i).setEdge(nodes.get(i-1),1);
+            }
+    }//end setSpecificEdges
+
 
 }//end graph
