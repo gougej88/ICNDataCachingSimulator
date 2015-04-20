@@ -19,9 +19,9 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class LineChart extends JFrame {
 
 
-    public LineChart(String applicationTitle, String chartTitle, Integer testsize, ArrayList<ArrayList<PacketTracer>> tests) {
+    public LineChart(String applicationTitle, String chartTitle, Integer testsize, ArrayList<ArrayList<PacketTracer>> tests, ArrayList<Integer> attacksPerTest) {
         super(applicationTitle);
-        XYDataset dataset = LoadData(testsize, tests);
+        XYDataset dataset = LoadData(testsize, attacksPerTest, tests);
         JFreeChart chart = createChart(dataset, applicationTitle);
         // we put the chart into a panel
         ChartPanel chartPanel = new ChartPanel(chart);
@@ -33,13 +33,14 @@ public class LineChart extends JFrame {
 
     }
 
-    private XYDataset LoadData(Integer testsize, ArrayList<ArrayList<PacketTracer>> tests){
+    private XYDataset LoadData(Integer testsize, ArrayList<Integer> attackers, ArrayList<ArrayList<PacketTracer>> tests){
         //final XYSeries seriesNoCache = new XYSeries("NoCache");
         final XYSeries seriesLRUCache = new XYSeries("LRU Cache Average Hops");
         final XYSeries seriesFIFOCache = new XYSeries("FIFO Cache Average Hops");
         final XYSeries seriesRandomCache = new XYSeries("Random Cache Average Hops");
         int testsPerSize= 0;
         double numTestsKept= 0;
+        int AttacksPerTest = attackers.size();
 
         ArrayList<PacketTracer> singleTest = new ArrayList<PacketTracer>();
 
@@ -49,91 +50,69 @@ public class LineChart extends JFrame {
         System.out.println("Final Results");
 
         //Combine all results
+        //Loop on cache type (t)
         for(int t=0; t< tests.size(); t++) {
 
             //change all values back to 6
             singleTest = tests.get(t);
             double[] max = new double[6];
             double[] min = new double[6];
-            double[] result = new double[6];
-            Arrays.fill(max,0);
-            Arrays.fill(min,10);
-            testsPerSize =singleTest.size()/6;
-            numTestsKept = (double)testsize;
+            double[] result = new double[6*AttacksPerTest];
+            testsPerSize =(singleTest.size()/6)/AttacksPerTest;
 
-            for (int i = 0; i < singleTest.size(); i++) {
-                int x = i / testsPerSize;
-                //int z = i % testsPerSize;
-                if (t == 0) {
-                    //if (z >= testsPerSize * .70) {
+            //Loop on number of attackers
+            for(int a = 0; a < AttacksPerTest; a++) {
+
+                Arrays.fill(max,0);
+                Arrays.fill(min,10);
+
+                //Loop on number of tests run
+                for (int i = 0; i < (singleTest.size()/AttacksPerTest); i++) {
+                    int x = i / testsPerSize;
+
                         if (singleTest.get(i).averageHops < min[x])
                             min[x] = singleTest.get(i).averageHops;
                         if (singleTest.get(i).averageHops > max[x])
                             max[x] = singleTest.get(i).averageHops;
                         result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
-                    //Line Graph
-                    //result[singleTest.get(i).cacheSize] += singleTest.get(i).averageHops;
-                    //}
-                }
 
-                if (t == 1) {
-                    //if (z >= testsPerSize * .70) {
-                        if (singleTest.get(i).averageHops < min[x])
-                            min[x] = singleTest.get(i).averageHops;
-                        if (singleTest.get(i).averageHops > max[x])
-                            max[x] = singleTest.get(i).averageHops;
-                        result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
-                    //Line Graph
-                    //result[singleTest.get(i).cacheSize] += singleTest.get(i).averageHops;
-                    //}
-                }
-                if (t == 2) {
-                    //if (z >= testsPerSize * .70) {
-                        if (singleTest.get(i).averageHops < min[x])
-                            min[x] = singleTest.get(i).averageHops;
-                        if (singleTest.get(i).averageHops > max[x])
-                            max[x] = singleTest.get(i).averageHops;
-                        result[singleTest.get(i).cacheSize / 10] += singleTest.get(i).averageHops;
-                    //Line Graph
-                    //result[singleTest.get(i).cacheSize] += singleTest.get(i).averageHops;
-                    //}
-                }
 
-            }
+                }//end for i
+            }//end for a
                 //Divide the result sums by the number of tests and add to series
-            //ALL NEED j*10 added back
+                //Loop on tests
                 for (int j = 0; j < result.length; j++) {
                     //LRU
                     if(t==0) {
-                        seriesLRUCache.add(j*10, result[j] / numTestsKept);
+                        seriesLRUCache.add(j*10, result[j] / testsPerSize);
                         seriesLRUCache.add(j*10,max[j]);
                         seriesLRUCache.add(j*10,min[j]);
 
                         //Print results to the console
-                        System.out.println("Average hops for LRU with cache size "+j*10+" = "+result[j]/numTestsKept);
-                        System.out.println("Max hops for LRU with cache size "+j*10+" = "+max[j]);
-                        System.out.println("Min hops for LRU with cache size "+j*10+" = "+min[j]);
+                        System.out.println("Average hops for LRU with cache size "+j*10+" = "+result[j]/testsPerSize);
+                        //System.out.println("Max hops for LRU with cache size "+j*10+" = "+max[j]);
+                        //System.out.println("Min hops for LRU with cache size "+j*10+" = "+min[j]);
                     }//end if lru cache
                     //FIFO
                     if(t==1) {
-                        seriesFIFOCache.add(j*10, result[j] / numTestsKept);
+                        seriesFIFOCache.add(j*10, result[j] / testsPerSize);
                         seriesFIFOCache.add(j*10,max[j]);
                         seriesFIFOCache.add(j*10,min[j]);
                         //Print results to the console
-                        System.out.println("Average hops for FIFO with cache size "+j*10+" = "+result[j]/numTestsKept);
-                        System.out.println("Max hops for FIFO with cache size "+j*10+" = "+max[j]);
-                        System.out.println("Min hops for FIFO with cache size "+j*10+" = "+min[j]);
+                        System.out.println("Average hops for FIFO with cache size "+j*10+" = "+result[j]/testsPerSize);
+                        //System.out.println("Max hops for FIFO with cache size "+j*10+" = "+max[j]);
+                        //System.out.println("Min hops for FIFO with cache size "+j*10+" = "+min[j]);
                     }//end if fifo cache
                     //Random
                     if(t==2) {
-                        seriesRandomCache.add(j*10, result[j] / numTestsKept);
+                        seriesRandomCache.add(j*10, result[j] / testsPerSize);
                         seriesRandomCache.add(j*10,max[j]);
                         seriesRandomCache.add(j*10,min[j]);
 
                         //Print results to the console
-                        System.out.println("Average hops for Random with cache size "+j*10+" = "+result[j]/numTestsKept);
-                        System.out.println("Max hops for Random with cache size "+j*10+" = "+max[j]);
-                        System.out.println("Min hops for Random with cache size "+j*10+" = "+min[j]);
+                        System.out.println("Average hops for Random with cache size "+j*10+" = "+result[j]/testsPerSize);
+                        //System.out.println("Max hops for Random with cache size "+j*10+" = "+max[j]);
+                        //System.out.println("Min hops for Random with cache size "+j*10+" = "+min[j]);
                     }//end if random cache
                 }//end for j
 

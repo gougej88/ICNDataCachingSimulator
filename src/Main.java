@@ -17,12 +17,14 @@ public class Main {
         //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
         int testsize = 5;
-        int requestsPerTest = 100000;
+        int requestsPerTest = 100;
         double poissonRate = .65;
         double zipfianAlpha = .65;
+        //Now done in attackers array
         int numAttackers = 2;
+        //Now done as 80% of cache size
         int numUnpopularItems = 100;
-        int numContentItems = 500;
+        int numContentItems = 50;
         double AttackerRequestRate = 2;
 
         //1 = LRU, 2 = FIFO, 3=Random
@@ -33,8 +35,8 @@ public class Main {
         //Make sure to always start with 0 attackers
         attackers.add(0);
         attackers.add(1);
-        attackers.add(2);
-        attackers.add(4);
+        //attackers.add(2);
+        //attackers.add(4);
 
         //Loop for number of cache types
         for(int c = 1; c < 4; c++) {
@@ -101,7 +103,7 @@ public class Main {
         }//end for cachetype tests
 
 
-        LineChart demo = new LineChart("Average hops per request. Alpha:"+zipfianAlpha +" Nodes:25 Requests per test:"+requestsPerTest+" Number of tests:"+testsize,"Average hops per request",testsize, allTests);
+        LineChart demo = new LineChart("Average hops per request. Alpha:"+zipfianAlpha +" Nodes:25 Requests per test:"+requestsPerTest+" Number of tests:"+testsize,"Average hops per request",testsize, allTests, attackers);
        // demo.pack();
         //demo.setVisible(true);
 
