@@ -17,14 +17,14 @@ public class Main {
         //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
         int testsize = 5;
-        int requestsPerTest = 100;
+        int requestsPerTest = 10000;
         double poissonRate = .65;
         double zipfianAlpha = .65;
         //Now done in attackers array
         int numAttackers = 2;
         //Now done as 80% of cache size
         int numUnpopularItems = 100;
-        int numContentItems = 50;
+        int numContentItems = 250;
         double AttackerRequestRate = 2;
 
         //1 = LRU, 2 = FIFO, 3=Random
@@ -35,7 +35,7 @@ public class Main {
         //Make sure to always start with 0 attackers
         attackers.add(0);
         attackers.add(1);
-        //attackers.add(2);
+        attackers.add(2);
         //attackers.add(4);
 
         //Loop for number of cache types
