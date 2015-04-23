@@ -205,8 +205,10 @@ public class Search {
         double x = Math.random();
         Node r = allRequesters.get(0);
 
-        for(Node k : allRequesters )
+        for(int i=0; i<allRequesters.size();i++)
         {
+            Random rand = new Random();
+            Node k = allRequesters.get(rand.nextInt(allRequesters.size()));
             totalSum += k.requestProbability;
             if(x <= totalSum)
             {
