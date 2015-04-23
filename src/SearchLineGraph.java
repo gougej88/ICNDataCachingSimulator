@@ -144,7 +144,7 @@ public class SearchLineGraph {
         System.out.println("Average hops per request: "+ averagehops);
         //Set totals in packetTracer
         int numAttackers = 1;
-        double AttackerRequestRate = 2;
+        int AttackerRequestRate = 2;
         test.setTotals(cacheType,cacheSize,numTests,numAttackers,AttackerRequestRate,numTestsKept,numPopularKept,numUnpopularKept,totalHops,cachehits,averagehops);
 
         //Write output to log file

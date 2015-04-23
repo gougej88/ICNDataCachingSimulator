@@ -19,7 +19,7 @@ public class Node {
     //1 = LRU, 2 = FIFO, 3=Random
     int cacheType;
     int cacheSize;
-    double requestProbability;
+    int requestProbability;
 
 
     public Node(int NodeID, final int cacheSize, int cacheType)

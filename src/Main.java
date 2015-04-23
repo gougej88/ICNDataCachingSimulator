@@ -25,7 +25,7 @@ public class Main {
         //Now done as 80% of cache size
         int numUnpopularItems = 100;
         int numContentItems = 250;
-        double AttackerRequestRate = 2;
+        int AttackerRequestRate = 2;
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType;

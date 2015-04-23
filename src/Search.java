@@ -7,7 +7,7 @@ import java.text.*;
 
 public class Search {
 
-    public static PacketTracer runTest(Graph g, int numTests, double poissonRate, double AttackerRequestRate, Boolean cacheEnabled){
+    public static PacketTracer runTest(Graph g, int numTests, double poissonRate, int AttackerRequestRate, Boolean cacheEnabled){
 
         //Get all nodes that are not content custodians, thus requesters
         ArrayList<Node> requesters = new ArrayList<Node>();
@@ -50,15 +50,15 @@ public class Search {
         //Get a random requester (aka not a custodian)
         int numRequesters = requesters.size();
         int numAttackers = attackers.size();
-        double totalReqPerRound = (numRequesters-numAttackers)+(numAttackers*AttackerRequestRate);
+        int totalReqPerRound = (numRequesters-numAttackers)+(numAttackers*AttackerRequestRate);
         for(int n = 0; n < requesters.size(); n++)
         {
             if(attackers.contains(requesters.get(n)))
             {
-                requesters.get(n).requestProbability = (AttackerRequestRate/totalReqPerRound);
+                requesters.get(n).requestProbability = AttackerRequestRate;
             }
             else {
-                requesters.get(n).requestProbability = (1 / totalReqPerRound);
+                requesters.get(n).requestProbability = 1;
             }//end else
         }//end if
 
@@ -92,7 +92,7 @@ public class Search {
 
             Content k = g.getZipfContent();
 
-            n = g.nodes.get(getNodeByProb(requesters).nodeID);
+            n = g.nodes.get(getNodeByProb(requesters,totalReqPerRound).nodeID);
 
             /*
             if(attackers.contains(last) && ((AttackerNode)last).readyToAttack && ((AttackerNode)last).attackStatus == 1 && x >= startKeepingStats)
@@ -198,25 +198,18 @@ public class Search {
         return p;
     }//end findContent
 
-    public static Node getNodeByProb(ArrayList<Node> allRequesters)
+    public static Node getNodeByProb(ArrayList<Node> allRequesters, int totalSum)
     {
         //This method will grab a random piece of content based on its popularity
-        double totalSum = 0.0;
-        double x = Math.random();
-        Node r = allRequesters.get(0);
-
-        for(int i=0; i<allRequesters.size();i++)
-        {
-            Random rand = new Random();
-            Node k = allRequesters.get(rand.nextInt(allRequesters.size()));
-            totalSum += k.requestProbability;
-            if(x <= totalSum)
-            {
-                r = k;
-                break;
-            }
+        Random rand = new Random();
+        int index = rand.nextInt(totalSum);
+        int sum = 0;
+        int i=0;
+        while(sum < index ) {
+            sum = sum + allRequesters.get(i++).requestProbability;
         }
-        return r;
+
+        return allRequesters.get(Math.max(0,i-1));
     }//end getNodeByProb
 
 }//end search class
