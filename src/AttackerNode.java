@@ -103,7 +103,7 @@ public class AttackerNode extends Node {
             //Before return, check if poll done
             //Check if warmup phase is complete.
             //Warmup phase = Whats the best way for this?
-            if(numRequestsServed == 500)
+            if(numRequestsServed == 100)
             {
                 donePolling = true;
                 target = FindBestTarget(this, custodians);

@@ -47,7 +47,7 @@ public class Search {
         //try {
              //writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file_name), "utf-8"));
 
-        //Get a random requester (aka not a custodian)
+        //Set probability distribution for node requests based on the request rate
         int numRequesters = requesters.size();
         int numAttackers = attackers.size();
         int totalReqPerRound = (numRequesters-numAttackers)+(numAttackers*AttackerRequestRate);

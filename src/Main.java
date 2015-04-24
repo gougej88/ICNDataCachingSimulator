@@ -9,7 +9,6 @@ public class Main {
         //Create an arraylist of all tests, and results
         ArrayList<ArrayList<PacketTracer>> allTests = new ArrayList<ArrayList<PacketTracer>>();
         //Create graph grid of nodes(length, width, cacheSize)
-        ArrayList<ArrayList<Integer>> attacks = new ArrayList<ArrayList<Integer>>();
         //LineGraph g;
         Graph g = null;
         Boolean usingCache = true;
@@ -17,15 +16,12 @@ public class Main {
         //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
         int testsize = 5;
-        int requestsPerTest = 10000;
+        int requestsPerTest = 100000;
+        //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
         double zipfianAlpha = .65;
-        //Now done in attackers array
-        int numAttackers = 2;
-        //Now done as 80% of cache size
-        int numUnpopularItems = 100;
         int numContentItems = 250;
-        int AttackerRequestRate = 2;
+        int AttackerRequestRate = 4;
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType;
@@ -34,8 +30,8 @@ public class Main {
         ArrayList<Integer> attackers = new ArrayList<Integer>();
         //Make sure to always start with 0 attackers
         attackers.add(0);
-        attackers.add(1);
         attackers.add(2);
+        attackers.add(4);
         //attackers.add(4);
 
         //Loop for number of cache types
@@ -43,14 +39,13 @@ public class Main {
             cacheType = c;
             ArrayList<PacketTracer> tests = new ArrayList<PacketTracer>();
             //Loop for number of unique cache sizes
-            //change y back to 6 for full test
             for (int y = 0; y < 6; y++) {
-                int unpopPerCache = (int)((y*10)*.8);
+                //Testing results showed around 120% was best for attack
+                int unpopPerCache = (int)((y*10)*1.2);
                 if(unpopPerCache==0)
                     unpopPerCache=10;
 
                     //Start test
-
                     //Loop on types of attacks
                     for(int a = 0; a < attackers.size();a++) {
 

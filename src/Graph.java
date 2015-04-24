@@ -85,7 +85,8 @@ public class Graph {
         //Use Distribution to assign popularity to each piece of content in the graph
         assignPopularityDistribution(alpha);
 
-        //Force attackers to attack from beginning
+        //ADD back for Force attackers to attack from beginning
+        /*
         for(AttackerNode att : attackers){
             //Simulate polling done and ready to guess characteristic time.
             att.numRequestsServed = 500;
@@ -117,7 +118,7 @@ public class Graph {
             att.readyToAttack = true;
 
         }//end for
-
+        */
 
     }
 
@@ -185,6 +186,7 @@ public class Graph {
 
     public void assignPopularityDistribution(double Alpha){
 
+        //This is the popularity distribution for content using Zipfian
         int totalContent = localContentCustodians.size();
         //System.out.println("Number of content items: " + totalContent);
 
@@ -200,10 +202,8 @@ public class Graph {
         for(int j=0; j<totalContent; j++)
         {
             ranks.add(zip.getProbability(j+1));
-            //System.out.print(" Zip prob:"+zip.getProbability(j+1));
-            //test += zip.getProbability(j+1);
+
         }
-        //System.out.println("Total prob sum: "+ test);
 
         //Shuffle the ranks
         Collections.shuffle(ranks);
@@ -216,7 +216,6 @@ public class Graph {
             Content k = (Content) e.nextElement();
             k.probability = ranks.get(i);
             i++;
-            //System.out.println(k);
         }
 
     }
@@ -308,7 +307,8 @@ public class Graph {
                     setSpecificEdges(attackerindex);
                     distributeContentCustodians();
 
-                    //Force attackers to attack from beginning
+                    //Add back to force attackers to attack from beginning
+                    /*
                     for(AttackerNode att : attackers){
                         //Simulate polling done and ready to guess characteristic time.
                         att.numRequestsServed = 500;
@@ -340,6 +340,7 @@ public class Graph {
                         att.readyToAttack = true;
 
                     }//end for
+                    */
                 }
             }//end for
         }
