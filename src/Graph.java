@@ -1,3 +1,4 @@
+import java.io.FileReader;
 import java.util.*;
 
 
@@ -5,6 +6,7 @@ import java.util.*;
  * Created by n00430588 on 10/3/2014.
  */
 public class Graph {
+    int graphType;
     int length;
     int width;
     int cacheSize;
@@ -24,7 +26,8 @@ public class Graph {
 
 
 
-    public Graph(int length, int width, int cacheSize, double alpha, int cacheType, int numAttackers, int numUnpopularItems, int numContentItems, int numRequests) {
+    public Graph(int graphType, int length, int width, int cacheSize, double alpha, int cacheType, int numAttackers, int numUnpopularItems, int numContentItems, int numRequests) {
+        this.graphType = graphType;
         this.length = length;
         this.width = width;
         this.cacheSize = cacheSize;
@@ -40,6 +43,9 @@ public class Graph {
 
     public void createGraph(){
 
+        if(graphType == 2){
+
+        }
 
         int attackerindex = -1;
         Random rand = new Random(size);

@@ -15,6 +15,8 @@ public class Main {
 
         //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
+        //Graph type. 1 = square, 2= Gnutella
+        int graphType = 1;
         int testsize = 5;
         int requestsPerTest = 100000;
         //Not used for request rate. Using popularity distribution
@@ -60,7 +62,7 @@ public class Main {
                             //SQUARE GRAPH
                             //Create square graph(x,y,cacheSize,alpha, cacheType, numAttackers, numUnpopularItems, numContentItems)
                             if (a == 0 && n == 0) {
-                                g = new Graph(5, 5, y * 10, zipfianAlpha, cacheType, attackers.get(a), unpopPerCache, numContentItems, requestsPerTest);
+                                g = new Graph(graphType, 5, 5, y * 10, zipfianAlpha, cacheType, attackers.get(a), unpopPerCache, numContentItems, requestsPerTest);
                                 g.createGraph();
                             } else {
                                 g.resetGraphStats();
