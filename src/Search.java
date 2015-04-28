@@ -13,6 +13,8 @@ public class Search {
         ArrayList<Node> requesters = new ArrayList<Node>();
         ArrayList<Node> custodians = new ArrayList<Node>();
         ArrayList<AttackerNode> attackers = new ArrayList<AttackerNode>();
+
+        System.out.println("Starting Dijkstra's algorithm. This could take some time on large graphs");
         for(int j=0; j<g.size; j++)
         {
             //COMPUTE ALL PATHS FROM EACH SRC ONCE

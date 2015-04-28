@@ -1,4 +1,7 @@
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 
@@ -24,10 +27,11 @@ public class Graph {
     ArrayList<AttackerNode> attackers = new ArrayList<AttackerNode>();
     ArrayList<Integer> attackIndexes = new ArrayList<Integer>();
     ArrayList<Integer> custodianIndexes = new ArrayList<Integer>();
+    Boolean useCharacteristicTimeAttack;
 
 
 
-    public Graph(int graphType, int size, int cacheSize, double alpha, int cacheType, int numAttackers, int numUnpopularItems, double percentCustodians, int numContentItems, int numRequests) {
+    public Graph(int graphType, int size, int cacheSize, double alpha, int cacheType, int numAttackers, int numUnpopularItems, double percentCustodians, int numContentItems, int numRequests, Boolean useTargetedAttack) {
         this.graphType = graphType;
         this.cacheSize = cacheSize;
         this.percentCustodians = percentCustodians;
@@ -38,6 +42,7 @@ public class Graph {
         this.numAttackers = numAttackers;
         this.numUnpopularItemsPerAttacker = numUnpopularItems;
         this.numRequestsPerTest = numRequests;
+        this.useCharacteristicTimeAttack = useTargetedAttack;
 
     }
 
@@ -83,6 +88,9 @@ public class Graph {
         if(graphType==1) {
             setEdgesSquareGraph();
         }
+        if(graphType==2){
+            setEdges();
+        }
         //Make 20% of the nodes content custodians and assign content to each one
         createContentCustodians(percentCustodians);
 
@@ -93,42 +101,72 @@ public class Graph {
         //Use Distribution to assign popularity to each piece of content in the graph
         assignPopularityDistribution(alpha);
 
-        //ADD back for Force attackers to attack from beginning
-        /*
-        for(AttackerNode att : attackers){
-            //Simulate polling done and ready to guess characteristic time.
-            att.numRequestsServed = 500;
-            att.donePolling = true;
-            //att.target = att.FindBestTarget(att, custodians);
-            //estimate cacheSize
-            att.cacheSizeGuess = att.maxCacheSize;
-            att.allPacketsFromCustodian = true;
+        //Force attackers to attack from beginning
+        if(!useCharacteristicTimeAttack) {
+            for (AttackerNode att : attackers) {
+                //Simulate polling done and ready to guess characteristic time.
+                att.numRequestsServed = 500;
+                att.donePolling = true;
+                //att.target = att.FindBestTarget(att, custodians);
+                //estimate cacheSize
+                att.cacheSizeGuess = att.maxCacheSize;
+                att.allPacketsFromCustodian = true;
 
-            //Grab most unpopular in graph
-            Map<Content, Double> popContent = new HashMap<Content, Double>();
-            ArrayList<Content> all = new ArrayList<Content>();
-            Enumeration e = att.contentCustodians.keys();
-            while(e.hasMoreElements()){
-                Content d = (Content) e.nextElement();
-                popContent.put(d,d.probability);
-            }
-            Map sorted = att.sortByValue(popContent);
-            List<Map.Entry<Content,Integer>> sortedList = new LinkedList<Map.Entry<Content, Integer>>(sorted.entrySet());
+                //Grab most unpopular in graph
+                Map<Content, Double> popContent = new HashMap<Content, Double>();
+                ArrayList<Content> all = new ArrayList<Content>();
+                Enumeration e = att.contentCustodians.keys();
+                while (e.hasMoreElements()) {
+                    Content d = (Content) e.nextElement();
+                    popContent.put(d, d.probability);
+                }
+                Map sorted = att.sortByValue(popContent);
+                List<Map.Entry<Content, Integer>> sortedList = new LinkedList<Map.Entry<Content, Integer>>(sorted.entrySet());
 
-            //Add only up to size specified to unpopular content list
-            for(int s = 0; s < att.numUnpopularItems; s++){
-                //Add unpopular files to variable
-                Map.Entry<Content,Integer> currentEntry = sortedList.get(s);
-                att.unpopularContent.add(currentEntry.getKey());
+                //Add only up to size specified to unpopular content list
+                for (int s = 0; s < att.numUnpopularItems; s++) {
+                    //Add unpopular files to variable
+                    Map.Entry<Content, Integer> currentEntry = sortedList.get(s);
+                    att.unpopularContent.add(currentEntry.getKey());
+                }//end for
+
+                att.finalCharTimeGuess = 0;
+                att.readyToAttack = true;
+
             }//end for
+        }//end if not using characteristic time attack
 
-            att.finalCharTimeGuess = 0;
-            att.readyToAttack = true;
+    }//end createGraph()
 
-        }//end for
-        */
+    public void setEdges(){
+        //Open the file and set edges
+        //One per line, From node [tab] To node
+        List<Map<Integer,Integer>> edges = new ArrayList<Map<Integer, Integer>>();
+        try {
+            String filename = "C:\\Users\\Jeff\\SkyDrive\\Documents\\Thesis\\MANET\\graphs\\p2p-Gnutella08.txt";
+            BufferedReader bReader = new BufferedReader(new FileReader(filename));
+            String line;
+            while ((line = bReader.readLine()) != null) {
 
-    }
+                /**
+                 * Splitting the content of tabbed separated line
+                 */
+                String datavalue[] = line.split("\t");
+                Map<Integer,Integer> edge = new HashMap<Integer, Integer>();
+                edge.put(Integer.parseInt(datavalue[0]),Integer.parseInt(datavalue[1]));
+                int fromNode = Integer.parseInt(datavalue[0]);
+                int toNode = Integer.parseInt(datavalue[1]);
+                nodes.get(fromNode).setEdge(nodes.get(toNode),1);
+                edges.add(edge);
+
+            }
+            bReader.close();
+        } catch(IOException ex) {
+            System.out.println(ex);
+        }
+
+
+    }//end setEdges()
 
     public void setEdgesSquareGraph(){
 
@@ -315,40 +353,40 @@ public class Graph {
                     setSpecificEdges(attackerindex);
                     distributeContentCustodians();
 
-                    //Add back to force attackers to attack from beginning
-                    /*
-                    for(AttackerNode att : attackers){
-                        //Simulate polling done and ready to guess characteristic time.
-                        att.numRequestsServed = 500;
-                        att.donePolling = true;
-                        //att.target = att.FindBestTarget(att, custodians);
-                        //estimate cacheSize
-                        att.cacheSizeGuess = att.maxCacheSize;
-                        att.allPacketsFromCustodian = true;
+                    //force attackers to attack from beginning
+                    if(!useCharacteristicTimeAttack) {
+                        for (AttackerNode att : attackers) {
+                            //Simulate polling done and ready to guess characteristic time.
+                            att.numRequestsServed = 500;
+                            att.donePolling = true;
+                            //att.target = att.FindBestTarget(att, custodians);
+                            //estimate cacheSize
+                            att.cacheSizeGuess = att.maxCacheSize;
+                            att.allPacketsFromCustodian = true;
 
-                        //Grab most unpopular in graph
-                        Map<Content, Double> popContent = new HashMap<Content, Double>();
-                        ArrayList<Content> all = new ArrayList<Content>();
-                        Enumeration e = att.contentCustodians.keys();
-                        while(e.hasMoreElements()){
-                            Content d = (Content) e.nextElement();
-                            popContent.put(d,d.probability);
-                        }
-                        Map sorted = att.sortByValue(popContent);
-                        List<Map.Entry<Content,Integer>> sortedList = new LinkedList<Map.Entry<Content, Integer>>(sorted.entrySet());
+                            //Grab most unpopular in graph
+                            Map<Content, Double> popContent = new HashMap<Content, Double>();
+                            ArrayList<Content> all = new ArrayList<Content>();
+                            Enumeration e = att.contentCustodians.keys();
+                            while (e.hasMoreElements()) {
+                                Content d = (Content) e.nextElement();
+                                popContent.put(d, d.probability);
+                            }
+                            Map sorted = att.sortByValue(popContent);
+                            List<Map.Entry<Content, Integer>> sortedList = new LinkedList<Map.Entry<Content, Integer>>(sorted.entrySet());
 
-                        //Add only up to size specified to unpopular content list
-                        for(int s = 0; s < att.numUnpopularItems; s++){
-                            //Add unpopular files to variable
-                            Map.Entry<Content,Integer> currentEntry = sortedList.get(s);
-                            att.unpopularContent.add(currentEntry.getKey());
+                            //Add only up to size specified to unpopular content list
+                            for (int s = 0; s < att.numUnpopularItems; s++) {
+                                //Add unpopular files to variable
+                                Map.Entry<Content, Integer> currentEntry = sortedList.get(s);
+                                att.unpopularContent.add(currentEntry.getKey());
+                            }//end for
+
+                            att.finalCharTimeGuess = 0;
+                            att.readyToAttack = true;
+
                         }//end for
-
-                        att.finalCharTimeGuess = 0;
-                        att.readyToAttack = true;
-
-                    }//end for
-                    */
+                    }//end if not using characteristic time attack
                 }
             }//end for
         }

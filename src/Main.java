@@ -16,26 +16,51 @@ public class Main {
         //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
         //Graph type. 1 = square, 2= Gnutella
-        int graphType = 1;
+        int graphType = 2;
         int testsize = 5;
         int requestsPerTest = 100000;
+        Boolean useCharacteristicTimeAttack = true;
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
         double zipfianAlpha = .65;
         double percentCustodians = .20;
         int numContentItems = 250;
         int AttackerRequestRate = 4;
+        //Tested with square graphs of size = 25,100
+        int graphSize = 25;
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType;
-
         //Add attack types to test
         ArrayList<Integer> attackers = new ArrayList<Integer>();
+
+
+        if(graphType==2){
+            graphSize=6301;
+            percentCustodians = .05;
+            numContentItems=2000;
+
+        }
+
+
         //Make sure to always start with 0 attackers
         attackers.add(0);
-        attackers.add(2);
-        attackers.add(4);
-        //attackers.add(4);
+        if(graphType==1){
+            attackers.add(1);
+            attackers.add(3);
+            //attackers.add(4);
+        }
+        if(graphType==2) {
+            //2% Attackers
+            attackers.add((int) (graphSize * .02));
+            //5% Attackers
+            attackers.add((int) (graphSize * .05));
+            //10% Attackers
+            //attackers.add((int)(graphSize*.1));
+            //25% Attackers
+            //attackers.add((int)(graphSize*.25));
+        }
+
 
         //Loop for number of cache types
         for(int c = 1; c < 4; c++) {
@@ -63,7 +88,7 @@ public class Main {
                             //SQUARE GRAPH
                             //Create square graph(x,y,cacheSize,alpha, cacheType, numAttackers, numUnpopularItems, numContentItems)
                             if (a == 0 && n == 0) {
-                                g = new Graph(graphType, 25, y * 10, zipfianAlpha, cacheType, attackers.get(a), unpopPerCache, percentCustodians, numContentItems, requestsPerTest);
+                                g = new Graph(graphType, graphSize, y * 10, zipfianAlpha, cacheType, attackers.get(a), unpopPerCache, percentCustodians, numContentItems, requestsPerTest, useCharacteristicTimeAttack);
                                 g.createGraph();
                             } else {
                                 g.resetGraphStats();
@@ -101,6 +126,11 @@ public class Main {
         }//end for cachetype tests
 
 
+        if(useCharacteristicTimeAttack){
+            System.out.println("Attack metrics used use characteristic time.");
+        }else {
+            System.out.println("Attack metrics used DO NOT USE characteristic time. These attacks request unpopular for every attacker request.");
+        }
         LineChart demo = new LineChart("Average hops per request. Alpha:"+zipfianAlpha +" Nodes:25 Requests per test:"+requestsPerTest+" Number of tests:"+testsize,"Average hops per request",testsize, allTests, attackers);
        // demo.pack();
         //demo.setVisible(true);
