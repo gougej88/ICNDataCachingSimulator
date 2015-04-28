@@ -44,8 +44,8 @@ public class Graph {
     public void createGraph(){
 
         if(graphType == 1){
-            length = 5;
-            width = 5;
+            length = (int)Math.sqrt(size);
+            width = length;
         }
 
         int attackerindex = -1;
