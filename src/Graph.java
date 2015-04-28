@@ -10,6 +10,7 @@ public class Graph {
     int length;
     int width;
     int cacheSize;
+    double percentCustodians;
     ArrayList<Node> nodes = new ArrayList<Node>();
     Hashtable<Content,Node> localContentCustodians = new Hashtable<Content, Node>();
     int size;
@@ -26,12 +27,11 @@ public class Graph {
 
 
 
-    public Graph(int graphType, int length, int width, int cacheSize, double alpha, int cacheType, int numAttackers, int numUnpopularItems, int numContentItems, int numRequests) {
+    public Graph(int graphType, int size, int cacheSize, double alpha, int cacheType, int numAttackers, int numUnpopularItems, double percentCustodians, int numContentItems, int numRequests) {
         this.graphType = graphType;
-        this.length = length;
-        this.width = width;
         this.cacheSize = cacheSize;
-        size = length*width;
+        this.percentCustodians = percentCustodians;
+        this.size = size;
         this.numContentItems = numContentItems;
         this.alpha = alpha;
         this.cacheType = cacheType;
@@ -43,8 +43,9 @@ public class Graph {
 
     public void createGraph(){
 
-        if(graphType == 2){
-
+        if(graphType == 1){
+            length = 5;
+            width = 5;
         }
 
         int attackerindex = -1;
@@ -79,10 +80,11 @@ public class Graph {
 
         //Setup the rest of the graph
         //Create all edges and weights
-        setEdges();
-
+        if(graphType==1) {
+            setEdgesSquareGraph();
+        }
         //Make 20% of the nodes content custodians and assign content to each one
-        createContentCustodians();
+        createContentCustodians(percentCustodians);
 
         //Pass a hashtable of all content and their respective custodian to all nodes
         //All nodes must know where content lives in order to route correctly
@@ -128,7 +130,7 @@ public class Graph {
 
     }
 
-    public void setEdges(){
+    public void setEdgesSquareGraph(){
 
         for(int i=0; i<size;i++)
         {
@@ -158,10 +160,10 @@ public class Graph {
         }
     }
 
-    public void createContentCustodians(){
+    public void createContentCustodians(double percent){
         ArrayList<Integer> n = new ArrayList<Integer>();
         //Get 20% of the graph size and make them content custodians
-        double temp = size * .2;
+        double temp = size * percent;
         int numCustodians = (int)temp;
         numContentItems = numContentItems / numCustodians;
         Random rand = new Random();

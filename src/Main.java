@@ -22,6 +22,7 @@ public class Main {
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
         double zipfianAlpha = .65;
+        double percentCustodians = .20;
         int numContentItems = 250;
         int AttackerRequestRate = 4;
 
@@ -62,7 +63,7 @@ public class Main {
                             //SQUARE GRAPH
                             //Create square graph(x,y,cacheSize,alpha, cacheType, numAttackers, numUnpopularItems, numContentItems)
                             if (a == 0 && n == 0) {
-                                g = new Graph(graphType, 5, 5, y * 10, zipfianAlpha, cacheType, attackers.get(a), unpopPerCache, numContentItems, requestsPerTest);
+                                g = new Graph(graphType, 25, y * 10, zipfianAlpha, cacheType, attackers.get(a), unpopPerCache, percentCustodians, numContentItems, requestsPerTest);
                                 g.createGraph();
                             } else {
                                 g.resetGraphStats();
