@@ -143,7 +143,8 @@ public class Graph {
         //One per line, From node [tab] To node
         List<Map<Integer,Integer>> edges = new ArrayList<Map<Integer, Integer>>();
         try {
-            String filename = "C:\\Users\\Jeff\\SkyDrive\\Documents\\Thesis\\MANET\\graphs\\p2p-Gnutella08.txt";
+
+            String filename = "./graphs/p2p-Gnutella08.txt";
             BufferedReader bReader = new BufferedReader(new FileReader(filename));
             String line;
             while ((line = bReader.readLine()) != null) {
