@@ -363,6 +363,7 @@ public class Graph {
                     AttackerNode act = new AttackerNode(attackerindex, cacheSize, cacheType, numUnpopularItemsPerAttacker,numRequestsPerTest);
                     attackers.add(act);
                     nodes.set(attackerindex,act);
+                    possibleRequesters.set(attackerindex,act);
 
                     setSpecificEdges(attackerindex);
                     distributeContentCustodians();
