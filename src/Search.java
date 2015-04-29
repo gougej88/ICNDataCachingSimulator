@@ -21,10 +21,11 @@ public class Search {
             Dijkstra.ComputePaths(g, g.nodes.get(j));
 
             //Check if the node is a custodian. if not: add to requesters
-            if(!g.localContentCustodians.contains(g.nodes.get(j)))
+            if(g.possibleRequesters.contains(g.nodes.get(j)))
             {
                 requesters.add(g.nodes.get(j));
-            }else {
+            }
+            if(g.localContentCustodians.contains(g.nodes.get(j))){
                 custodians.add(g.nodes.get(j));
             }
         }

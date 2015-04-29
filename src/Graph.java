@@ -24,6 +24,8 @@ public class Graph {
     int numAttackers;
     int numUnpopularItemsPerAttacker;
     ArrayList<Node> custodians = new ArrayList<Node>();
+    ArrayList<Node> possibleRequesters = new ArrayList<Node>();
+    ArrayList<Node> possibleCustodians = new ArrayList<Node>();
     ArrayList<AttackerNode> attackers = new ArrayList<AttackerNode>();
     ArrayList<Integer> attackIndexes = new ArrayList<Integer>();
     ArrayList<Integer> custodianIndexes = new ArrayList<Integer>();
@@ -159,7 +161,12 @@ public class Graph {
                 int toNode = Integer.parseInt(datavalue[1]);
                 nodes.get(fromNode).setEdge(nodes.get(toNode),1);
                 edges.add(edge);
-
+                if(!possibleRequesters.contains(nodes.get(fromNode))){
+                    possibleRequesters.add(nodes.get(fromNode));
+                }
+                if(!possibleCustodians.contains(nodes.get(toNode))) {
+                    possibleCustodians.add(nodes.get(toNode));
+                }
             }
             bReader.close();
         } catch(IOException ex) {
@@ -196,7 +203,9 @@ public class Graph {
                     //System.out.println("Set left edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i-1).nodeID);
                     nodes.get(i).setEdge(nodes.get(i-1),1);
                 }
-        }
+            possibleRequesters.add(nodes.get(i));
+            possibleCustodians.add(nodes.get(i));
+        }//end for
     }
 
     public void createContentCustodians(double percent){
@@ -216,7 +225,7 @@ public class Graph {
         {
             int contentCust = rand.nextInt(size);
 
-            if(!n.contains(contentCust)) {
+            if(!n.contains(contentCust) && possibleCustodians.contains(nodes.get(contentCust))) {
                 n.add(contentCust);
                 custodians.add(nodes.get(contentCust));
                 for(int c = 0; c < numContentItems; c++)
@@ -226,7 +235,11 @@ public class Graph {
                 }
 
 
+            }//end if
+            else{
+                i--;
             }
+
         }//end for
 
     }
