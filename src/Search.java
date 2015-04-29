@@ -21,7 +21,7 @@ public class Search {
             Dijkstra.ComputePaths(g, g.nodes.get(j));
 
             //Check if the node is a custodian. if not: add to requesters
-            if(g.possibleRequesters.contains(g.nodes.get(j)))
+            if(g.possibleRequesters.contains(g.nodes.get(j)) && !g.localContentCustodians.contains(g.nodes.get(j)))
             {
                 requesters.add(g.nodes.get(j));
             }
@@ -109,11 +109,19 @@ public class Search {
             }
 
             */
+            Packet pack = new Packet(n,k);
+
+            //fix to ignore the nodes that cannot route to dest
+            while(pack.route.size() ==1)
+            {
+                requesters.remove(n);
+                n = g.nodes.get(getNodeByProb(requesters,totalReqPerRound).nodeID);
+                pack = new Packet(n,k);
+            }
             if(x >= startKeepingStats && attackers.contains(n))
                 numUnpopularKept++;
 
             test.addToTest(jump+p,k,n);
-            Packet pack = new Packet(n,k);
             pack.cacheEnabled = cacheEnabled;
             pack.time = maxtime;
             //Perform the search
