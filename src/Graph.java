@@ -358,7 +358,7 @@ public class Graph {
             }
             for(int a = 0; a < num-currentAttackers; a++){
                 attackerindex = rand.nextInt(size);
-                if(attackIndexes.contains(attackerindex) || custodianIndexes.contains(attackerindex))
+                if(attackIndexes.contains(attackerindex) || custodianIndexes.contains(attackerindex) || !possibleRequesters.contains(attackerindex))
                 {
                     a--;
                 }else {
