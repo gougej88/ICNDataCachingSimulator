@@ -18,8 +18,10 @@ public class Search {
         for(int j=0; j<g.size; j++)
         {
             //COMPUTE ALL PATHS FROM EACH SRC ONCE
-            Dijkstra.ComputePaths(g, g.nodes.get(j));
+            if(g.dijkstraComputed == false) {
+                Dijkstra.ComputePaths(g, g.nodes.get(j));
 
+            }
             //Check if the node is a custodian. if not: add to requesters
             if(g.possibleRequesters.contains(g.nodes.get(j)) && !g.localContentCustodians.contains(g.nodes.get(j)))
             {
@@ -28,7 +30,9 @@ public class Search {
             if(g.localContentCustodians.contains(g.nodes.get(j))){
                 custodians.add(g.nodes.get(j));
             }
-        }
+        }//end for
+
+        g.dijkstraComputed=true;
 
         attackers = g.attackers;
 

@@ -30,6 +30,7 @@ public class Graph {
     ArrayList<Integer> attackIndexes = new ArrayList<Integer>();
     ArrayList<Integer> custodianIndexes = new ArrayList<Integer>();
     Boolean useCharacteristicTimeAttack;
+    Boolean dijkstraComputed;
 
 
 
@@ -50,6 +51,7 @@ public class Graph {
 
     public void createGraph(){
 
+        dijkstraComputed = false;
         if(graphType == 1){
             length = (int)Math.sqrt(size);
             width = length;
@@ -137,6 +139,7 @@ public class Graph {
 
             }//end for
         }//end if not using characteristic time attack
+
 
     }//end createGraph()
 
@@ -362,8 +365,12 @@ public class Graph {
                     attackIndexes.add(attackerindex);
                     AttackerNode act = new AttackerNode(attackerindex, cacheSize, cacheType, numUnpopularItemsPerAttacker,numRequestsPerTest);
                     attackers.add(act);
+                    Node old = nodes.get(attackerindex);
+                    act.previous =old.previous;
+                    act.contentCustodians=old.contentCustodians;
                     nodes.set(attackerindex,act);
                     possibleRequesters.set(attackerindex,act);
+                    dijkstraComputed=false;
 
                     setSpecificEdges(attackerindex);
                     distributeContentCustodians();
