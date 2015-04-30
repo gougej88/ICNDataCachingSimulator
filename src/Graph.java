@@ -367,12 +367,12 @@ public class Graph {
                     attackers.add(act);
                     Node old = nodes.get(attackerindex);
                     act.previous =old.previous;
+                    act.edges = old.edges;
                     act.contentCustodians=old.contentCustodians;
                     nodes.set(attackerindex,act);
                     possibleRequesters.set(attackerindex,act);
                     dijkstraComputed=false;
 
-                    setSpecificEdges(attackerindex);
                     distributeContentCustodians();
 
                     //force attackers to attack from beginning
@@ -414,33 +414,6 @@ public class Graph {
         }
     }//end addAttackersToExistingGraph
 
-    public void setSpecificEdges(int nodeID){
-
-        int i = nodeID;
-            //Check if node has a neighbor to the right
-            if(i%width < width-1) {
-                //System.out.println("Set right edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i+1).nodeID);
-                nodes.get(i).setEdge(nodes.get(i+1), 1);
-
-            }
-            //Check if node has a neighbor to the bottom
-            if(i < (size-width)) {
-                //System.out.println("Set bottom edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i+width).nodeID);
-                nodes.get(i).setEdge(nodes.get(i+width), 1);
-            }
-            //Check if node has a neighbor to the top
-            if(i >= length)
-            {
-                //System.out.println("Set top edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i-length).nodeID);
-                nodes.get(i).setEdge(nodes.get(i-length),1);
-            }
-            //Check if node has a neighbor to the left
-            if(i%length > 0)
-            {
-                //System.out.println("Set left edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i-1).nodeID);
-                nodes.get(i).setEdge(nodes.get(i-1),1);
-            }
-    }//end setSpecificEdges
 
 
 }//end graph

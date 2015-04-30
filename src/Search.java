@@ -14,7 +14,9 @@ public class Search {
         ArrayList<Node> custodians = new ArrayList<Node>();
         ArrayList<AttackerNode> attackers = new ArrayList<AttackerNode>();
 
-        System.out.println("Starting Dijkstra's algorithm. This could take some time on large graphs");
+        if(g.graphType==2) {
+            System.out.println("Starting Dijkstra's algorithm. This could take some time on large graphs");
+        }
         for(int j=0; j<g.size; j++)
         {
             //COMPUTE ALL PATHS FROM EACH SRC ONCE
@@ -88,6 +90,9 @@ public class Search {
         int numPopularKept = 0;
         int numUnpopularTotal = 0;
 
+        if(g.graphType==2) {
+            System.out.println("Starting test. Running " + numTests + " with a large graph could take some time.");
+        }
         for(int x=0; x<numTests; x++) {
 
 
@@ -119,7 +124,10 @@ public class Search {
             while(pack.route.size() ==1)
             {
                 requesters.remove(n);
+                g.possibleRequesters.remove(n);
+                totalReqPerRound--;
                 n = g.nodes.get(getNodeByProb(requesters,totalReqPerRound).nodeID);
+                k = g.getZipfContent();
                 pack = new Packet(n,k);
             }
             if(x >= startKeepingStats && attackers.contains(n))

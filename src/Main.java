@@ -16,7 +16,7 @@ public class Main {
         //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
         //Graph type. 1 = square, 2= Gnutella
-        int graphType = 1;
+        int graphType = 2;
         int testsize = 5;
         int requestsPerTest = 10000;
         Boolean useCharacteristicTimeAttack = true;
