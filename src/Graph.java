@@ -163,6 +163,7 @@ public class Graph {
                 int fromNode = Integer.parseInt(datavalue[0]);
                 int toNode = Integer.parseInt(datavalue[1]);
                 nodes.get(fromNode).setEdge(nodes.get(toNode),1);
+                nodes.get(toNode).setEdge(nodes.get(fromNode),1);
                 edges.add(edge);
                 if(!possibleRequesters.contains(nodes.get(fromNode))){
                     possibleRequesters.add(nodes.get(fromNode));

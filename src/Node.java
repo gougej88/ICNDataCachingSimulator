@@ -51,7 +51,12 @@ public class Node {
     }
 
     public void setEdge(Node n, Integer weight) {
-        edges.add(new Edge(n, weight));
+        Edge e = new Edge(n,weight);
+        if(!edges.contains(e)) {
+            edges.add(e);
+        }else{
+            System.out.println("duplicate");
+        }
 
     }
 
