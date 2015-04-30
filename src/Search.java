@@ -123,9 +123,9 @@ public class Search {
             //fix to ignore the nodes that cannot route to dest
             while(pack.route.size() ==1)
             {
-                requesters.remove(n);
-                g.possibleRequesters.remove(n);
-                totalReqPerRound--;
+                //requesters.remove(n);
+                //g.possibleRequesters.remove(n);
+                //totalReqPerRound--;
                 n = g.nodes.get(getNodeByProb(requesters,totalReqPerRound).nodeID);
                 k = g.getZipfContent();
                 pack = new Packet(n,k);

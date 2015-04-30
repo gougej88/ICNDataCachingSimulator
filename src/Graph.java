@@ -358,7 +358,7 @@ public class Graph {
             }
             for(int a = 0; a < num-currentAttackers; a++){
                 attackerindex = rand.nextInt(size);
-                if(attackIndexes.contains(attackerindex) || custodianIndexes.contains(attackerindex) || !possibleRequesters.contains(attackerindex))
+                if(attackIndexes.contains(attackerindex) || custodianIndexes.contains(attackerindex) || !possibleRequesters.contains(nodes.get(attackerindex)))
                 {
                     a--;
                 }else {
@@ -370,7 +370,8 @@ public class Graph {
                     act.edges = old.edges;
                     act.contentCustodians=old.contentCustodians;
                     nodes.set(attackerindex,act);
-                    possibleRequesters.set(attackerindex,act);
+                    int index = possibleRequesters.indexOf(old);
+                    possibleRequesters.set(index,act);
                     dijkstraComputed=false;
 
                     distributeContentCustodians();
