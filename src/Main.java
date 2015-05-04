@@ -52,14 +52,12 @@ public class Main {
             //attackers.add(4);
         }
         if(graphType==2) {
-            //2% Attackers
-            attackers.add((int) (graphSize * .02));
             //5% Attackers
             attackers.add((int) (graphSize * .05));
             //10% Attackers
-            //attackers.add((int)(graphSize*.1));
-            //25% Attackers
-            //attackers.add((int)(graphSize*.25));
+            attackers.add((int)(graphSize*.1));
+            //20% Attackers
+            attackers.add((int)(graphSize*.20));
         }
 
 
