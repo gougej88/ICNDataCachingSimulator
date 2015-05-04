@@ -57,7 +57,7 @@ public class Main {
             //10% Attackers
             attackers.add((int)(graphSize*.1));
             //20% Attackers
-            attackers.add((int)(graphSize*.20));
+            //attackers.add((int)(graphSize*.20));
         }
 
 

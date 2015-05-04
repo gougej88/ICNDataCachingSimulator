@@ -327,6 +327,14 @@ public class AttackerNode extends Node {
                 pack.search = unpopularContent.get(rand.nextInt(unpopularContent.size()));
                 pack.dest = this.contentCustodians.get(pack.search);
                 pack.route = Dijkstra.getShortestPath(this, pack.dest);
+
+                //fix to ignore the nodes that cannot route to dest
+                while(pack.route.size() ==1)
+                {
+                    pack.search = unpopularContent.get(rand.nextInt(unpopularContent.size()));
+                    pack.dest = this.contentCustodians.get(pack.search);
+                    pack.route = Dijkstra.getShortestPath(this, pack.dest);
+                }
                 pack.next = pack.route.get(1);
 
                 pack = pack.next.receiveData(pack);
