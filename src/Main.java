@@ -17,9 +17,9 @@ public class Main {
         //To change the number of tests change the integer for testsize
         //Graph type. 1 = square, 2= Gnutella
         int graphType = 2;
-        int testsize = 5;
-        int requestsPerTest = 10000;
-        Boolean useCharacteristicTimeAttack = true;
+        int testsize = 10;
+        int requestsPerTest = 100000;
+        Boolean useCharacteristicTimeAttack = false;
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
         double zipfianAlpha = .65;
@@ -28,6 +28,7 @@ public class Main {
         int AttackerRequestRate = 4;
         //Tested with square graphs of size = 25,100
         int graphSize = 25;
+        int cacheSizesTested=0;
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType;
@@ -62,12 +63,16 @@ public class Main {
         }
 
 
-        //Loop for number of cache types
-        for(int c = 1; c < 4; c++) {
+        //Loop for number of cache types (1,2,3)
+        for(int c = 1; c < 2; c++) {
             cacheType = c;
             ArrayList<PacketTracer> tests = new ArrayList<PacketTracer>();
-            //Loop for number of unique cache sizes
-            for (int y = 0; y < 6; y++) {
+            //Loop for number of unique cache sizes (0,10,20,30,40,50)
+            for (int y = 1; y < 2; y++) {
+                //Number of cache sizes tested. Used for stats computations
+                if(c==1){
+                    cacheSizesTested++;
+                }
                 //Testing results showed around 120% was best for attack
                 int unpopPerCache = (int)((y*10)*1.2);
                 if(unpopPerCache==0)
@@ -131,7 +136,7 @@ public class Main {
         }else {
             System.out.println("Attack metrics used DO NOT USE characteristic time. These attacks request unpopular for every attacker request.");
         }
-        LineChart demo = new LineChart("Average hops per request. Alpha:"+zipfianAlpha +" Nodes:25 Requests per test:"+requestsPerTest+" Number of tests:"+testsize,"Average hops per request",testsize, allTests, attackers);
+        LineChart demo = new LineChart("Average hops per request. Alpha:"+zipfianAlpha +" Nodes:25 Requests per test:"+requestsPerTest+" Number of tests:"+testsize,"Average hops per request",cacheSizesTested, allTests, attackers);
        // demo.pack();
         //demo.setVisible(true);
 

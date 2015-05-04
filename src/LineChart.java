@@ -19,22 +19,18 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class LineChart extends JFrame {
 
 
-    public LineChart(String applicationTitle, String chartTitle, Integer testsize, ArrayList<ArrayList<PacketTracer>> tests, ArrayList<Integer> attacksPerTest) {
+    public LineChart(String applicationTitle, String chartTitle, Integer cacheSizesTested, ArrayList<ArrayList<PacketTracer>> tests, ArrayList<Integer> attacksPerTest) {
         super(applicationTitle);
-        XYDataset dataset = LoadData(testsize, attacksPerTest, tests);
+        XYDataset dataset = LoadData(cacheSizesTested, attacksPerTest, tests);
         JFreeChart chart = createChart(dataset, applicationTitle);
-        // we put the chart into a panel
         ChartPanel chartPanel = new ChartPanel(chart);
-        // default size
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-        // add it to our application
         setContentPane(chartPanel);
 
 
     }
 
-    private XYDataset LoadData(Integer testsize, ArrayList<Integer> attackers, ArrayList<ArrayList<PacketTracer>> tests){
-        //final XYSeries seriesNoCache = new XYSeries("NoCache");
+    private XYDataset LoadData(Integer cacheSizesTested, ArrayList<Integer> attackers, ArrayList<ArrayList<PacketTracer>> tests){
         final XYSeries seriesLRUCache = new XYSeries("LRU Cache Average Hops");
         final XYSeries seriesFIFOCache = new XYSeries("FIFO Cache Average Hops");
         final XYSeries seriesRandomCache = new XYSeries("Random Cache Average Hops");
@@ -46,7 +42,6 @@ public class LineChart extends JFrame {
 
         //Print space for final numbers to console
         System.out.println();
-        System.out.println();
         System.out.println("Final Results");
 
         //Combine all results
@@ -55,13 +50,13 @@ public class LineChart extends JFrame {
 
             //change all values back to 6
             singleTest = tests.get(t);
-            double[] max = new double[6*AttacksPerTest];
-            double[] min = new double[6*AttacksPerTest];
-            double[] result = new double[6*AttacksPerTest];
-            int[] numattackers = new int[6*AttacksPerTest];
+            double[] max = new double[cacheSizesTested*AttacksPerTest];
+            double[] min = new double[cacheSizesTested*AttacksPerTest];
+            double[] result = new double[cacheSizesTested*AttacksPerTest];
+            int[] numattackers = new int[cacheSizesTested*AttacksPerTest];
             Arrays.fill(max,0);
             Arrays.fill(min,10);
-            testsPerSize =(singleTest.size()/6)/AttacksPerTest;
+            testsPerSize =(singleTest.size()/cacheSizesTested)/AttacksPerTest;
 
                 //Loop on number of tests run
                 for (int i = 0; i < singleTest.size(); i++) {
@@ -126,7 +121,6 @@ public class LineChart extends JFrame {
         dataset.addSeries(seriesFIFOCache);
         dataset.addSeries(seriesRandomCache);
 
-        //dataset.addSeries(seriesNoCache);
         return dataset;
 
     }
@@ -149,7 +143,6 @@ public class LineChart extends JFrame {
         plot.setDomainGridlinePaint(Color.white);
         plot.setRangeGridlinePaint(Color.white);
 
-        //final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
         XYErrorRenderer t = new XYErrorRenderer();
         t.setBaseLinesVisible(true);
         t.setBaseShapesVisible(false);
@@ -158,10 +151,7 @@ public class LineChart extends JFrame {
         t.setSeriesPaint(0, Color.black);
         t.setSeriesPaint(1, Color.BLUE);
         t.setSeriesPaint(2, Color.red);
-        //renderer.setSeriesLinesVisible(0, true);
-        //renderer.setSeriesShapesVisible(1, false);
         plot.setRenderer(t);
-        //plot.setRenderer(renderer);
 
         return chart;
 

@@ -145,7 +145,7 @@ public class Graph {
 
     public void setEdges(){
         //Open the file and set edges
-        //One per line, From node [tab] To node
+        //One per line, fromNode [tab] toNode
         List<Map<Integer,Integer>> edges = new ArrayList<Map<Integer, Integer>>();
         try {
 
@@ -154,9 +154,6 @@ public class Graph {
             String line;
             while ((line = bReader.readLine()) != null) {
 
-                /**
-                 * Splitting the content of tabbed separated line
-                 */
                 String datavalue[] = line.split("\t");
                 Map<Integer,Integer> edge = new HashMap<Integer, Integer>();
                 edge.put(Integer.parseInt(datavalue[0]),Integer.parseInt(datavalue[1]));
