@@ -25,9 +25,9 @@ public class Main {
         double zipfianAlpha = .65;
         double percentCustodians = .20;
         int numContentItems = 250;
-        int AttackerRequestRate = 6;
+        int AttackerRequestRate = 2;
         //Tested with square graphs of size = 25,100
-        int graphSize = 25;
+        int graphSize = 100;
         int cacheSizesTested=0;
 
         //1 = LRU, 2 = FIFO, 3=Random
@@ -134,6 +134,7 @@ public class Main {
         }else {
             System.out.println("Attack metrics used DO NOT USE characteristic time. These attacks request unpopular for every attacker request.");
         }
+        System.out.println("Request Rate used = "+AttackerRequestRate);
         LineChart demo = new LineChart("Average hops per request. Alpha:"+zipfianAlpha +" Nodes:25 Requests per test:"+requestsPerTest+" Number of tests:"+testsize,"Average hops per request",cacheSizesTested, allTests, attackers);
        // demo.pack();
         //demo.setVisible(true);
