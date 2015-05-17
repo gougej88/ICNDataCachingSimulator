@@ -307,7 +307,7 @@ public class AttackerNode extends Node {
                 c = unpopularContent.get(index);
                 if (attackList.containsKey(c)) {
                     int waitedTime = attackList.get(c);
-                    if (waitedTime >= finalCharTimeGuess) {
+                    if (waitedTime > finalCharTimeGuess) {
                         //Set content item back to zero since it is now being requested.
                         attackList.put(c,0);
                         foundItem = true;

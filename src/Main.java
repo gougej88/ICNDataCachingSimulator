@@ -19,13 +19,13 @@ public class Main {
         int graphType = 1;
         int testsize = 10;
         int requestsPerTest = 100000;
-        Boolean useCharacteristicTimeAttack = false;
+        Boolean useCharacteristicTimeAttack = true;
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
         double zipfianAlpha = .65;
         double percentCustodians = .20;
         int numContentItems = 250;
-        int AttackerRequestRate = 4;
+        int AttackerRequestRate = 6;
         //Tested with square graphs of size = 25,100
         int graphSize = 25;
         int cacheSizesTested=0;
