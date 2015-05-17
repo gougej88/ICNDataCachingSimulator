@@ -19,7 +19,7 @@ public class Main {
         int graphType = 1;
         int testsize = 10;
         int requestsPerTest = 100000;
-        Boolean useCharacteristicTimeAttack = true;
+        Boolean useCharacteristicTimeAttack = false;
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
         double zipfianAlpha = .65;
@@ -47,9 +47,9 @@ public class Main {
         //Make sure to always start with 0 attackers
         attackers.add(0);
         if(graphType==1){
-            //attackers.add(1);
+            attackers.add(1);
             attackers.add(3);
-            //attackers.add(4);
+            attackers.add(4);
         }
         if(graphType==2) {
             //5% Attackers

@@ -35,7 +35,7 @@ public class AttackerNode extends Node {
         //Guess Cache using theory that all nodes same size cache
         cacheSizeGuess = cacheSize;
         //Guess Characteristic Time to large value
-        characteristicTimeGuess = cacheSize*numUnpopularItems;
+        characteristicTimeGuess = cacheSize;
         donePolling = false;
         readyToAttack = false;
         allPacketsFromCustodian = true;
@@ -307,7 +307,7 @@ public class AttackerNode extends Node {
                 c = unpopularContent.get(index);
                 if (attackList.containsKey(c)) {
                     int waitedTime = attackList.get(c);
-                    if (waitedTime > finalCharTimeGuess) {
+                    if (waitedTime >= finalCharTimeGuess) {
                         //Set content item back to zero since it is now being requested.
                         attackList.put(c,0);
                         foundItem = true;
