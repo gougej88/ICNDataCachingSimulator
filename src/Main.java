@@ -9,7 +9,6 @@ public class Main {
         //Create an arraylist of all tests, and results
         ArrayList<ArrayList<PacketTracer>> allTests = new ArrayList<ArrayList<PacketTracer>>();
         //Create graph grid of nodes(length, width, cacheSize)
-        //LineGraph g;
         Graph g = null;
         Boolean usingCache = true;
 
@@ -19,13 +18,13 @@ public class Main {
         int graphType = 1;
         int testsize = 10;
         int requestsPerTest = 100000;
-        Boolean useCharacteristicTimeAttack = true;
+        Boolean useCharacteristicTimeAttack = false;
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
         double zipfianAlpha = .65;
         double percentCustodians = .20;
         int numContentItems = 250;
-        int AttackerRequestRate = 2;
+        int AttackerRequestRate = 4;
         //Tested with square graphs of size = 25,100
         int graphSize = 100;
         int cacheSizesTested=0;
@@ -40,7 +39,6 @@ public class Main {
             graphSize=6301;
             percentCustodians = .05;
             numContentItems=2000;
-
         }
 
 
@@ -110,14 +108,7 @@ public class Main {
                             tests.add(Search.runTest(g, requestsPerTest, poissonRate, AttackerRequestRate, usingCache));
 
 
-                        /* //LineGraph
-                        //g = new LineGraph(5, y * 10, zipfianAlpha, cacheType, numAttackers, numUnpopularItems, numContentItems, requestsPerTest);
-                        g = new LineGraph(5, y, zipfianAlpha, cacheType, numAttackers, numUnpopularItems, numContentItems, requestsPerTest);
-                        g.createLineGraph();
-                        //Run without cache
-                        System.out.println("Test Number: " +n);
-                        tests.add(SearchLineGraph.runTest(g, requestsPerTest, poissonRate, false));
-                        */
+
                         }//end for loop number of tests per attack
 
 
