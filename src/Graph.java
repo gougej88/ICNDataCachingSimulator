@@ -23,11 +23,11 @@ public class Graph {
     int cacheType;
     int numAttackers;
     int numUnpopularItemsPerAttacker;
-    ArrayList<Node> custodians = new ArrayList<Node>();
     ArrayList<Node> possibleRequesters = new ArrayList<Node>();
     ArrayList<Node> possibleCustodians = new ArrayList<Node>();
     ArrayList<AttackerNode> attackers = new ArrayList<AttackerNode>();
     ArrayList<Integer> attackIndexes = new ArrayList<Integer>();
+    ArrayList<Node> custodians = new ArrayList<Node>();
     ArrayList<Integer> custodianIndexes = new ArrayList<Integer>();
     Boolean useCharacteristicTimeAttack;
     Boolean dijkstraComputed;
@@ -348,11 +348,12 @@ public class Graph {
         if(num>currentAttackers){
             numAttackers = num;
             int attackerindex = -1;
-            Random rand = new Random(size);
+            Random rand = new Random();
             for(Node a : nodes){
                 if(custodians.contains(a)){
                     custodianIndexes.add(a.nodeID);
                 }
+                a.clearEdges();
             }
             for(int a = 0; a < num-currentAttackers; a++){
                 attackerindex = rand.nextInt(size);
@@ -364,13 +365,22 @@ public class Graph {
                     AttackerNode act = new AttackerNode(attackerindex, cacheSize, cacheType, numUnpopularItemsPerAttacker,numRequestsPerTest);
                     attackers.add(act);
                     Node old = nodes.get(attackerindex);
-                    act.previous =old.previous;
+
                     act.edges = old.edges;
                     act.contentCustodians=old.contentCustodians;
                     nodes.set(attackerindex,act);
                     int index = possibleRequesters.indexOf(old);
                     possibleRequesters.set(index,act);
                     dijkstraComputed=false;
+                }//end else
+            }//end for
+
+                    if(graphType==1) {
+                        setEdgesSquareGraph();
+                    }
+                    if(graphType==2){
+                        setEdges();
+                    }
 
                     distributeContentCustodians();
 
@@ -408,8 +418,8 @@ public class Graph {
 
                         }//end for
                     }//end if not using characteristic time attack
-                }
-            }//end for
+
+
         }
     }//end addAttackersToExistingGraph
 

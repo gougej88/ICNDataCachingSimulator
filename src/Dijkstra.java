@@ -20,7 +20,7 @@ public class Dijkstra {
 
     public static void ComputePaths(Graph g, Node src)
     {
-        src.minDistance = 0.0;
+        src.minDistance = 0.;
         Queue<Node> queue1 = new LinkedList<Node>();
 
         queue1.add(src);

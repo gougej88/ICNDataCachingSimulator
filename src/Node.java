@@ -188,5 +188,9 @@ public class Node {
 
     }//end resetNodeStats()
 
+    public void clearEdges(){
+        edges.clear();
+    }
+
 
 }

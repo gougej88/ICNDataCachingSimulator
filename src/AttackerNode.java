@@ -13,16 +13,15 @@ public class AttackerNode extends Node {
     Node target;
     ArrayList<Node> custodians;
     ArrayList<Content> unpopularContent = new ArrayList<Content>();
+    Map<Content,Integer> attackList = new HashMap<Content, Integer>();
     Map<Content,Integer> allContent;
     int numRequestsTotal;
     int numUnpopularItems;
     boolean donePolling;
     boolean readyToAttack;
     boolean allPacketsFromCustodian;
-    int indexInList;
     int characteristicTimeStatus;
     int characteristicTimeUnpopCounter = 0;
-    int attackStatus;
     int startWait;
     int numattacks = 0;
 
@@ -41,7 +40,6 @@ public class AttackerNode extends Node {
         readyToAttack = false;
         allPacketsFromCustodian = true;
         characteristicTimeStatus = 1;
-        attackStatus = 1;
 
     }
 
@@ -281,31 +279,9 @@ public class AttackerNode extends Node {
     }//end guessCharacteristicTime
 
     public Packet sendAttack(Packet pack){
-
-        //Need to know where in the process we are
-        //Possible values attackStatus
-        //1 - attacking
-        //2 - waiting phase between attack requests
-
         numattacks++;
-        if(attackStatus==2){
-            startWait++;
-            //if number of requests seen more than characteristic time guess, then time to request again
-            if(startWait >= finalCharTimeGuess){
-                attackStatus = 1;
-            }
 
-            pack = pack.next.receiveData(pack);
-        }//end waiting
-        else {
             //Run attack
-
-            //Section to help prevent detection
-            //Every 10 requests, request a popular file i.e. leave it unaltered
-            //if (indexInList % 10 == 0 && indexInList != 0) {
-
-                //pack = pack.next.receiveData(pack);
-
             /*
                 //increment indexInList to request new file on next run
                 if (indexInList < (unpopularContent.size() - 1)) {
@@ -313,18 +289,37 @@ public class AttackerNode extends Node {
                 } else {
                     startWait = 0;
                     //This would cause attack to enter the waiting state
-                    //attackStatus = 2;
                     indexInList = 0;
                 }//end else for increment
                 */
             //}//end if for every 10 requests
-            //Else request unpopular file
-            //else {
 
-                //Random file taken from list
-                Random rand = new Random();
+
+            Boolean foundItem = false;
+            int index = 0;
+            Content c = new Content();
+
+            //Random file taken from list
+            //Need to make sure the file has waited at least T*
+            Random rand = new Random();
+            while (!foundItem){
+                index = rand.nextInt(unpopularContent.size());
+                c = unpopularContent.get(index);
+                if (attackList.containsKey(c)) {
+                    int waitedTime = attackList.get(c);
+                    if (waitedTime > finalCharTimeGuess) {
+                        //Set content item back to zero since it is now being requested.
+                        attackList.put(c,0);
+                        foundItem = true;
+                    }
+                } else {
+                    attackList.put(c, 0);
+                    foundItem=true;
+                }
+            }//end while
+
                 //Alter the request and request an unpopular file
-                pack.search = unpopularContent.get(rand.nextInt(unpopularContent.size()));
+                pack.search = c;
                 pack.dest = this.contentCustodians.get(pack.search);
                 pack.route = Dijkstra.getShortestPath(this, pack.dest);
 
@@ -339,18 +334,14 @@ public class AttackerNode extends Node {
 
                 pack = pack.next.receiveData(pack);
 
-                //increment indexInList to request new file on next run
-                if (indexInList < (unpopularContent.size() - 1)) {
-                    indexInList++;
-                } else {
-                    startWait = 0;
-                    //This would cause attack to enter the waiting state
-                    //attackStatus = 2;
-                    indexInList = 0;
-                }//end else for increment
+        //Increment all attackItems by 1
+        for(Map.Entry<Content, Integer> entry : attackList.entrySet())
+        {
+            Content k = entry.getKey();
+            Integer i = entry.getValue();
+            attackList.put(k,i+1);
+        }
 
-            //}//end else for request decision
-        }//end else for waiting phase
         return pack;
 
     }//end sendAttack()
@@ -381,7 +372,6 @@ public class AttackerNode extends Node {
         numattacks=0;
         allPacketsFromCustodian=true;
         characteristicTimeGuess=1;
-        attackStatus=1;
     }//end resetAttackerStats
 
 
