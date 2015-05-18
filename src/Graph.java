@@ -117,22 +117,7 @@ public class Graph {
                 att.allPacketsFromCustodian = true;
 
                 //Grab most unpopular in graph
-                Map<Content, Double> popContent = new HashMap<Content, Double>();
-                ArrayList<Content> all = new ArrayList<Content>();
-                Enumeration e = att.contentCustodians.keys();
-                while (e.hasMoreElements()) {
-                    Content d = (Content) e.nextElement();
-                    popContent.put(d, d.probability);
-                }
-                Map sorted = att.sortByValue(popContent);
-                List<Map.Entry<Content, Integer>> sortedList = new LinkedList<Map.Entry<Content, Integer>>(sorted.entrySet());
-
-                //Add only up to size specified to unpopular content list
-                for (int s = 0; s < att.numUnpopularItems; s++) {
-                    //Add unpopular files to variable
-                    Map.Entry<Content, Integer> currentEntry = sortedList.get(s);
-                    att.unpopularContent.add(currentEntry.getKey());
-                }//end for
+                att.getUnpopularContent();
 
                 att.finalCharTimeGuess = 0;
                 att.readyToAttack = true;
@@ -413,22 +398,7 @@ public class Graph {
                             att.allPacketsFromCustodian = true;
 
                             //Grab most unpopular in graph
-                            Map<Content, Double> popContent = new HashMap<Content, Double>();
-                            ArrayList<Content> all = new ArrayList<Content>();
-                            Enumeration e = att.contentCustodians.keys();
-                            while (e.hasMoreElements()) {
-                                Content d = (Content) e.nextElement();
-                                popContent.put(d, d.probability);
-                            }
-                            Map sorted = att.sortByValue(popContent);
-                            List<Map.Entry<Content, Integer>> sortedList = new LinkedList<Map.Entry<Content, Integer>>(sorted.entrySet());
-
-                            //Add only up to size specified to unpopular content list
-                            for (int s = 0; s < att.numUnpopularItems; s++) {
-                                //Add unpopular files to variable
-                                Map.Entry<Content, Integer> currentEntry = sortedList.get(s);
-                                att.unpopularContent.add(currentEntry.getKey());
-                            }//end for
+                            att.getUnpopularContent();
 
                             att.finalCharTimeGuess = 0;
                             att.readyToAttack = true;
