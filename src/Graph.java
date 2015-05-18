@@ -374,6 +374,15 @@ public class Graph {
                     int index = possibleRequesters.indexOf(old);
                     possibleRequesters.set(index,act);
                     dijkstraComputed=false;
+
+                    //set to make sure polling not needed set done polling but not final t* guess
+                    act.donePolling = true;
+                    act.target = act.FindBestTarget(act, custodians);
+                    //estimate cacheSize
+                    act.cacheSizeGuess = act.maxCacheSize;
+                    act.allPacketsFromCustodian = true;
+                    act.getUnpopularContent();
+
                 }//end else
             }//end for
 
