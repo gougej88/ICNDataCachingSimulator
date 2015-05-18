@@ -229,12 +229,12 @@ public class Search {
         Random rand = new Random();
         int index = rand.nextInt(totalSum);
         int sum = 0;
-        int i=0;
+        int i=rand.nextInt(allRequesters.size());
         while(sum < index ) {
-            sum = sum + allRequesters.get(i++).requestProbability;
+            sum = sum + allRequesters.get(i).requestProbability;
         }
 
-        return allRequesters.get(Math.max(0,i-1));
+        return allRequesters.get(Math.max(0,i));
     }//end getNodeByProb
 
 }//end search class

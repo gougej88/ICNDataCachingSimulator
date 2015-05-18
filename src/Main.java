@@ -16,8 +16,8 @@ public class Main {
         //To change the number of tests change the integer for testsize
         //Graph type. 1 = square, 2= Gnutella
         int graphType = 1;
-        int testsize = 10;
-        int requestsPerTest = 100000;
+        int testsize = 5;
+        int requestsPerTest = 5000;
         Boolean useCharacteristicTimeAttack = false;
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
@@ -26,7 +26,7 @@ public class Main {
         int numContentItems = 250;
         int AttackerRequestRate = 4;
         //Tested with square graphs of size = 25,100
-        int graphSize = 100;
+        int graphSize = 25;
         int cacheSizesTested=0;
 
         //1 = LRU, 2 = FIFO, 3=Random
@@ -46,8 +46,9 @@ public class Main {
         attackers.add(0);
         if(graphType==1){
             attackers.add(1);
-            attackers.add(3);
-            attackers.add(4);
+            attackers.add(2);
+            //attackers.add(3);
+            //attackers.add(4);
         }
         if(graphType==2) {
             //5% Attackers

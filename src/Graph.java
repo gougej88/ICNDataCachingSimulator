@@ -204,7 +204,11 @@ public class Graph {
                     //System.out.println("Set left edge:" + nodes.get(i).getNodeID()+ "to node: "+nodes.get(i-1).nodeID);
                     nodes.get(i).setEdge(nodes.get(i-1),1);
                 }
-            possibleRequesters.add(nodes.get(i));
+
+            //test for potency
+            if(i==0 || i==1 || i==5 || i==6) {
+                possibleRequesters.add(nodes.get(i));
+            }
             possibleCustodians.add(nodes.get(i));
         }//end for
     }
@@ -214,6 +218,10 @@ public class Graph {
         //Get 20% of the graph size and make them content custodians
         double temp = size * percent;
         int numCustodians = (int)temp;
+
+        //test custodians in corner
+        numCustodians=2;
+
         numContentItems = numContentItems / numCustodians;
         Random rand = new Random();
 
@@ -225,6 +233,11 @@ public class Graph {
         for(int i = 0; i<numCustodians; i++)
         {
             int contentCust = rand.nextInt(size);
+
+            //testing out custodian locations
+            contentCust=23;
+            if(n.contains(contentCust))
+                contentCust=24;
 
             if(!n.contains(contentCust) && possibleCustodians.contains(nodes.get(contentCust))) {
                 n.add(contentCust);
@@ -357,6 +370,12 @@ public class Graph {
             }
             for(int a = 0; a < num-currentAttackers; a++){
                 attackerindex = rand.nextInt(size);
+
+                //test for potency
+                attackerindex=1;
+                if(attackIndexes.contains(1)){
+                    attackerindex=5;
+                }
                 if(attackIndexes.contains(attackerindex) || custodianIndexes.contains(attackerindex) || !possibleRequesters.contains(nodes.get(attackerindex)))
                 {
                     a--;
@@ -365,8 +384,6 @@ public class Graph {
                     AttackerNode act = new AttackerNode(attackerindex, cacheSize, cacheType, numUnpopularItemsPerAttacker,numRequestsPerTest);
                     attackers.add(act);
                     Node old = nodes.get(attackerindex);
-
-                    act.edges = old.edges;
                     act.contentCustodians=old.contentCustodians;
                     nodes.set(attackerindex,act);
                     int index = possibleRequesters.indexOf(old);
