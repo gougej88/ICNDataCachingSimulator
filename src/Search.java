@@ -85,6 +85,8 @@ public class Search {
         int startKeepingStats = (int)(numTests*.70);
         int numTestsKept = numTests - startKeepingStats;
         Node n = requesters.get(0);
+        Content k = g.getZipfContent();
+        Packet pack = null;
         //Node last = requesters.get(0);
         int numUnpopularKept = 0;
         int numPopularKept = 0;
@@ -101,34 +103,28 @@ public class Search {
 
             //Mean is set here for rate at which to request content
             p= Poisson.getPoisson(poissonRate);
-
-            Content k = g.getZipfContent();
-
-            n = g.nodes.get(getNodeByProb(requesters,totalReqPerRound).nodeID);
-
-            /*
-            if(attackers.contains(last) && ((AttackerNode)last).readyToAttack && ((AttackerNode)last).attackStatus == 1 && x >= startKeepingStats)
-            {
-               n = last;
-                numUnpopularKept++;
-
-            }else {
-                n = g.nodes.get(requesters.get(rand.nextInt(requesters.size())).nodeID);
-                last = n;
+            if(g.firstRun) {
+                k = g.getZipfContent();
+                n = g.nodes.get(getNodeByProb(requesters, totalReqPerRound).nodeID);
+                pack = new Packet(n, k);
+            }else{
+                k = g.pattern.get(x).search;
+                n = g.nodes.get((g.pattern.get(x).src).nodeID);
+                pack = new Packet(n, k);
             }
-
-            */
-            Packet pack = new Packet(n,k);
 
             //fix to ignore the nodes that cannot route to dest
             while(pack.route.size() ==1)
             {
-                //requesters.remove(n);
-                //g.possibleRequesters.remove(n);
-                //totalReqPerRound--;
-                n = g.nodes.get(getNodeByProb(requesters,totalReqPerRound).nodeID);
-                k = g.getZipfContent();
-                pack = new Packet(n,k);
+                if(g.firstRun) {
+                    k = g.getZipfContent();
+                    n = g.nodes.get(getNodeByProb(requesters, totalReqPerRound).nodeID);
+                    pack = new Packet(n, k);
+                }else{
+                    k = g.pattern.get(x).search;
+                    n = g.nodes.get((g.pattern.get(x).src).nodeID);
+                    pack = new Packet(n, k);
+                }
             }
             if(x >= startKeepingStats && attackers.contains(n))
                 numUnpopularKept++;
@@ -145,6 +141,11 @@ public class Search {
                 totalHops += r.hops;
             }
                 maxtime += p;
+
+            //Add to pattern if first run
+            if(g.firstRun) {
+                g.pattern.add(r);
+            }
             //Write each query out to text file
             //writer.write("Test:"+x+" | Time:"+maxtime+" | Source:"+r.src.nodeID+" | Content:"+r.search.contentID+" | Destination:"+r.dest.nodeID+" | Data found on:"+r.referrer.nodeID+" | Number of hops:"+r.hops+" | Cache hit?:"+r.cachehit+"\r\n");
         }//end for

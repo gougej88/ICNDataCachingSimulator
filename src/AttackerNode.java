@@ -166,18 +166,12 @@ public class AttackerNode extends Node {
         for(Content distinctFile : K)
         {
             Packet p = new Packet(attacker,distinctFile);
-            //Packet r = Search.findContent(p);
-
         }
 
         for(Content distinctFile : K)
         {
             Packet p = new Packet(attacker,distinctFile);
-            //Packet r = Search.findContent(p);
-            //if(r.cachehit)
-                //SumCacheHits++;
         }
-
 
         if(SumCacheHits == cacheSizeGuess)
         {

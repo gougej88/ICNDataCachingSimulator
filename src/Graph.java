@@ -1,3 +1,5 @@
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -29,12 +31,15 @@ public class Graph {
     ArrayList<Integer> attackIndexes = new ArrayList<Integer>();
     ArrayList<Node> custodians = new ArrayList<Node>();
     ArrayList<Integer> custodianIndexes = new ArrayList<Integer>();
+    ArrayList<Packet> pattern = new ArrayList<Packet>();
+    Boolean firstRun;
     Boolean useCharacteristicTimeAttack;
     Boolean dijkstraComputed;
+    Boolean fixSquareGraph;
 
 
 
-    public Graph(int graphType, int size, int cacheSize, double alpha, int cacheType, int numAttackers, int numUnpopularItems, double percentCustodians, int numContentItems, int numRequests, Boolean useTargetedAttack) {
+    public Graph(int graphType, int size, int cacheSize, double alpha, int cacheType, int numAttackers, int numUnpopularItems, double percentCustodians, int numContentItems, int numRequests, Boolean useTargetedAttack, Boolean fixSquareGraph) {
         this.graphType = graphType;
         this.cacheSize = cacheSize;
         this.percentCustodians = percentCustodians;
@@ -46,6 +51,7 @@ public class Graph {
         this.numUnpopularItemsPerAttacker = numUnpopularItems;
         this.numRequestsPerTest = numRequests;
         this.useCharacteristicTimeAttack = useTargetedAttack;
+        this.fixSquareGraph = fixSquareGraph;
 
     }
 
@@ -190,8 +196,12 @@ public class Graph {
                     nodes.get(i).setEdge(nodes.get(i-1),1);
                 }
 
-            //test for potency
-            if(i==0 || i==1 || i==5 || i==6) {
+            if(fixSquareGraph) {
+                //test for potency
+                if (i == 0 || i == 1 || i == 5 || i == 6) {
+                    possibleRequesters.add(nodes.get(i));
+                }
+            }else{
                 possibleRequesters.add(nodes.get(i));
             }
             possibleCustodians.add(nodes.get(i));
@@ -205,8 +215,9 @@ public class Graph {
         int numCustodians = (int)temp;
 
         //test custodians in corner
-        numCustodians=2;
-
+        if(fixSquareGraph) {
+            numCustodians = 2;
+        }
         numContentItems = numContentItems / numCustodians;
         Random rand = new Random();
 
@@ -219,11 +230,12 @@ public class Graph {
         {
             int contentCust = rand.nextInt(size);
 
-            //testing out custodian locations
-            contentCust=23;
-            if(n.contains(contentCust))
-                contentCust=24;
-
+            if(fixSquareGraph) {
+                //testing out custodian locations
+                contentCust = 23;
+                if (n.contains(contentCust))
+                    contentCust = 24;
+            }
             if(!n.contains(contentCust) && possibleCustodians.contains(nodes.get(contentCust))) {
                 n.add(contentCust);
                 custodians.add(nodes.get(contentCust));
@@ -356,11 +368,14 @@ public class Graph {
             for(int a = 0; a < num-currentAttackers; a++){
                 attackerindex = rand.nextInt(size);
 
-                //test for potency
-                attackerindex=1;
-                if(attackIndexes.contains(1)){
-                    attackerindex=5;
-                }
+                if(fixSquareGraph) {
+                    //test for potency
+                    attackerindex = 1;
+                    if (attackIndexes.contains(1)) {
+                        attackerindex = 5;
+                    }
+                }//end if
+
                 if(attackIndexes.contains(attackerindex) || custodianIndexes.contains(attackerindex) || !possibleRequesters.contains(nodes.get(attackerindex)))
                 {
                     a--;

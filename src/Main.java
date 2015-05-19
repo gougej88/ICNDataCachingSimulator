@@ -16,17 +16,20 @@ public class Main {
         //To change the number of tests change the integer for testsize
         //Graph type. 1 = square, 2= Gnutella
         int graphType = 1;
-        int testsize = 10;
-        int requestsPerTest = 100000;
-        Boolean useCharacteristicTimeAttack = true;
+        int testsize = 5;
+        int requestsPerTest = 10000;
+        Boolean useCharacteristicTimeAttack = false;
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
         double zipfianAlpha = .65;
         double percentCustodians = .20;
-        int numContentItems = 250;
+        int numContentItems = 500;
         int AttackerRequestRate = 2;
         //Tested with square graphs of size = 25,100
         int graphSize = 25;
+        //When this is set make sure to only test with 0,1,and 2 attackers on the square graph only
+        Boolean fixSquareGraph = false;
+
         int cacheSizesTested=0;
 
         //1 = LRU, 2 = FIFO, 3=Random
@@ -39,6 +42,7 @@ public class Main {
             graphSize=6301;
             percentCustodians = .05;
             numContentItems=2000;
+            fixSquareGraph=false;
         }
 
 
@@ -48,7 +52,7 @@ public class Main {
             attackers.add(1);
             attackers.add(2);
             //attackers.add(3);
-            //attackers.add(4);
+            attackers.add(4);
         }
         if(graphType==2) {
             //5% Attackers
@@ -90,9 +94,11 @@ public class Main {
                             //SQUARE GRAPH
                             //Create square graph(x,y,cacheSize,alpha, cacheType, numAttackers, numUnpopularItems, numContentItems)
                             if (a == 0 && n == 0) {
-                                g = new Graph(graphType, graphSize, y * 10, zipfianAlpha, cacheType, attackers.get(a), unpopPerCache, percentCustodians, numContentItems, requestsPerTest, useCharacteristicTimeAttack);
+                                g = new Graph(graphType, graphSize, y * 10, zipfianAlpha, cacheType, attackers.get(a), unpopPerCache, percentCustodians, numContentItems, requestsPerTest, useCharacteristicTimeAttack, fixSquareGraph);
+                                g.firstRun = true;
                                 g.createGraph();
                             } else {
+                                g.firstRun = false;
                                 g.resetGraphStats();
                             }
                             //Run without cache
