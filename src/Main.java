@@ -17,17 +17,20 @@ public class Main {
         //Graph type. 1 = square, 2= Gnutella
         int graphType = 1;
         int testsize = 5;
-        int requestsPerTest = 10000;
+        int requestsPerTest = 20000;
         Boolean useCharacteristicTimeAttack = false;
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
         double zipfianAlpha = .65;
         double percentCustodians = .20;
         int numContentItems = 500;
+
+        //Request rate not used with using same pattern for all tests.
         int AttackerRequestRate = 2;
         //Tested with square graphs of size = 25,100
         int graphSize = 25;
-        //When this is set make sure to only test with 0,1,and 2 attackers on the square graph only
+        //When this is set make sure to only test with 0,1,and 2 attackers on the square graph only.
+        //This should only be used for a quick test on graphSize=25
         Boolean fixSquareGraph = false;
 
         int cacheSizesTested=0;

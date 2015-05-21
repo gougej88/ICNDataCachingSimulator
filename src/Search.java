@@ -13,6 +13,7 @@ public class Search {
         ArrayList<Node> requesters = new ArrayList<Node>();
         ArrayList<Node> custodians = new ArrayList<Node>();
         ArrayList<AttackerNode> attackers = new ArrayList<AttackerNode>();
+        int countRegularRequests = 0;
 
         if(g.graphType==2) {
             System.out.println("Starting Dijkstra's algorithm. This could take some time on large graphs");
@@ -95,7 +96,7 @@ public class Search {
         if(g.graphType==2) {
             System.out.println("Starting test. Running " + numTests + " with a large graph could take some time.");
         }
-        for(int x=0; x<numTests; x++) {
+        for(int x=0; countRegularRequests<numTestsKept; x++) {
 
 
             //Get the number of requests to create per time step
@@ -103,7 +104,7 @@ public class Search {
 
             //Mean is set here for rate at which to request content
             p= Poisson.getPoisson(poissonRate);
-            if(g.firstRun) {
+            if(g.firstRun || g.pattern.size() <= x) {
                 k = g.getZipfContent();
                 n = g.nodes.get(getNodeByProb(requesters, totalReqPerRound).nodeID);
                 pack = new Packet(n, k);
@@ -116,7 +117,7 @@ public class Search {
             //fix to ignore the nodes that cannot route to dest
             while(pack.route.size() ==1)
             {
-                if(g.firstRun) {
+                if(g.firstRun || g.pattern.size() <= x) {
                     k = g.getZipfContent();
                     n = g.nodes.get(getNodeByProb(requesters, totalReqPerRound).nodeID);
                     pack = new Packet(n, k);
@@ -126,24 +127,26 @@ public class Search {
                     pack = new Packet(n, k);
                 }
             }
-            if(x >= startKeepingStats && attackers.contains(n))
-                numUnpopularKept++;
 
             test.addToTest(jump+p,k,n);
             pack.cacheEnabled = cacheEnabled;
             pack.time = maxtime;
             //Perform the search
             Packet r = findContent(pack,attackers);
-            if(x >= startKeepingStats && !attackers.contains(n)) {
+            if(x >= startKeepingStats && !attackers.contains(r.src)) {
                 if (r.cachehit)
                     cachehits++;
 
                 totalHops += r.hops;
+                countRegularRequests++;
             }
                 maxtime += p;
 
+            if(x >= startKeepingStats && attackers.contains(r.src))
+                numUnpopularKept++;
+
             //Add to pattern if first run
-            if(g.firstRun) {
+            if(g.firstRun || g.pattern.size() <= x) {
                 g.pattern.add(r);
             }
             //Write each query out to text file
@@ -159,7 +162,7 @@ public class Search {
 
         }//end if
 
-        numPopularKept = numTestsKept-numUnpopularKept;
+        numPopularKept = numTestsKept;
         System.out.println("Number of unpopular requests total: "+numUnpopularTotal);
         System.out.println("Number of unpopular requests kept: "+numUnpopularKept);
         System.out.println("Number of regular requests kept: "+numPopularKept);
@@ -172,7 +175,7 @@ public class Search {
         System.out.println("Percentage of cache hits: "+ percent+"%");
 
         //Need to show just the regular reguests average
-        averagehops = (double)totalHops/(double)numPopularKept;
+        averagehops = (double)totalHops/(double)countRegularRequests;
         System.out.println("Average hops per request: "+ averagehops);
         //Set totals in packetTracer
         test.setTotals(cacheType,cacheSize,numTests,numAttackers,AttackerRequestRate,numTestsKept,numPopularKept,numUnpopularKept,totalHops,cachehits,averagehops);
