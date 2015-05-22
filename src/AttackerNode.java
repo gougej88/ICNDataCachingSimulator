@@ -119,7 +119,7 @@ public class AttackerNode extends Node {
 
     }//end receive data
 
-    public Packet sendData(Packet p)
+    public Packet sendDataAttack(Packet p)
     {
         //Check if done polling, if so time to attack or guess characteristic time
         //If not just send content along as usual

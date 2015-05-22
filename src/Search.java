@@ -44,18 +44,7 @@ public class Search {
             att.SetCustodians(custodians);
         }
 
-        //Create a new log file of a test
-        /*
-        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
-        Date d = new Date();
-        String file_name = "C:\\temp\\manet\\"+dateFormat.format(d)+".txt";
-        //File file = new File("C:\\temp\\manet\\");
-        //file.mkdirs();
-        //Writer writer = null;
-        */
         PacketTracer test = new PacketTracer(cacheEnabled);
-        //try {
-             //writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file_name), "utf-8"));
 
         //Set probability distribution for node requests based on the request rate
         int numRequesters = requesters.size();
@@ -96,7 +85,7 @@ public class Search {
         if(g.graphType==2) {
             System.out.println("Starting test. Running " + numTests + " with a large graph could take some time.");
         }
-        for(int x=0; countRegularRequests<numTestsKept; x++) {
+        for(int x=0; x<numTests; x++) {
 
 
             //Get the number of requests to create per time step
@@ -104,7 +93,7 @@ public class Search {
 
             //Mean is set here for rate at which to request content
             p= Poisson.getPoisson(poissonRate);
-            if(g.firstRun || g.pattern.size() <= x) {
+            if(g.firstRun) {
                 k = g.getZipfContent();
                 n = g.nodes.get(getNodeByProb(requesters, totalReqPerRound).nodeID);
                 pack = new Packet(n, k);
@@ -117,7 +106,7 @@ public class Search {
             //fix to ignore the nodes that cannot route to dest
             while(pack.route.size() ==1)
             {
-                if(g.firstRun || g.pattern.size() <= x) {
+                if(g.firstRun) {
                     k = g.getZipfContent();
                     n = g.nodes.get(getNodeByProb(requesters, totalReqPerRound).nodeID);
                     pack = new Packet(n, k);
@@ -132,8 +121,18 @@ public class Search {
             pack.cacheEnabled = cacheEnabled;
             pack.time = maxtime;
             //Perform the search
-            Packet r = findContent(pack,attackers);
-            if(x >= startKeepingStats && !attackers.contains(r.src)) {
+            Packet r = findContent(pack);
+
+            //Send attack requests but don't track
+            if(attackers.contains(r.src)){
+                for(int a=0; a<AttackerRequestRate; a++) {
+                    Packet b = new Packet(r.src, r.search);
+                    b.cacheEnabled = cacheEnabled;
+                    b.time = maxtime;
+                    b = sendAttackerRequest(b, attackers);
+                }
+            }//end if
+            if(x >= startKeepingStats) {
                 if (r.cachehit)
                     cachehits++;
 
@@ -143,15 +142,14 @@ public class Search {
                 maxtime += p;
 
             if(x >= startKeepingStats && attackers.contains(r.src))
-                numUnpopularKept++;
+                numUnpopularKept+=AttackerRequestRate;
 
             //Add to pattern if first run
-            if(g.firstRun || g.pattern.size() <= x) {
+            if(g.firstRun) {
                 g.pattern.add(r);
             }
-            //Write each query out to text file
-            //writer.write("Test:"+x+" | Time:"+maxtime+" | Source:"+r.src.nodeID+" | Content:"+r.search.contentID+" | Destination:"+r.dest.nodeID+" | Data found on:"+r.referrer.nodeID+" | Number of hops:"+r.hops+" | Cache hit?:"+r.cachehit+"\r\n");
         }//end for
+
         //Testing for number of attacks run
         if(g.attackers.size() >=1)
         {
@@ -159,19 +157,15 @@ public class Search {
                 int unpop = attackers.get(a).numattacks;
                 numUnpopularTotal+=unpop;
             }
-
         }//end if
 
         numPopularKept = numTestsKept;
         System.out.println("Number of unpopular requests total: "+numUnpopularTotal);
         System.out.println("Number of unpopular requests kept: "+numUnpopularKept);
         System.out.println("Number of regular requests kept: "+numPopularKept);
-        //System.out.println("Maxtime: " + maxtime);
         percent = (double)cachehits/(double)numTests *100;
         System.out.println("Number of requests: "+ numTests);
-        //System.out.println("Number of hops in test: "+ totalHops);
         System.out.println("Cache Size: "+ cacheSize);
-        //System.out.println("Number of cache hits in test: "+ cachehits);
         System.out.println("Percentage of cache hits: "+ percent+"%");
 
         //Need to show just the regular reguests average
@@ -180,19 +174,11 @@ public class Search {
         //Set totals in packetTracer
         test.setTotals(cacheType,cacheSize,numTests,numAttackers,AttackerRequestRate,numTestsKept,numPopularKept,numUnpopularKept,totalHops,cachehits,averagehops);
 
-        //Write output to log file
-        //writer.write("Number of requests:"+numTests+" | Total number of hops:"+totalHops+" | Number of cache hits:"+cachehits+" | Percentage cache hits:"+percent+"%"+ " | Average hops per request"+ averagehops );
-       // } catch (IOException ex) {
-       //     System.out.println(ex);
-       // } finally {
-            //try {writer.close();} catch (Exception ex) {System.out.println(ex);}
-       // }
     return test;
     }//end runTest
 
-    public static Packet findContent(Packet p, ArrayList<AttackerNode> attackers){
+    public static Packet findContent(Packet p){
 
-        //System.out.println("Route" + p.route);
         int i = 0;
         while(!p.found)
         {
@@ -200,23 +186,48 @@ public class Search {
                 if(i+1 > p.route.size())
                     System.out.print("Test");
                 p.next = p.route.get(i + 1);
-                //Check if starting node is attack node
-                if(attackers.contains(p.route.get(i)))
-                {
-                   int index = attackers.indexOf(p.route.get(i));
-                   p = attackers.get(index).sendData(p);
 
-                }else {
-                    //else send data as usual
-                    p = p.route.get(i).sendData(p);
-                }
+                //send data as usual
+                p = p.route.get(i).sendData(p);
+
             }else{
                 //This should only occur if a content custodian makes a request, which should never happen
                 //System.out.println("Content is on the requesting node");
                 break;
             }
                 i++;
-        }
+        }//end while
+
+        return p;
+    }//end findContent
+
+    public static Packet sendAttackerRequest(Packet p, ArrayList<AttackerNode> attackers){
+
+        int i = 0;
+        while(!p.found)
+        {
+            if(p.dest != p.src && i < p.route.size()) {
+                if(i+1 > p.route.size())
+                    System.out.print("Test");
+                p.next = p.route.get(i + 1);
+
+                //Check if starting node is attack node
+                if(attackers.contains(p.route.get(i)))
+                {
+                int index = attackers.indexOf(p.route.get(i));
+                p = attackers.get(index).sendDataAttack(p);
+
+                }else {
+                //else send data as usual
+                p = p.route.get(i).sendData(p);
+                }
+            }else{
+                //This should only occur if a content custodian makes a request, which should never happen
+                //System.out.println("Content is on the requesting node");
+                break;
+            }
+            i++;
+        }//end while
 
         //Check if attacker is guessing characteristic time
         //If so and there is a cache hit, then a packet was returned from a source other than the custodian
