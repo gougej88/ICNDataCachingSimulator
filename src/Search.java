@@ -160,8 +160,8 @@ public class Search {
         }//end if
 
         numPopularKept = numTestsKept;
-        System.out.println("Number of unpopular requests total: "+numUnpopularTotal);
-        System.out.println("Number of unpopular requests kept: "+numUnpopularKept);
+        //System.out.println("Number of unpopular requests total: "+numUnpopularTotal);
+        System.out.println("Number of unpopular requests sent after 70% warm up: "+numUnpopularKept);
         System.out.println("Number of regular requests kept: "+numPopularKept);
         percent = (double)cachehits/(double)numTests *100;
         System.out.println("Number of requests: "+ numTests);

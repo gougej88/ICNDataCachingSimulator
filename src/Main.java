@@ -23,10 +23,11 @@ public class Main {
         double poissonRate = .65;
         double zipfianAlpha = .65;
         double percentCustodians = .20;
+        //Make this number divide into the number of custodians equally
         int numContentItems = 500;
         int AttackerRequestRate = 2;
         //Tested with square graphs of size = 25, and 100
-        int graphSize = 25;
+        int graphSize = 100;
 
         //When this is set make sure to only test with 0,1,and 2 attackers on the square graph only.
         //This should only be used for a quick test on graphSize=25
