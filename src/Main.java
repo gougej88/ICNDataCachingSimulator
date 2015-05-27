@@ -18,7 +18,7 @@ public class Main {
         int graphType = 2;
         int testsize = 10;
         int requestsPerTest = 100000;
-        Boolean useCharacteristicTimeAttack = false;
+        Boolean useCharacteristicTimeAttack = true;
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
         double zipfianAlpha = .65;
@@ -58,21 +58,21 @@ public class Main {
             attackers.add(4);
         }
         if(graphType==2) {
+            //1% Attackers
+            //attackers.add((int) (graphSize * .01));
+            //2% Attackers
+            //attackers.add((int)(graphSize*.02));
             //5% Attackers
-            attackers.add((int) (graphSize * .05));
-            //10% Attackers
-            //attackers.add((int)(graphSize*.1));
-            //20% Attackers
-            //attackers.add((int)(graphSize*.20));
+            attackers.add((int)(graphSize*.05));
         }
 
 
         //Loop for number of cache types (1,2,3)
-        for(int c = 1; c < 4; c++) {
+        for(int c = 1; c < 2; c++) {
             cacheType = c;
             ArrayList<PacketTracer> tests = new ArrayList<PacketTracer>();
             //Loop for number of unique cache sizes (0,10,20,30,40,50)
-            for (int y = 0; y < 6; y++) {
+            for (int y = 1; y < 2; y++) {
                 //Number of cache sizes tested. Used for stats computations
                 if(c==1){
                     cacheSizesTested++;
