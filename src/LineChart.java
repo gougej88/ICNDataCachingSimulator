@@ -82,8 +82,8 @@ public class LineChart extends JFrame {
 
                         //Print results to the console
                         System.out.println("Average hops for "+ numattackers[j]+" Attackers and LRU with cache size "+(j/attackers.size())*10+" = "+result[j]/testsPerSize);
-                        //System.out.println("Max hops for LRU with cache size "+j*10+" = "+max[j]);
-                        //System.out.println("Min hops for LRU with cache size "+j*10+" = "+min[j]);
+                        System.out.println("Max hops for LRU with cache size "+j*10+" = "+max[j]);
+                        System.out.println("Min hops for LRU with cache size "+j*10+" = "+min[j]);
                     }//end if lru cache
                     //FIFO
                     if(t==1) {
@@ -92,8 +92,8 @@ public class LineChart extends JFrame {
                         seriesFIFOCache.add(j*10,min[j]);
                         //Print results to the console
                         System.out.println("Average hops for "+ numattackers[j]+" Attackers and FIFO with cache size "+(j/attackers.size())*10+" = "+result[j]/testsPerSize);
-                        //System.out.println("Max hops for FIFO with cache size "+j*10+" = "+max[j]);
-                        //System.out.println("Min hops for FIFO with cache size "+j*10+" = "+min[j]);
+                        System.out.println("Max hops for FIFO with cache size "+j*10+" = "+max[j]);
+                        System.out.println("Min hops for FIFO with cache size "+j*10+" = "+min[j]);
                     }//end if fifo cache
                     //Random
                     if(t==2) {
@@ -103,8 +103,8 @@ public class LineChart extends JFrame {
 
                         //Print results to the console
                         System.out.println("Average hops for "+ numattackers[j]+" Attackers and Random with cache size "+(j/attackers.size())*10+" = "+result[j]/testsPerSize);
-                        //System.out.println("Max hops for Random with cache size "+j*10+" = "+max[j]);
-                        //System.out.println("Min hops for Random with cache size "+j*10+" = "+min[j]);
+                        System.out.println("Max hops for Random with cache size "+j*10+" = "+max[j]);
+                        System.out.println("Min hops for Random with cache size "+j*10+" = "+min[j]);
                     }//end if random cache
                 }//end for j
 
