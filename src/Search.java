@@ -123,10 +123,6 @@ public class Search {
             //Perform the search
             Packet r = findContent(pack);
 
-            if(g.firstRun && r.cachehit){
-                    g.patternCacheHit.add(x);
-            }//end if
-
             //Send attack requests but don't track
             if(attackers.contains(r.src)){
                 for(int a=0; a<AttackerRequestRate; a++) {
@@ -139,6 +135,11 @@ public class Search {
             if(x >= startKeepingStats) {
                 if (r.cachehit)
                     cachehits++;
+
+                //Add first run cache hits to tracked data
+                if(g.firstRun && r.cachehit){
+                    g.patternCacheHit.add(x);
+                }//end if
 
                 //check what results we are collecting
                 if (keepCacheHitsOnly) {

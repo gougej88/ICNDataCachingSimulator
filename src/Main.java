@@ -71,7 +71,7 @@ public class Main {
 
 
         //Loop for number of cache types (1,2,3)
-        for(int c = 1; c < 3; c++) {
+        for(int c = 1; c < 4; c++) {
             cacheType = c;
             ArrayList<PacketTracer> tests = new ArrayList<PacketTracer>();
             //Loop for number of unique cache sizes (0,10,20,30,40,50)
