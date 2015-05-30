@@ -7,7 +7,7 @@ import java.text.*;
 
 public class Search {
 
-    public static PacketTracer runTest(Graph g, int numTests, double poissonRate, int AttackerRequestRate, Boolean cacheEnabled){
+    public static PacketTracer runTest(Graph g, int numTests, double poissonRate, int AttackerRequestRate, Boolean cacheEnabled, Boolean keepCacheHitsOnly){
 
         //Get all nodes that are not content custodians, thus requesters
         ArrayList<Node> requesters = new ArrayList<Node>();
@@ -123,6 +123,10 @@ public class Search {
             //Perform the search
             Packet r = findContent(pack);
 
+            if(g.firstRun && r.cachehit){
+                    g.patternCacheHit.add(x);
+            }//end if
+
             //Send attack requests but don't track
             if(attackers.contains(r.src)){
                 for(int a=0; a<AttackerRequestRate; a++) {
@@ -130,15 +134,24 @@ public class Search {
                     b.cacheEnabled = cacheEnabled;
                     b.time = maxtime;
                     b = sendAttackerRequest(b, attackers);
-                }
+                }//end for
             }//end if
             if(x >= startKeepingStats) {
                 if (r.cachehit)
                     cachehits++;
 
-                totalHops += r.hops;
-                countRegularRequests++;
-            }
+                //check what results we are collecting
+                if (keepCacheHitsOnly) {
+                    //Track only cache hits from the first run
+                    if (g.patternCacheHit.contains(x)) {
+                        totalHops += r.hops;
+                        countRegularRequests++;
+                    }//end if
+                } else {
+                    totalHops += r.hops;
+                    countRegularRequests++;
+                }//end else
+            }//end if
                 maxtime += p;
 
             if(x >= startKeepingStats && attackers.contains(r.src))
@@ -159,6 +172,7 @@ public class Search {
             }
         }//end if
 
+
         numPopularKept = numTestsKept;
         //System.out.println("Number of unpopular requests total: "+numUnpopularTotal);
         System.out.println("Number of unpopular requests sent after 70% warm up: "+numUnpopularKept);
@@ -170,6 +184,12 @@ public class Search {
 
         //Need to show just the regular reguests average
         averagehops = (double)totalHops/(double)countRegularRequests;
+
+        //Fix for 0 cache size
+        if(countRegularRequests==0){
+            averagehops=0;
+        }//end if
+
         System.out.println("Average hops per request: "+ averagehops);
         //Set totals in packetTracer
         test.setTotals(cacheType,cacheSize,numTests,numAttackers,AttackerRequestRate,numTestsKept,numPopularKept,numUnpopularKept,totalHops,cachehits,averagehops);

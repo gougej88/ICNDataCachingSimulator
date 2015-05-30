@@ -32,6 +32,7 @@ public class Graph {
     ArrayList<Node> custodians = new ArrayList<Node>();
     ArrayList<Integer> custodianIndexes = new ArrayList<Integer>();
     ArrayList<Packet> pattern = new ArrayList<Packet>();
+    ArrayList<Integer> patternCacheHit = new ArrayList<Integer>();
     Boolean firstRun;
     Boolean useCharacteristicTimeAttack;
     Boolean dijkstraComputed;

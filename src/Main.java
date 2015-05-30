@@ -15,9 +15,9 @@ public class Main {
         //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
         //Graph type. 1 = square, 2= Gnutella
-        int graphType = 2;
-        int testsize = 10;
-        int requestsPerTest = 100000;
+        int graphType = 1;
+        int testsize = 5;
+        int requestsPerTest = 10000;
         Boolean useCharacteristicTimeAttack = true;
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
@@ -25,13 +25,16 @@ public class Main {
         double percentCustodians = .20;
         //Make this number divide into the number of custodians equally
         int numContentItems = 500;
-        int AttackerRequestRate = 2;
+        int AttackerRequestRate = 4;
         //Tested with square graphs of size = 25, and 100
         int graphSize = 100;
 
         //When this is set make sure to only test with 0,1,and 2 attackers on the square graph only.
         //This should only be used for a quick test on graphSize=25
         Boolean fixSquareGraph = false;
+
+        //Variable to set weather to keep stats on only cache hit packets or all of the last 30% of every test
+        Boolean keepCacheHitsOnly = true;
 
         int cacheSizesTested=0;
 
@@ -68,11 +71,11 @@ public class Main {
 
 
         //Loop for number of cache types (1,2,3)
-        for(int c = 1; c < 2; c++) {
+        for(int c = 1; c < 3; c++) {
             cacheType = c;
             ArrayList<PacketTracer> tests = new ArrayList<PacketTracer>();
             //Loop for number of unique cache sizes (0,10,20,30,40,50)
-            for (int y = 1; y < 2; y++) {
+            for (int y = 0; y < 6; y++) {
                 //Number of cache sizes tested. Used for stats computations
                 if(c==1){
                     cacheSizesTested++;
@@ -115,7 +118,7 @@ public class Main {
                             }else{
                                 usingCache=true;
                             }
-                            tests.add(Search.runTest(g, requestsPerTest, poissonRate, AttackerRequestRate, usingCache));
+                            tests.add(Search.runTest(g, requestsPerTest, poissonRate, AttackerRequestRate, usingCache, keepCacheHitsOnly));
 
 
 
