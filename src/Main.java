@@ -16,8 +16,8 @@ public class Main {
         //To change the number of tests change the integer for testsize
         //Graph type. 1 = square, 2= Gnutella
         int graphType = 1;
-        int testsize = 5;
-        int requestsPerTest = 10000;
+        int testsize = 10;
+        int requestsPerTest = 100000;
         Boolean useCharacteristicTimeAttack = true;
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
