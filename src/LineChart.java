@@ -19,9 +19,9 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class LineChart extends JFrame {
 
 
-    public LineChart(String applicationTitle, String chartTitle, Integer cacheSizesTested, ArrayList<ArrayList<PacketTracer>> tests, ArrayList<Integer> attacksPerTest) {
+    public LineChart(String applicationTitle, String chartTitle, Integer cacheSizesTested, Integer cacheSizeIncrement, ArrayList<ArrayList<PacketTracer>> tests, ArrayList<Integer> attacksPerTest) {
         super(applicationTitle);
-        XYDataset dataset = LoadData(cacheSizesTested, attacksPerTest, tests);
+        XYDataset dataset = LoadData(cacheSizesTested, cacheSizeIncrement, attacksPerTest, tests);
         JFreeChart chart = createChart(dataset, applicationTitle);
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
@@ -30,7 +30,7 @@ public class LineChart extends JFrame {
 
     }
 
-    private XYDataset LoadData(Integer cacheSizesTested, ArrayList<Integer> attackers, ArrayList<ArrayList<PacketTracer>> tests){
+    private XYDataset LoadData(Integer cacheSizesTested, Integer cacheSizeIncrement, ArrayList<Integer> attackers, ArrayList<ArrayList<PacketTracer>> tests){
         final XYSeries seriesLRUCache = new XYSeries("LRU Cache Average Hops");
         final XYSeries seriesFIFOCache = new XYSeries("FIFO Cache Average Hops");
         final XYSeries seriesRandomCache = new XYSeries("Random Cache Average Hops");
@@ -55,7 +55,7 @@ public class LineChart extends JFrame {
             double[] result = new double[cacheSizesTested*AttacksPerTest];
             int[] numattackers = new int[cacheSizesTested*AttacksPerTest];
             Arrays.fill(max,0);
-            Arrays.fill(min,10);
+            Arrays.fill(min,cacheSizeIncrement);
             testsPerSize =(singleTest.size()/cacheSizesTested)/AttacksPerTest;
 
                 //Loop on number of tests run
@@ -76,35 +76,35 @@ public class LineChart extends JFrame {
                 for (int j = 0; j < result.length; j++) {
                     //LRU
                     if(t==0) {
-                        seriesLRUCache.add(j*10, result[j] / testsPerSize);
-                        seriesLRUCache.add(j*10,max[j]);
-                        seriesLRUCache.add(j*10,min[j]);
+                        seriesLRUCache.add(j*cacheSizeIncrement, result[j] / testsPerSize);
+                        seriesLRUCache.add(j*cacheSizeIncrement,max[j]);
+                        seriesLRUCache.add(j*cacheSizeIncrement,min[j]);
 
                         //Print results to the console
-                        System.out.println("Average hops for "+ numattackers[j]+" Attackers and LRU with cache size "+(j/attackers.size())*10+" = "+result[j]/testsPerSize);
-                        System.out.println("Max hops for LRU with cache size "+(j/attackers.size())*10+" = "+max[j]);
-                        System.out.println("Min hops for LRU with cache size "+(j/attackers.size())*10+" = "+min[j]);
+                        System.out.println("Average hops for "+ numattackers[j]+" Attackers and LRU with cache size "+(j/attackers.size())*cacheSizeIncrement+" = "+result[j]/testsPerSize);
+                        System.out.println("Max hops for LRU with cache size "+(j/attackers.size())*cacheSizeIncrement+" = "+max[j]);
+                        System.out.println("Min hops for LRU with cache size "+(j/attackers.size())*cacheSizeIncrement+" = "+min[j]);
                     }//end if lru cache
                     //FIFO
                     if(t==1) {
-                        seriesFIFOCache.add(j*10, result[j] / testsPerSize);
-                        seriesFIFOCache.add(j*10,max[j]);
-                        seriesFIFOCache.add(j*10,min[j]);
+                        seriesFIFOCache.add(j*cacheSizeIncrement, result[j] / testsPerSize);
+                        seriesFIFOCache.add(j*cacheSizeIncrement,max[j]);
+                        seriesFIFOCache.add(j*cacheSizeIncrement,min[j]);
                         //Print results to the console
-                        System.out.println("Average hops for "+ numattackers[j]+" Attackers and FIFO with cache size "+(j/attackers.size())*10+" = "+result[j]/testsPerSize);
-                        System.out.println("Max hops for FIFO with cache size "+(j/attackers.size())*10+" = "+max[j]);
-                        System.out.println("Min hops for FIFO with cache size "+(j/attackers.size())*10+" = "+min[j]);
+                        System.out.println("Average hops for "+ numattackers[j]+" Attackers and FIFO with cache size "+(j/attackers.size())*cacheSizeIncrement+" = "+result[j]/testsPerSize);
+                        System.out.println("Max hops for FIFO with cache size "+(j/attackers.size())*cacheSizeIncrement+" = "+max[j]);
+                        System.out.println("Min hops for FIFO with cache size "+(j/attackers.size())*cacheSizeIncrement+" = "+min[j]);
                     }//end if fifo cache
                     //Random
                     if(t==2) {
-                        seriesRandomCache.add(j*10, result[j] / testsPerSize);
-                        seriesRandomCache.add(j*10,max[j]);
-                        seriesRandomCache.add(j*10,min[j]);
+                        seriesRandomCache.add(j*cacheSizeIncrement, result[j] / testsPerSize);
+                        seriesRandomCache.add(j*cacheSizeIncrement,max[j]);
+                        seriesRandomCache.add(j*cacheSizeIncrement,min[j]);
 
                         //Print results to the console
-                        System.out.println("Average hops for "+ numattackers[j]+" Attackers and Random with cache size "+(j/attackers.size())*10+" = "+result[j]/testsPerSize);
-                        System.out.println("Max hops for Random with cache size "+(j/attackers.size())*10+" = "+max[j]);
-                        System.out.println("Min hops for Random with cache size "+(j/attackers.size())*10+" = "+min[j]);
+                        System.out.println("Average hops for "+ numattackers[j]+" Attackers and Random with cache size "+(j/attackers.size())*cacheSizeIncrement+" = "+result[j]/testsPerSize);
+                        System.out.println("Max hops for Random with cache size "+(j/attackers.size())*cacheSizeIncrement+" = "+max[j]);
+                        System.out.println("Min hops for Random with cache size "+(j/attackers.size())*cacheSizeIncrement+" = "+min[j]);
                     }//end if random cache
                 }//end for j
 

@@ -11,6 +11,7 @@ public class Main {
         //Create graph grid of nodes(length, width, cacheSize)
         Graph g = null;
         Boolean usingCache = true;
+        int cacheSizesTested=0;
 
         //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
@@ -24,10 +25,12 @@ public class Main {
         double zipfianAlpha = .65;
         double percentCustodians = .20;
         //Make this number divide into the number of custodians equally
-        int numContentItems = 500;
+        int numContentItems = 1000;
         int AttackerRequestRate = 4;
         //Tested with square graphs of size = 25, and 100
         int graphSize = 100;
+        //Tested with increments of 5 and 10 cache sizes
+        int cacheSizeIncrement = 5;
 
         //When this is set make sure to only test with 0,1,and 2 attackers on the square graph only.
         //This should only be used for a quick test on graphSize=25
@@ -35,8 +38,6 @@ public class Main {
 
         //Variable to set weather to keep stats on only cache hit packets or all of the last 30% of every test
         Boolean keepCacheHitsOnly = true;
-
-        int cacheSizesTested=0;
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType;
@@ -55,10 +56,10 @@ public class Main {
         //Make sure to always start with 0 attackers
         attackers.add(0);
         if(graphType==1){
-            attackers.add(1);
             attackers.add(2);
-            //attackers.add(3);
             attackers.add(4);
+            //attackers.add(3);
+            attackers.add(8);
         }
         if(graphType==2) {
             //1% Attackers
@@ -81,9 +82,9 @@ public class Main {
                     cacheSizesTested++;
                 }
                 //Testing results showed around 120% was best for attack
-                int unpopPerCache = (int)((y*10)*1.2);
+                int unpopPerCache = (int)((y*cacheSizeIncrement)*1.2);
                 if(unpopPerCache==0)
-                    unpopPerCache=10;
+                    unpopPerCache=cacheSizeIncrement;
 
                     //Start test
                     //Loop on types of attacks
@@ -100,7 +101,7 @@ public class Main {
                             //SQUARE GRAPH
                             //Create square graph(x,y,cacheSize,alpha, cacheType, numAttackers, numUnpopularItems, numContentItems)
                             if (a == 0 && n == 0) {
-                                g = new Graph(graphType, graphSize, y * 10, zipfianAlpha, cacheType, attackers.get(a), unpopPerCache, percentCustodians, numContentItems, requestsPerTest, useCharacteristicTimeAttack, fixSquareGraph);
+                                g = new Graph(graphType, graphSize, y * cacheSizeIncrement, zipfianAlpha, cacheType, attackers.get(a), unpopPerCache, percentCustodians, numContentItems, requestsPerTest, useCharacteristicTimeAttack, fixSquareGraph);
                                 g.firstRun = true;
                                 g.createGraph();
                             } else {
@@ -139,7 +140,7 @@ public class Main {
             System.out.println("Attack metrics used DO NOT USE characteristic time. These attacks request unpopular for every attacker request.");
         }
         System.out.println("Request Rate used = "+AttackerRequestRate);
-        LineChart demo = new LineChart("Average hops per request. Alpha:"+zipfianAlpha +" Nodes:25 Requests per test:"+requestsPerTest+" Number of tests:"+testsize,"Average hops per request",cacheSizesTested, allTests, attackers);
+        LineChart demo = new LineChart("Average hops per request. Alpha:"+zipfianAlpha +" Nodes:25 Requests per test:"+requestsPerTest+" Number of tests:"+testsize,"Average hops per request",cacheSizesTested, cacheSizeIncrement, allTests, attackers);
        // demo.pack();
         //demo.setVisible(true);
 
