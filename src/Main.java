@@ -56,10 +56,17 @@ public class Main {
         //Make sure to always start with 0 attackers
         attackers.add(0);
         if(graphType==1){
-            attackers.add(2);
-            attackers.add(4);
-            //attackers.add(3);
-            attackers.add(8);
+            if(graphSize==100) {
+                attackers.add(2);
+                attackers.add(4);
+                attackers.add(8);
+                attackers.add(16);
+            }
+            if(graphSize==25){
+                attackers.add(1);
+                attackers.add(2);
+                attackers.add(4);
+            }
         }
         if(graphType==2) {
             //1% Attackers
