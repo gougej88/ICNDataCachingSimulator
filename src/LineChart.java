@@ -55,7 +55,8 @@ public class LineChart extends JFrame {
             double[] result = new double[cacheSizesTested*AttacksPerTest];
             int[] numattackers = new int[cacheSizesTested*AttacksPerTest];
             Arrays.fill(max,0);
-            Arrays.fill(min,cacheSizeIncrement);
+            //Fill the min array with values that are as large as the most number of hops a test can take. Starting with 10
+            Arrays.fill(min,10);
             testsPerSize =(singleTest.size()/cacheSizesTested)/AttacksPerTest;
 
                 //Loop on number of tests run

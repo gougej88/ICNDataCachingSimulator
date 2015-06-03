@@ -22,7 +22,7 @@ public class Main {
         Boolean useCharacteristicTimeAttack = true;
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
-        double zipfianAlpha = .65;
+        double zipfianAlpha = .35;
         double percentCustodians = .20;
         //Make this number divide into the number of custodians equally
         int numContentItems = 1000;
