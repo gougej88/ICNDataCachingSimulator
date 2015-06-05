@@ -18,7 +18,7 @@ public class Main {
         //Graph type. 1 = square, 2= Gnutella6301, 3=Gnutella8846
         int graphType = 3;
         int testsize = 10;
-        int requestsPerTest = 100000;
+        int requestsPerTest = 1000;
         Boolean useCharacteristicTimeAttack = false;
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
