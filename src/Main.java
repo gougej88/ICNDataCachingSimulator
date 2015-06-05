@@ -18,7 +18,7 @@ public class Main {
         //Graph type. 1 = square, 2= Gnutella6301, 3=Gnutella8846
         int graphType = 3;
         int testsize = 10;
-        int requestsPerTest = 1000;
+        int requestsPerTest = 100000;
         Boolean useCharacteristicTimeAttack = false;
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
@@ -110,6 +110,8 @@ public class Main {
             attackers.add((int)(graphSize*.16));
         }
 
+        System.out.println("Starting simulation. Variables - GraphType:"+graphType+" UsingCharacteristicTime:"+useCharacteristicTimeAttack+" ZipfianAlpha:"+ zipfianAlpha+" AttackerRequestRate:"+AttackerRequestRate);
+
 
         //Loop for number of cache types (1,2,3)
         for(int c = cacheTypeStart; c < cacheTypeEnd; c++) {
@@ -149,11 +151,11 @@ public class Main {
                                 g.resetGraphStats();
                             }
                             //Run without cache
-                            System.out.println("Test Number: " + n);
+                            //System.out.println("Test Number: " + n);
                             double requestRateString = AttackerRequestRate;
                             if(attackers.get(a)==0)
                                 requestRateString=0;
-                            System.out.println("Number of attackers-rate: " + attackers.get(a) + "-" + requestRateString);
+                            //System.out.println("Number of attackers-rate: " + attackers.get(a) + "-" + requestRateString);
                             if(y==0){
                                 usingCache=false;
                             }else{

@@ -16,7 +16,7 @@ public class Search {
         int countRegularRequests = 0;
 
         if(g.graphType==2 || g.graphType==3) {
-            System.out.println("Starting Dijkstra's algorithm. This could take some time on large graphs");
+            //System.out.println("Starting Dijkstra's algorithm. This could take some time on large graphs");
         }
         for(int j=0; j<g.size; j++)
         {
@@ -83,7 +83,7 @@ public class Search {
         int numUnpopularTotal = 0;
 
         if(g.graphType==2 || g.graphType==3) {
-            System.out.println("Starting test. Running " + numTests + " with a large graph could take some time.");
+            //System.out.println("Starting test. Running " + numTests + " with a large graph could take some time.");
         }
         for(int x=0; x<numTests; x++) {
 
@@ -176,12 +176,12 @@ public class Search {
 
         numPopularKept = numTestsKept;
         //System.out.println("Number of unpopular requests total: "+numUnpopularTotal);
-        System.out.println("Number of unpopular requests sent after 70% warm up: "+numUnpopularKept);
-        System.out.println("Number of regular requests kept: "+numPopularKept);
+        //System.out.println("Number of unpopular requests sent after 70% warm up: "+numUnpopularKept);
+        //System.out.println("Number of regular requests kept: "+numPopularKept);
         percent = (double)cachehits/(double)numTests *100;
-        System.out.println("Number of requests: "+ numTests);
-        System.out.println("Cache Size: "+ cacheSize);
-        System.out.println("Percentage of cache hits: "+ percent+"%");
+        //System.out.println("Number of requests: "+ numTests);
+        //System.out.println("Cache Size: "+ cacheSize);
+        //System.out.println("Percentage of cache hits: "+ percent+"%");
 
         //Need to show just the regular reguests average
         averagehops = (double)totalHops/(double)countRegularRequests;
@@ -191,7 +191,7 @@ public class Search {
             averagehops=0;
         }//end if
 
-        System.out.println("Average hops per request: "+ averagehops);
+        //System.out.println("Average hops per request: "+ averagehops);
         //Set totals in packetTracer
         test.setTotals(cacheType,cacheSize,numTests,numAttackers,AttackerRequestRate,numTestsKept,numPopularKept,numUnpopularKept,totalHops,cachehits,averagehops);
 
