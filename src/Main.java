@@ -16,7 +16,7 @@ public class Main {
         //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
         //Graph type. 1 = square, 2= Gnutella6301, 3=Gnutella8846
-        int graphType = 3;
+        int graphType = 1;
         int testsize = 10;
         int requestsPerTest = 100000;
         Boolean useCharacteristicTimeAttack = false;
@@ -67,6 +67,7 @@ public class Main {
                 }//end catch
             }else{
                 System.out.println("Please enter the correct number of input arguments or leave it empty for defaults.");
+                System.exit(1);
             }//end else
         }//end if
 
@@ -186,7 +187,8 @@ public class Main {
        // demo.pack();
         //demo.setVisible(true);
 
-
+        System.out.println("");
+        System.out.println("");
 
 
     }
