@@ -1,5 +1,5 @@
 import java.util.*;
-
+import java.util.concurrent.Exchanger;
 
 
 public class Main {
@@ -41,9 +41,34 @@ public class Main {
 
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType;
+        int cacheTypeStart = 1;
+        int cacheTypeEnd = 2;
+        int cacheSizeStart = 1;
+        int cacheSizeEnd = 2;
         //Add attack types to test
         ArrayList<Integer> attackers = new ArrayList<Integer>();
 
+        //Optional variables for running large graphs one at a time
+        if(args.length > 0) {
+            if (args.length > 7) {
+                try {
+                    graphType = Integer.parseInt(args[0]);
+                    useCharacteristicTimeAttack = Boolean.parseBoolean(args[1]);
+                    zipfianAlpha = Double.parseDouble(args[2]);
+                    AttackerRequestRate = Integer.parseInt(args[3]);
+                    cacheTypeStart = Integer.parseInt(args[4]);
+                    cacheTypeEnd = Integer.parseInt(args[5]);
+                    cacheSizeStart = Integer.parseInt(args[6]);
+                    cacheSizeEnd = Integer.parseInt(args[7]);
+                } catch (Exception e) {
+                    System.out.println(e.toString());
+                    System.out.println("Input argument was incorrect. Please fix.");
+                    System.exit(1);
+                }//end catch
+            }else{
+                System.out.println("Please enter the correct number of input arguments or leave it empty for defaults.");
+            }//end else
+        }//end if
 
         if(graphType==2){
             graphSize=6301;
@@ -87,11 +112,11 @@ public class Main {
 
 
         //Loop for number of cache types (1,2,3)
-        for(int c = 1; c < 2; c++) {
+        for(int c = cacheTypeStart; c < cacheTypeEnd; c++) {
             cacheType = c;
             ArrayList<PacketTracer> tests = new ArrayList<PacketTracer>();
             //Loop for number of unique cache sizes (0,10,20,30,40,50)
-            for (int y = 1; y < 2; y++) {
+            for (int y = cacheSizeStart; y < cacheSizeEnd; y++) {
                 //Number of cache sizes tested. Used for stats computations
                 if(c==1){
                     cacheSizesTested++;
