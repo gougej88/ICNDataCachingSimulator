@@ -117,7 +117,7 @@ public class Main {
             //Loop for number of unique cache sizes (0,10,20,30,40,50)
             for (int y = cacheSizeStart; y < cacheSizeEnd; y++) {
                 //Number of cache sizes tested. Used for stats computations
-                if(c==1){
+                if(c==cacheTypeStart){
                     cacheSizesTested++;
                 }
                 //Testing results showed around 120% was best for attack
