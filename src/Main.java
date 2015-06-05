@@ -47,19 +47,21 @@ public class Main {
         int cacheSizeEnd = 2;
         //Add attack types to test
         ArrayList<Integer> attackers = new ArrayList<Integer>();
+        double percentAttackers = .16;
 
         //Optional variables for running large graphs one at a time
         if(args.length > 0) {
-            if (args.length > 7) {
+            if (args.length > 8) {
                 try {
                     graphType = Integer.parseInt(args[0]);
                     useCharacteristicTimeAttack = Boolean.parseBoolean(args[1]);
                     zipfianAlpha = Double.parseDouble(args[2]);
                     AttackerRequestRate = Integer.parseInt(args[3]);
-                    cacheTypeStart = Integer.parseInt(args[4]);
-                    cacheTypeEnd = Integer.parseInt(args[5]);
-                    cacheSizeStart = Integer.parseInt(args[6]);
-                    cacheSizeEnd = Integer.parseInt(args[7]);
+                    percentAttackers = Double.parseDouble(args[4]);
+                    cacheTypeStart = Integer.parseInt(args[5]);
+                    cacheTypeEnd = Integer.parseInt(args[6]);
+                    cacheSizeStart = Integer.parseInt(args[7]);
+                    cacheSizeEnd = Integer.parseInt(args[8]);
                 } catch (Exception e) {
                     System.out.println(e.toString());
                     System.out.println("Input argument was incorrect. Please fix.");
@@ -101,17 +103,11 @@ public class Main {
             }
         }
         if(graphType==2 || graphType==3) {
-            //1% Attackers
-            //attackers.add((int) (graphSize * .01));
-            //2% Attackers
-            //attackers.add((int)(graphSize*.02));
-            //5% Attackers
-            //attackers.add((int)(graphSize*.05));
-            //10% Attackers
-            attackers.add((int)(graphSize*.16));
+            //X% Attackers
+            attackers.add((int)(graphSize*percentAttackers));
         }
 
-        System.out.println("Starting simulation. Variables - GraphType:"+graphType+" UsingCharacteristicTime:"+useCharacteristicTimeAttack+" ZipfianAlpha:"+ zipfianAlpha+" AttackerRequestRate:"+AttackerRequestRate);
+        System.out.println("Starting simulation. Variables - GraphType:"+graphType+" UsingCharacteristicTime:"+useCharacteristicTimeAttack+" ZipfianAlpha:"+ zipfianAlpha+" AttackerRequestRate:"+AttackerRequestRate+" PercentAttackers:"+percentAttackers);
 
 
         //Loop for number of cache types (1,2,3)
