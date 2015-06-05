@@ -15,14 +15,14 @@ public class Main {
 
         //Run a test(graph, number of requests to perform, cache enabled, number of attackers)
         //To change the number of tests change the integer for testsize
-        //Graph type. 1 = square, 2= Gnutella
-        int graphType = 1;
+        //Graph type. 1 = square, 2= Gnutella6301, 3=Gnutella8846
+        int graphType = 3;
         int testsize = 10;
         int requestsPerTest = 100000;
-        Boolean useCharacteristicTimeAttack = true;
+        Boolean useCharacteristicTimeAttack = false;
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
-        double zipfianAlpha = .35;
+        double zipfianAlpha = .65;
         double percentCustodians = .20;
         //Make this number divide into the number of custodians equally
         int numContentItems = 1000;
@@ -51,6 +51,12 @@ public class Main {
             numContentItems=2000;
             fixSquareGraph=false;
         }
+        if(graphType==3){
+            graphSize=8846;
+            percentCustodians = .05;
+            numContentItems=2000;
+            fixSquareGraph=false;
+        }
 
 
         //Make sure to always start with 0 attackers
@@ -68,22 +74,24 @@ public class Main {
                 attackers.add(4);
             }
         }
-        if(graphType==2) {
+        if(graphType==2 || graphType==3) {
             //1% Attackers
             //attackers.add((int) (graphSize * .01));
             //2% Attackers
             //attackers.add((int)(graphSize*.02));
             //5% Attackers
-            attackers.add((int)(graphSize*.05));
+            //attackers.add((int)(graphSize*.05));
+            //10% Attackers
+            attackers.add((int)(graphSize*.16));
         }
 
 
         //Loop for number of cache types (1,2,3)
-        for(int c = 1; c < 4; c++) {
+        for(int c = 1; c < 2; c++) {
             cacheType = c;
             ArrayList<PacketTracer> tests = new ArrayList<PacketTracer>();
             //Loop for number of unique cache sizes (0,10,20,30,40,50)
-            for (int y = 0; y < 6; y++) {
+            for (int y = 1; y < 2; y++) {
                 //Number of cache sizes tested. Used for stats computations
                 if(c==1){
                     cacheSizesTested++;

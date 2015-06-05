@@ -100,7 +100,10 @@ public class Graph {
             setEdgesSquareGraph();
         }
         if(graphType==2){
-            setEdges();
+            setEdges(graphType);
+        }
+        if(graphType==3){
+            setEdges(graphType);
         }
         //Make 20% of the nodes content custodians and assign content to each one
         createContentCustodians(percentCustodians);
@@ -135,13 +138,20 @@ public class Graph {
 
     }//end createGraph()
 
-    public void setEdges(){
+    public void setEdges(int type){
         //Open the file and set edges
         //One per line, fromNode [tab] toNode
+        String filename = "";
+        if(type==2){
+            filename = "./graphs/p2p-Gnutella08.txt";
+        }//end if
+        if(type==3){
+            filename = "./graphs/p2p-Gnutella05.txt";
+        }//end if
         List<Map<Integer,Integer>> edges = new ArrayList<Map<Integer, Integer>>();
         try {
 
-            String filename = "./graphs/p2p-Gnutella08.txt";
+
             BufferedReader bReader = new BufferedReader(new FileReader(filename));
             String line;
             while ((line = bReader.readLine()) != null) {
@@ -405,8 +415,8 @@ public class Graph {
                     if(graphType==1) {
                         setEdgesSquareGraph();
                     }
-                    if(graphType==2){
-                        setEdges();
+                    if(graphType==2 || graphType==3){
+                        setEdges(graphType);
                     }
 
                     distributeContentCustodians();

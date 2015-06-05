@@ -15,7 +15,7 @@ public class Search {
         ArrayList<AttackerNode> attackers = new ArrayList<AttackerNode>();
         int countRegularRequests = 0;
 
-        if(g.graphType==2) {
+        if(g.graphType==2 || g.graphType==3) {
             System.out.println("Starting Dijkstra's algorithm. This could take some time on large graphs");
         }
         for(int j=0; j<g.size; j++)
@@ -82,7 +82,7 @@ public class Search {
         int numPopularKept = 0;
         int numUnpopularTotal = 0;
 
-        if(g.graphType==2) {
+        if(g.graphType==2 || g.graphType==3) {
             System.out.println("Starting test. Running " + numTests + " with a large graph could take some time.");
         }
         for(int x=0; x<numTests; x++) {
