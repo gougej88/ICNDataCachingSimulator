@@ -19,16 +19,16 @@ public class Main {
         int graphType = 1;
         int testsize = 10;
         int requestsPerTest = 100000;
-        Boolean useCharacteristicTimeAttack = false;
+        Boolean compareSmartAttack = true;
         //Not used for request rate. Using popularity distribution
         double poissonRate = .65;
         double zipfianAlpha = .65;
         double percentCustodians = .20;
         //Make this number divide into the number of custodians equally
-        int numContentItems = 1000;
-        int AttackerRequestRate = 4;
+        int numContentItems = 250;
+        int AttackerRequestRate = 2;
         //Tested with square graphs of size = 25, and 100
-        int graphSize = 100;
+        int graphSize = 25;
         //Tested with increments of 5 and 10 cache sizes
         int cacheSizeIncrement = 5;
 
@@ -42,9 +42,9 @@ public class Main {
         //1 = LRU, 2 = FIFO, 3=Random
         int cacheType;
         int cacheTypeStart = 1;
-        int cacheTypeEnd = 2;
+        int cacheTypeEnd = 4;
         int cacheSizeStart = 1;
-        int cacheSizeEnd = 2;
+        int cacheSizeEnd = 6;
         //Add attack types to test
         ArrayList<Integer> attackers = new ArrayList<Integer>();
         double percentAttackers = .16;
@@ -54,7 +54,7 @@ public class Main {
             if (args.length > 8) {
                 try {
                     graphType = Integer.parseInt(args[0]);
-                    useCharacteristicTimeAttack = Boolean.parseBoolean(args[1]);
+                    compareSmartAttack = Boolean.parseBoolean(args[1]);
                     zipfianAlpha = Double.parseDouble(args[2]);
                     AttackerRequestRate = Integer.parseInt(args[3]);
                     percentAttackers = Double.parseDouble(args[4]);
@@ -107,9 +107,15 @@ public class Main {
             attackers.add((int)(graphSize*percentAttackers));
         }
 
-        System.out.println("Starting simulation. Variables - GraphType:"+graphType+" UsingCharacteristicTime:"+useCharacteristicTimeAttack+" ZipfianAlpha:"+ zipfianAlpha+" AttackerRequestRate:"+AttackerRequestRate+" PercentAttackers:"+percentAttackers);
+        System.out.println("Starting simulation. Variables - GraphType:"+graphType+" CompareSmartAttack:"+compareSmartAttack+" ZipfianAlpha:"+ zipfianAlpha+" AttackerRequestRate:"+AttackerRequestRate+" PercentAttackers:"+percentAttackers);
 
 
+        Boolean useCharacteristicTimeAttack = false;
+        int s = 1;
+        //Loop on smart attack
+        if(compareSmartAttack){
+            s = 2;
+        }//end if
         //Loop for number of cache types (1,2,3)
         for(int c = cacheTypeStart; c < cacheTypeEnd; c++) {
             cacheType = c;
@@ -134,36 +140,47 @@ public class Main {
                             g.addAttackersToExistingGraph(attackers.get(a));
 
                         }//end if
-                        //Loop number of tests per attack
-                        for (int n = 0; n < testsize; n++) {
-
-                            //SQUARE GRAPH
-                            //Create square graph(x,y,cacheSize,alpha, cacheType, numAttackers, numUnpopularItems, numContentItems)
-                            if (a == 0 && n == 0) {
-                                g = new Graph(graphType, graphSize, y * cacheSizeIncrement, zipfianAlpha, cacheType, attackers.get(a), unpopPerCache, percentCustodians, numContentItems, requestsPerTest, useCharacteristicTimeAttack, fixSquareGraph);
-                                g.firstRun = true;
-                                g.createGraph();
-                            } else {
-                                g.firstRun = false;
-                                g.resetGraphStats();
-                            }
-                            //Run without cache
-                            //System.out.println("Test Number: " + n);
-                            double requestRateString = AttackerRequestRate;
-                            if(attackers.get(a)==0)
-                                requestRateString=0;
-                            //System.out.println("Number of attackers-rate: " + attackers.get(a) + "-" + requestRateString);
-                            if(y==0){
-                                usingCache=false;
-                            }else{
-                                usingCache=true;
-                            }
-                            tests.add(Search.runTest(g, requestsPerTest, poissonRate, AttackerRequestRate, usingCache, keepCacheHitsOnly));
 
 
+                        //Loop on smart attack on and off
+                        for(int l = 0; l < s; l++) {
 
-                        }//end for loop number of tests per attack
+                            if(l==1) {
+                                g.useCharacteristicTimeAttack = true;
+                            }//end if
 
+                            //Loop number of tests per attack
+                            for (int n = 0; n < testsize; n++) {
+
+                                //SQUARE GRAPH
+                                //Create square graph(x,y,cacheSize,alpha, cacheType, numAttackers, numUnpopularItems, numContentItems)
+                                if (a == 0 && l == 0 && n == 0) {
+                                    g = new Graph(graphType, graphSize, y * cacheSizeIncrement, zipfianAlpha, cacheType, attackers.get(a), unpopPerCache, percentCustodians, numContentItems, requestsPerTest, useCharacteristicTimeAttack, fixSquareGraph);
+                                    g.firstRun = true;
+                                    g.createGraph();
+                                } else {
+                                    g.firstRun = false;
+                                    g.resetGraphStats();
+                                }
+                                //Run without cache
+                                //System.out.println("Test Number: " + n);
+                                double requestRateString = AttackerRequestRate;
+                                if (attackers.get(a) == 0)
+                                    requestRateString = 0;
+                                //System.out.println("Number of attackers-rate: " + attackers.get(a) + "-" + requestRateString);
+                                if (y == 0) {
+                                    usingCache = false;
+                                } else {
+                                    usingCache = true;
+                                }
+                                tests.add(Search.runTest(g, requestsPerTest, poissonRate, AttackerRequestRate, usingCache, keepCacheHitsOnly));
+
+
+                            }//end for loop number of tests per attack
+
+                            //reset smart attack variable
+                            g.useCharacteristicTimeAttack = false;
+                        }//end for loop for smart attack on and off
 
                     }//end for loop types of attacks
 

@@ -191,7 +191,7 @@ public class Search {
             averagehops=0;
         }//end if
 
-        System.out.println("Cache type:"+cacheType+" cache size:"+cacheSize+" attackers:"+numAttackers+" request rate:"+AttackerRequestRate+"  Average hops: " + averagehops);
+        System.out.println("Cache type:"+cacheType+" cache size:"+cacheSize+" attackers:"+numAttackers+" request rate:"+AttackerRequestRate+" Smart attack:"+g.useCharacteristicTimeAttack +"  Average hops: " + averagehops);
         //Set totals in packetTracer
         test.setTotals(cacheType,cacheSize,numTests,numAttackers,AttackerRequestRate,numTestsKept,numPopularKept,numUnpopularKept,totalHops,cachehits,averagehops);
 
