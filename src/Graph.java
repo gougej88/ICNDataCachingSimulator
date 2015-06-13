@@ -359,7 +359,7 @@ public class Graph {
         }
         for(AttackerNode a : attackers){
             //Reset all stats for each attacker
-            a.resetAttackerStats();
+            a.resetAttackerStats(useCharacteristicTimeAttack);
         }
     }//end resetGraphStats()
 

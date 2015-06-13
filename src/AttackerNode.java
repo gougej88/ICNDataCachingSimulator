@@ -339,13 +339,20 @@ public class AttackerNode extends Node {
         return result;
     }
 
-    public void resetAttackerStats(){
+    public void resetAttackerStats(Boolean useSmartAttack){
 
         numRequestsServed=0;
         numRequestsTotal=0;
         numattacks=0;
         allPacketsFromCustodian=true;
         characteristicTimeGuess=1;
+
+        if(useSmartAttack){
+            donePolling=false;
+            readyToAttack=false;
+        }
+
+
     }//end resetAttackerStats
 
     public void getUnpopularContent() {
