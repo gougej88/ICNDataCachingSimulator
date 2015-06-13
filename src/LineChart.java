@@ -19,9 +19,9 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class LineChart extends JFrame {
 
 
-    public LineChart(String applicationTitle, String chartTitle, Integer cacheSizesTested, Integer cacheSizeIncrement, ArrayList<ArrayList<PacketTracer>> tests, ArrayList<Integer> attacksPerTest) {
+    public LineChart(String applicationTitle, String chartTitle, Integer cacheSizesTested, Integer cacheSizeIncrement, Boolean useSmartAttack, ArrayList<ArrayList<PacketTracer>> tests, ArrayList<Integer> attacksPerTest) {
         super(applicationTitle);
-        XYDataset dataset = LoadData(cacheSizesTested, cacheSizeIncrement, attacksPerTest, tests);
+        XYDataset dataset = LoadData(cacheSizesTested, cacheSizeIncrement, useSmartAttack, attacksPerTest, tests);
         JFreeChart chart = createChart(dataset, applicationTitle);
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
@@ -30,14 +30,19 @@ public class LineChart extends JFrame {
 
     }
 
-    private XYDataset LoadData(Integer cacheSizesTested, Integer cacheSizeIncrement, ArrayList<Integer> attackers, ArrayList<ArrayList<PacketTracer>> tests){
+    private XYDataset LoadData(Integer cacheSizesTested, Integer cacheSizeIncrement, Boolean useSmartAttack, ArrayList<Integer> attackers, ArrayList<ArrayList<PacketTracer>> tests){
         final XYSeries seriesLRUCache = new XYSeries("LRU Cache Average Hops");
         final XYSeries seriesFIFOCache = new XYSeries("FIFO Cache Average Hops");
         final XYSeries seriesRandomCache = new XYSeries("Random Cache Average Hops");
         int testsPerSize= 0;
         double numTestsKept= 0;
         int AttacksPerTest = attackers.size();
+        Boolean usingSmartAttack = useSmartAttack;
 
+        int s=1;
+        if(usingSmartAttack){
+            s=2;
+        }
         ArrayList<PacketTracer> singleTest = new ArrayList<PacketTracer>();
 
         //Print space for final numbers to console
@@ -51,14 +56,16 @@ public class LineChart extends JFrame {
             //change all values back to 6
             singleTest = tests.get(t);
             int startCacheSize = singleTest.get(0).cacheSize;
-            double[] max = new double[cacheSizesTested*AttacksPerTest];
-            double[] min = new double[cacheSizesTested*AttacksPerTest];
-            double[] result = new double[cacheSizesTested*AttacksPerTest];
-            int[] numattackers = new int[cacheSizesTested*AttacksPerTest];
+            double[] max = new double[cacheSizesTested*AttacksPerTest*s];
+            double[] min = new double[cacheSizesTested*AttacksPerTest*s];
+            double[] result = new double[cacheSizesTested*AttacksPerTest*s];
+            int[] numattackers = new int[cacheSizesTested*AttacksPerTest*s];
             Arrays.fill(max,0);
             //Fill the min array with values that are as large as the most number of hops a test can take. Starting with 10
             Arrays.fill(min,10);
-            testsPerSize =(singleTest.size()/cacheSizesTested)/AttacksPerTest;
+
+
+            testsPerSize =((singleTest.size()/cacheSizesTested)/AttacksPerTest)/s;
 
                 //Loop on number of tests run
                 for (int i = 0; i < singleTest.size(); i++) {
@@ -76,6 +83,13 @@ public class LineChart extends JFrame {
                 //Divide the result sums by the number of tests and add to series
                 //Loop on tests
                 for (int j = 0; j < result.length; j++) {
+                    String smartAttackString;
+                    if(j%2 == 0){
+                        smartAttackString = "false";
+                    }else{
+                        smartAttackString = "true";
+                    }
+
                     //LRU
                     if(t==0) {
                         seriesLRUCache.add(j*cacheSizeIncrement, result[j] / testsPerSize);
@@ -83,9 +97,9 @@ public class LineChart extends JFrame {
                         seriesLRUCache.add(j*cacheSizeIncrement,min[j]);
 
                         //Print results to the console
-                        System.out.println("Average hops for "+ numattackers[j]+" Attackers and LRU with cache size "+(startCacheSize+((j/attackers.size())*cacheSizeIncrement))+" = "+result[j]/testsPerSize);
-                        System.out.println("Max hops for LRU with cache size "+(startCacheSize+((j/attackers.size())*cacheSizeIncrement))+" = "+max[j]);
-                        System.out.println("Min hops for LRU with cache size "+(startCacheSize+((j/attackers.size())*cacheSizeIncrement))+" = "+min[j]);
+                        System.out.println("Average hops for "+ numattackers[j]+" Attackers, smart attack = " +smartAttackString +" and LRU with cache size "+(startCacheSize+((j/(attackers.size()*s))*cacheSizeIncrement))+" = "+result[j]/testsPerSize);
+                        System.out.println("Max hops for LRU with cache size "+(startCacheSize+((j/(attackers.size()*s))*cacheSizeIncrement))+" = "+max[j]);
+                        System.out.println("Min hops for LRU with cache size "+(startCacheSize+((j/(attackers.size()*s))*cacheSizeIncrement))+" = "+min[j]);
                     }//end if lru cache
                     //FIFO
                     if(t==1) {
@@ -93,9 +107,9 @@ public class LineChart extends JFrame {
                         seriesFIFOCache.add(j*cacheSizeIncrement,max[j]);
                         seriesFIFOCache.add(j*cacheSizeIncrement,min[j]);
                         //Print results to the console
-                        System.out.println("Average hops for "+ numattackers[j]+" Attackers and FIFO with cache size "+(startCacheSize+((j/attackers.size())*cacheSizeIncrement))+" = "+result[j]/testsPerSize);
-                        System.out.println("Max hops for FIFO with cache size "+(startCacheSize+((j/attackers.size())*cacheSizeIncrement))+" = "+max[j]);
-                        System.out.println("Min hops for FIFO with cache size "+(startCacheSize+((j/attackers.size())*cacheSizeIncrement))+" = "+min[j]);
+                        System.out.println("Average hops for "+ numattackers[j]+" Attackers, smart attack = " +smartAttackString +" and FIFO with cache size "+(startCacheSize+((j/(attackers.size()*s))*cacheSizeIncrement))+" = "+result[j]/testsPerSize);
+                        System.out.println("Max hops for FIFO with cache size "+(startCacheSize+((j/(attackers.size()*s))*cacheSizeIncrement))+" = "+max[j]);
+                        System.out.println("Min hops for FIFO with cache size "+(startCacheSize+((j/(attackers.size()*s))*cacheSizeIncrement))+" = "+min[j]);
                     }//end if fifo cache
                     //Random
                     if(t==2) {
@@ -104,9 +118,9 @@ public class LineChart extends JFrame {
                         seriesRandomCache.add(j*cacheSizeIncrement,min[j]);
 
                         //Print results to the console
-                        System.out.println("Average hops for "+ numattackers[j]+" Attackers and Random with cache size "+(startCacheSize+((j/attackers.size())*cacheSizeIncrement))+" = "+result[j]/testsPerSize);
-                        System.out.println("Max hops for Random with cache size "+(startCacheSize+((j/attackers.size())*cacheSizeIncrement))+" = "+max[j]);
-                        System.out.println("Min hops for Random with cache size "+(startCacheSize+((j/attackers.size())*cacheSizeIncrement))+" = "+min[j]);
+                        System.out.println("Average hops for "+ numattackers[j]+" Attackers, smart attack = " +smartAttackString +" and Random with cache size "+(startCacheSize+((j/(attackers.size()*s))*cacheSizeIncrement))+" = "+result[j]/testsPerSize);
+                        System.out.println("Max hops for Random with cache size "+(startCacheSize+((j/(attackers.size()*s))*cacheSizeIncrement))+" = "+max[j]);
+                        System.out.println("Min hops for Random with cache size "+(startCacheSize+((j/(attackers.size()*s))*cacheSizeIncrement))+" = "+min[j]);
                     }//end if random cache
                 }//end for j
 

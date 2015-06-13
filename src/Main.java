@@ -196,7 +196,7 @@ public class Main {
             System.out.println("Attack metrics used DO NOT USE characteristic time. These attacks request unpopular for every attacker request.");
         }
         System.out.println("Request Rate used = "+AttackerRequestRate);
-        LineChart demo = new LineChart("Average hops per request. Alpha:"+zipfianAlpha +" Nodes:25 Requests per test:"+requestsPerTest+" Number of tests:"+testsize,"Average hops per request",cacheSizesTested, cacheSizeIncrement, allTests, attackers);
+        LineChart demo = new LineChart("Average hops per request. Alpha:"+zipfianAlpha +" Nodes:25 Requests per test:"+requestsPerTest+" Number of tests:"+testsize,"Average hops per request",cacheSizesTested, cacheSizeIncrement, compareSmartAttack, allTests, attackers);
        // demo.pack();
         //demo.setVisible(true);
 

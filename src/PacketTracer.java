@@ -20,6 +20,7 @@ public class PacketTracer {
     Double averageHops;
     Integer numAttackers;
     Integer attackerRequestRate;
+    Boolean usingSmartAttack;
 
 
     public PacketTracer(Boolean cache){
@@ -32,7 +33,7 @@ public class PacketTracer {
         srcNodes.add(node1);
     }
 
-    public void setTotals(Integer cacheType, Integer cacheSize, Integer tests, Integer attackers, Integer requestRate, Integer testsKept, Integer numPop, Integer numUnpop, Integer hops, Integer cache, Double avgHops){
+    public void setTotals(Integer cacheType, Integer cacheSize, Integer tests, Integer attackers, Integer requestRate, Integer testsKept, Integer numPop, Integer numUnpop, Integer hops, Integer cache, Double avgHops, Boolean usingSmartAttack){
         this.cacheType = cacheType;
         this.cacheSize = cacheSize;
         this.totalRequests = tests;
@@ -44,6 +45,7 @@ public class PacketTracer {
         this.totalHops = hops;
         this.totalCacheHits = cache;
         this.averageHops = avgHops;
+        this.usingSmartAttack = usingSmartAttack;
     }
 
 
