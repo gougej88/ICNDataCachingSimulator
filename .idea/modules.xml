@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MANET.iml" filepath="$PROJECT_DIR$/MANET.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ICNDataCachingSimulator.iml" filepath="$PROJECT_DIR$/ICNDataCachingSimulator.iml" />
     </modules>
   </component>
 </project>
-
