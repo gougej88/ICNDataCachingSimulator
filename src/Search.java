@@ -7,7 +7,7 @@ import java.text.*;
 
 public class Search {
 
-    public static PacketTracer runTest(Graph g, int numTests, double poissonRate, int AttackerRequestRate, Boolean cacheEnabled, Boolean keepCacheHitsOnly){
+    public static PacketTracer runTest(Graph g, int numTests, int AttackerRequestRate, Boolean cacheEnabled, Boolean keepCacheHitsOnly){
 
         //Get all nodes that are not content custodians, thus requesters
         ArrayList<Node> requesters = new ArrayList<Node>();
@@ -67,7 +67,7 @@ public class Search {
         int totalHops = 0;
         double percent = 0;
         double averagehops = 0;
-        int p = 0;
+        int p = 1;
         double jump = 0;
         double maxtime = 0;
         int cacheSize = g.cacheSize;
@@ -92,7 +92,6 @@ public class Search {
             jump = maxtime;
 
             //Mean is set here for rate at which to request content
-            p= Poisson.getPoisson(poissonRate);
             if(g.firstRun) {
                 k = g.getZipfContent();
                 n = g.nodes.get(getNodeByProb(requesters, totalReqPerRound).nodeID);

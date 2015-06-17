@@ -18,10 +18,8 @@ public class Main {
         //Graph type. 1 = square, 2= Gnutella6301, 3=Gnutella8846
         int graphType = 1;
         int testsize = 10;
-        int requestsPerTest = 100000;
-        Boolean compareSmartAttack = true;
-        //Not used for request rate. Using popularity distribution
-        double poissonRate = .65;
+        int requestsPerTest = 1000;
+        Boolean compareSmartAttack = false;
         double zipfianAlpha = .65;
         double percentCustodians = .20;
         //Make this number divide into the number of custodians equally
@@ -100,6 +98,7 @@ public class Main {
                 attackers.add(1);
                 attackers.add(2);
                 attackers.add(4);
+                attackers.add(8);
             }
         }
         if(graphType==2 || graphType==3) {
@@ -173,7 +172,7 @@ public class Main {
                                 } else {
                                     usingCache = true;
                                 }
-                                tests.add(Search.runTest(g, requestsPerTest, poissonRate, AttackerRequestRate, usingCache, keepCacheHitsOnly));
+                                tests.add(Search.runTest(g, requestsPerTest, AttackerRequestRate, usingCache, keepCacheHitsOnly));
 
 
                             }//end for loop number of tests per attack
